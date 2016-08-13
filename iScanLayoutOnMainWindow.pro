@@ -17,13 +17,18 @@ SOURCES += main.cpp\
     CameraWidget.cpp \
     defectLabel.cpp \
     pic2label.cpp \
-    widget.cpp
+    widget.cpp \
+    ImagingStuff/MatToQImage.cpp \
+    ImagingStuff/SharedImageBuffer.cpp
 
 HEADERS  += mainwindow.h \
     CameraWidget.h \
     defectLabel.h \
     pic2label.h \
-    widget.h
+    widget.h \
+    ImagingStuff/Buffer.h \
+    ImagingStuff/MatToQImage.h \
+    ImagingStuff/SharedImageBuffer.h
 
 DISTFILES += \
     notes.txt
