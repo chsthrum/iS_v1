@@ -1,0 +1,5 @@
+These should go in the mainwindow holding the container widget
+
+//    QScrollArea* scrollArea;
+//    scrollArea = new QScrollArea;
+//    scrollArea->setWidget(logoLabel);
