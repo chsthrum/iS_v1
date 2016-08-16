@@ -18,6 +18,7 @@ public:
 private:
     QScrollArea* scrollArea;
     Widget* widget;
+
 };
 
 #endif // MAINWINDOW_H

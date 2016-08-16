@@ -7,6 +7,8 @@
 //local includes
 #include "CameraWidget.h"
 #include "pic2label.h"
+#include "ImagingStuff/Buffer.h"
+#include "ImagingStuff/SharedImageBuffer.h"
 
 class Widget : public QWidget
 {
@@ -25,6 +27,9 @@ private:
     QHBoxLayout* logoLayout;
     QVBoxLayout* layout;
     ScaledLabel* logoLabel;
+
+    QMap<int, int> deviceNumberMap;
+    SharedImageBuffer *sharedImageBuffer;
 
 };
 

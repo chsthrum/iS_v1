@@ -35,9 +35,11 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber) : QWidget(parent),
     machStatusLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     machStatusLabel->setFixedSize(20,20);
 
-
+    // Set up the camera view label
     cameraViewLabel->setMinimumSize(250,100);
     cameraViewLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    cameraViewLabel->setText("No camera connected.");
+    cameraViewLabel->setAlignment(Qt::AlignCenter);
 
 
     QVBoxLayout* indicatorLampsLayout = new QVBoxLayout;

@@ -51,7 +51,8 @@ Widget::Widget(QWidget *parent)
 end of the layout
 ***********************************************************************************/
 
-
+    // Create SharedImageBuffer object
+    sharedImageBuffer = new SharedImageBuffer();
     QSize size = camLayout->sizeHint();
     qDebug() << "from widget::widget(), label size (Width * Height)   " << size;
     size = cams[0]->getSize();
