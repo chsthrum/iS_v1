@@ -3,9 +3,14 @@
 //local includes
 #include "widget.h"
 
+
+
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
+    // Create SharedImageBuffer object
+    sharedImageBuffer = new SharedImageBuffer();
+
     //load the logo and check that it has loaded
     QPixmap p("../images/fsSVG.png");
     if (p.isNull())
@@ -37,7 +42,7 @@ Widget::Widget(QWidget *parent)
     logoLayout->addStretch();
 
 
-    addCameras(cams,camLayout,5);
+    addCameras(cams,camLayout,sharedImageBuffer,NumberOfDevices);
 
     layout->addLayout(logoLayout);
     layout->addLayout(camLayout);
@@ -51,8 +56,7 @@ Widget::Widget(QWidget *parent)
 end of the layout
 ***********************************************************************************/
 
-    // Create SharedImageBuffer object
-    sharedImageBuffer = new SharedImageBuffer();
+
     QSize size = camLayout->sizeHint();
     qDebug() << "from widget::widget(), label size (Width * Height)   " << size;
     size = cams[0]->getSize();
@@ -60,14 +64,16 @@ end of the layout
 
     //test
     cams[0]->setText("test");
- }
+}
 
 Widget::~Widget()
 {
 
 }
 
-void Widget::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut,int limit)
+//add the Camera Widget and the buffers containing the mats which are all held in a hash table in in the SharedImageBuffer class.
+
+void Widget::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, int limit)
 {
     for(int i = 0; i != limit ; ++i)
     {
@@ -75,6 +81,13 @@ void Widget::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOu
        // p_CamWidgets[i]->setMinimumSize(1000,250);
         p_layOut->addWidget(p_CamWidgets[i]);
         p_layOut->addSpacing(1);
+
+        // Create ImageBuffer with user-defined size
+        Buffer<Mat> *imageBuffer = new Buffer<Mat>(30);
+        // Add created ImageBuffer to SharedImageBuffer object
+        sharedImBuf->add(i, imageBuffer, false);
+
+
     }
 
 

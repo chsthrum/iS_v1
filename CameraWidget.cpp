@@ -71,6 +71,12 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber) : QWidget(parent),
 
     setLayout(cameraView);
 
+/*********************************************************************
+ camera stuff
+*********************************************************************/
+
+
+
 }
 
 CameraWidget::~CameraWidget()

@@ -10,6 +10,8 @@
 #include "ImagingStuff/Buffer.h"
 #include "ImagingStuff/SharedImageBuffer.h"
 
+const int NumberOfDevices = 3;
+
 class Widget : public QWidget
 {
     Q_OBJECT
@@ -17,7 +19,7 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = 0);
     ~Widget();
-    void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, int limit);
+    void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, int limit);
 
 
 private:
