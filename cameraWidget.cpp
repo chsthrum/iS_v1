@@ -85,7 +85,8 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
     //connect to the camera
     bool isCam;
     //bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height);
-    isCam = connectToCamera(false,DEFAULT_CAP_THREAD_PRIO, DEFAULT_PROC_THREAD_PRIO, true, -1, -1);
+    //isCam = connectToCamera(false,DEFAULT_CAP_THREAD_PRIO, DEFAULT_PROC_THREAD_PRIO, true, 640, 480);//this one also works
+    isCam = connectToCamera(false, 3, 4, true, -1, -1);
 
 
 }
@@ -113,18 +114,18 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         // Create image processing settings dialog
         //imageProcessingSettingsDialog = new ImageProcessingSettingsDialog(this);
         // Setup signal/slot connections
-        //connect(processingThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
-        connect(captureThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
+        connect(processingThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
+        //connect(captureThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
         //connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
         //connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));
         //connect(imageProcessingSettingsDialog, SIGNAL(newImageProcessingSettings(struct ImageProcessingSettings)), processingThread, SLOT(updateImageProcessingSettings(struct ImageProcessingSettings)));
         //connect(this, SIGNAL(newImageProcessingFlags(struct ImageProcessingFlags)), processingThread, SLOT(updateImageProcessingFlags(struct ImageProcessingFlags)));
-        //connect(this, SIGNAL(setROI(QRect)), processingThread, SLOT(setROI(QRect)));
+        connect(this, SIGNAL(setROI(QRect)), processingThread, SLOT(setROI(QRect)));
         // Only enable ROI setting/resetting if frame processing is enabled
         //if(enableFrameProcessing)
         //    connect(ui->frameLabel, SIGNAL(newMouseData(struct MouseData)), this, SLOT(newMouseData(struct MouseData)));
         // Set initial data in processing thread
-        //emit setROI(QRect(0, 0, captureThread->getInputSourceWidth(), captureThread->getInputSourceHeight()));
+        emit setROI(QRect(0, 0, captureThread->getInputSourceWidth(), captureThread->getInputSourceHeight()));
         //emit newImageProcessingFlags(imageProcessingFlags);
         //imageProcessingSettingsDialog->updateStoredSettingsFromDialog();
 
@@ -179,6 +180,27 @@ void CameraWidget::addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBo
 
         p_layOut->addWidget(p_Labels[i]);
     }
+}
+
+void CameraWidget::stopCaptureThread()
+{
+    qDebug() << "[" << cameraNumber << "] About to stop capture thread...";
+    captureThread->stop();
+    sharedImageBuffer->wakeAll(); // This allows the thread to be stopped if it is in a wait-state
+    // Take one frame off a FULL queue to allow the capture thread to finish
+    if(sharedImageBuffer->getByDeviceNumber(cameraNumber)->isFull())
+        sharedImageBuffer->getByDeviceNumber(cameraNumber)->get();
+    captureThread->wait();
+    qDebug() << "[" << cameraNumber << "] Capture thread successfully stopped.";
+}
+
+void CameraWidget::stopProcessingThread()
+{
+    qDebug() << "[" << cameraNumber << "] About to stop processing thread...";
+    processingThread->stop();
+    sharedImageBuffer->wakeAll(); // This allows the thread to be stopped if it is in a wait-state
+    processingThread->wait();
+    qDebug() << "[" << cameraNumber << "] Processing thread successfully stopped.";
 }
 
 QSize CameraWidget::getSize()

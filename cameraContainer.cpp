@@ -83,7 +83,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
         p_layOut->addSpacing(1);
 
         // Create ImageBuffer with user-defined size
-        Buffer<Mat> *imageBuffer = new Buffer<Mat>(30);
+        Buffer<Mat> *imageBuffer = new Buffer<Mat>(32);
         // Add created ImageBuffer to SharedImageBuffer object
         sharedImBuf->add(i, imageBuffer, false);
 

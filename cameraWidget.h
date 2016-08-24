@@ -60,9 +60,14 @@ private:
 
 
     QList <DefectLabel*> labels;
+    void stopCaptureThread();
+    void stopProcessingThread();
 
 private slots:
     void updateFrame(const QImage &frame);
+
+signals:
+    void setROI(QRect roi);
 
 
 };

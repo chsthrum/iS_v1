@@ -31,6 +31,7 @@
 /************************************************************************/
 
 #include "ProcessingThread.h"
+#include <QDebug>
 
 ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber) : QThread(), sharedImageBuffer(sharedImageBuffer)
 {
@@ -71,6 +72,9 @@ void ProcessingThread::run()
         processingMutex.lock();
         // Get frame from queue, store in currentFrame, set ROI
         currentFrame=Mat(sharedImageBuffer->getByDeviceNumber(deviceNumber)->get().clone(), currentROI);
+        //qDebug() << "current ROI width " << currentROI.width << "   currentFrame width " << currentFrame.cols;
+
+
 
         // Example of how to grab a frame from another stream (where Device Number=1)
         // Note: This requires stream synchronization to be ENABLED (in the Options menu of MainWindow) and frame processing for the stream you are grabbing FROM to be DISABLED.
@@ -148,7 +152,7 @@ void ProcessingThread::run()
         processingMutex.unlock();
 
         // Inform GUI thread of new frame (QImage)
-        //emit newFrame(frame);
+        emit newFrame(frame);
 
 //       //  Update statistics
 //        updateFPS(processingTime);
@@ -222,14 +226,14 @@ void ProcessingThread::stop()
 //    this->imgProcSettings.cannyL2gradient=imgProcSettings.cannyL2gradient;
 //}
 
-//void ProcessingThread::setROI(QRect roi)
-//{
-//    QMutexLocker locker(&processingMutex);
-//    currentROI.x = roi.x();
-//    currentROI.y = roi.y();
-//    currentROI.width = roi.width();
-//    currentROI.height = roi.height();
-//}
+void ProcessingThread::setROI(QRect roi)
+{
+    QMutexLocker locker(&processingMutex);
+    currentROI.x = roi.x();
+    currentROI.y = roi.y();
+    currentROI.width = roi.width();
+    currentROI.height = roi.height();
+}
 
 //QRect ProcessingThread::getCurrentROI()
 //{

@@ -89,10 +89,10 @@ class ProcessingThread : public QThread
     private slots:
 //        void updateImageProcessingFlags(struct ImageProcessingFlags);
 //        void updateImageProcessingSettings(struct ImageProcessingSettings);
-//        void setROI(QRect roi);
+       void setROI(QRect roi);
 
     signals:
-        //void newFrame(const QImage &frame);
+        void newFrame(const QImage &frame);
 //        void updateStatisticsInGUI(struct ThreadStatisticsData);
 };
 

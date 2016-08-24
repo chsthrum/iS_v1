@@ -85,7 +85,7 @@ class CaptureThread : public QThread
 
     signals:
         //void updateStatisticsInGUI(struct ThreadStatisticsData);
-        void newFrame(const QImage &frame);
+        //void newFrame(const QImage &frame);
 };
 
 #endif // CAPTURETHREAD_H

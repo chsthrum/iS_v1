@@ -90,9 +90,9 @@ void CaptureThread::run()
         //emit updateStatisticsInGUI(statsData);
 
         // Convert Mat to QImage
-        frame=MatToQImage(grabbedFrame);
+        //frame=MatToQImage(grabbedFrame);
         // Inform GUI thread of new frame (QImage)
-        emit newFrame(frame);
+        //emit newFrame(frame);
     }
     qDebug() << "Stopping capture thread...";
 }
