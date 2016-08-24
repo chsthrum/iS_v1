@@ -10,6 +10,10 @@
 #include <QMouseEvent>
 //local includes
 #include "defectLabel.h"
+#include "ImagingStuff/SharedImageBuffer.h"
+#include "ImagingStuff/CaptureThread.h"
+#include "ImagingStuff/ProcessingThread.h"
+#include "ImagingStuff/Config.h"
 
 class CameraWidget : public QWidget
 {
@@ -17,8 +21,10 @@ class CameraWidget : public QWidget
 
 public:
     //CameraWidget(QWidget *parent = 0, int deviceNumber = 0);
-    CameraWidget(QWidget *parent, int deviceNumber);
+    //CameraWidget(QWidget *parent, int deviceNumber);
+    explicit CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer *sharedImageBuffer);
     ~CameraWidget();
+    bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height);
 
     //void addDefectCameraViewLabels(QVector<QLabel*>& p_Labels, QHBoxLayout* & p_layOut,int i);
     //void addDefectCameraViewLabels(QList<QLabel*>& p_Labels, QHBoxLayout* p_layOut,int i);
@@ -33,7 +39,12 @@ protected:
 
 private:
 
+    SharedImageBuffer *sharedImageBuffer;
     int cameraNumber;
+    bool isCameraConnected;
+
+    ProcessingThread *processingThread;
+    CaptureThread *captureThread;
 
     QLabel *cameraViewLabel;
     //DefectLabel *cameraViewLabel;
@@ -49,6 +60,9 @@ private:
 
 
     QList <DefectLabel*> labels;
+
+private slots:
+    void updateFrame(const QImage &frame);
 
 
 };

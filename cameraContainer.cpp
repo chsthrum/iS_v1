@@ -1,11 +1,11 @@
 //qt includes
 #include <QDebug>
 //local includes
-#include "widget.h"
+#include "cameraContainer.h"
 
 
 
-Widget::Widget(QWidget *parent)
+CameraContainer::CameraContainer(QWidget *parent)
     : QWidget(parent)
 {
     // Create SharedImageBuffer object
@@ -66,18 +66,18 @@ end of the layout
     cams[0]->setText("test");
 }
 
-Widget::~Widget()
+CameraContainer::~CameraContainer()
 {
 
 }
 
-//add the Camera Widget and the buffers containing the mats which are all held in a hash table in in the SharedImageBuffer class.
+//add the Camera Widget and the buffers containing the mats which are all held in a hash table in the SharedImageBuffer class.
 
-void Widget::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, int limit)
+void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, int limit)
 {
     for(int i = 0; i != limit ; ++i)
     {
-        p_CamWidgets.push_back(new CameraWidget(this, i));
+        p_CamWidgets.push_back(new CameraWidget(this, i, sharedImBuf));
        // p_CamWidgets[i]->setMinimumSize(1000,250);
         p_layOut->addWidget(p_CamWidgets[i]);
         p_layOut->addSpacing(1);

@@ -41,7 +41,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 // Local
-#include "Structures.h"
+//#include "Structures.h"
 #include "Config.h"
 #include "Buffer.h"
 #include "MatToQImage.h"
@@ -73,9 +73,9 @@ class ProcessingThread : public QThread
         QMutex processingMutex;
         Size frameSize;
         Point framePoint;
-        struct ImageProcessingFlags imgProcFlags;
-        struct ImageProcessingSettings imgProcSettings;
-        struct ThreadStatisticsData statsData;
+        //struct ImageProcessingFlags imgProcFlags;
+        //struct ImageProcessingSettings imgProcSettings;
+        //struct ThreadStatisticsData statsData;
         volatile bool doStop;
         int processingTime;
         int fpsSum;
@@ -87,13 +87,13 @@ class ProcessingThread : public QThread
         void run();
 
     private slots:
-        void updateImageProcessingFlags(struct ImageProcessingFlags);
-        void updateImageProcessingSettings(struct ImageProcessingSettings);
-        void setROI(QRect roi);
+//        void updateImageProcessingFlags(struct ImageProcessingFlags);
+//        void updateImageProcessingSettings(struct ImageProcessingSettings);
+//        void setROI(QRect roi);
 
     signals:
-        void newFrame(const QImage &frame);
-        void updateStatisticsInGUI(struct ThreadStatisticsData);
+        //void newFrame(const QImage &frame);
+//        void updateStatisticsInGUI(struct ThreadStatisticsData);
 };
 
 #endif // PROCESSINGTHREAD_H

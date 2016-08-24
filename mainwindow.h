@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QScrollArea>
 //local includes
-#include "widget.h"
+#include "cameraContainer.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,7 +17,7 @@ public:
     ~MainWindow();
 private:
     QScrollArea* scrollArea;
-    Widget* widget;
+    CameraContainer* widget;
 
 };
 

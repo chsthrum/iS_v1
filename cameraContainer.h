@@ -5,20 +5,20 @@
 #include <QLayout>
 #include <QScrollArea>
 //local includes
-#include "CameraWidget.h"
+#include "cameraWidget.h"
 #include "pic2label.h"
 #include "ImagingStuff/Buffer.h"
 #include "ImagingStuff/SharedImageBuffer.h"
 
 const int NumberOfDevices = 3;
 
-class Widget : public QWidget
+class CameraContainer : public QWidget
 {
     Q_OBJECT
 
 public:
-    Widget(QWidget *parent = 0);
-    ~Widget();
+    CameraContainer(QWidget *parent = 0);
+    ~CameraContainer();
     void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, int limit);
 
 

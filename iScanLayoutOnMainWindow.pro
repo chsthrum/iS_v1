@@ -18,21 +18,26 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    CameraWidget.cpp \
     defectLabel.cpp \
     pic2label.cpp \
-    widget.cpp \
     ImagingStuff/MatToQImage.cpp \
-    ImagingStuff/SharedImageBuffer.cpp
+    ImagingStuff/SharedImageBuffer.cpp \
+    cameraWidget.cpp \
+    cameraContainer.cpp \
+    ImagingStuff/CaptureThread.cpp \
+    ImagingStuff/ProcessingThread.cpp
 
 HEADERS  += mainwindow.h \
-    CameraWidget.h \
     defectLabel.h \
     pic2label.h \
-    widget.h \
     ImagingStuff/Buffer.h \
     ImagingStuff/MatToQImage.h \
-    ImagingStuff/SharedImageBuffer.h
+    ImagingStuff/SharedImageBuffer.h \
+    cameraContainer.h \
+    cameraWidget.h \
+    ImagingStuff/CaptureThread.h \
+    ImagingStuff/ProcessingThread.h \
+    ImagingStuff/Config.h
 
 DISTFILES += \
     notes.txt

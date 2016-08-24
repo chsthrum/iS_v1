@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //set the scroll area
     scrollArea = new QScrollArea;
-    widget = new Widget;
+    widget = new CameraContainer;
     //make the widget a child of the scroll area
     scrollArea->setWidget(widget);
     //make the scroll area the central widget
