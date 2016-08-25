@@ -83,10 +83,10 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
     // Initialize internal flag
     isCameraConnected=false;
     //connect to the camera
-    bool isCam;
+    //bool isCam;
     //bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height);
     //isCam = connectToCamera(false,DEFAULT_CAP_THREAD_PRIO, DEFAULT_PROC_THREAD_PRIO, true, 640, 480);//this one also works
-    isCam = connectToCamera(false, 3, 4, true, -1, -1);
+    //isCam = connectToCamera(false, 3, 4, true, -1, -1);
 
 
 }
