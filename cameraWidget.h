@@ -40,7 +40,7 @@ protected:
 private:
 
     SharedImageBuffer *sharedImageBuffer;
-    int cameraNumber;
+    int deviceNumber;
     bool isCameraConnected;
 
     ProcessingThread *processingThread;

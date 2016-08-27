@@ -79,7 +79,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
 *********************************************************************/
 
     // Save Device Number
-    this->cameraNumber=deviceNumber;
+    this->deviceNumber=deviceNumber;
     // Initialize internal flag
     isCameraConnected=false;
     //connect to the camera
@@ -105,12 +105,12 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
     //    ui->frameLabel->setText("Connecting to camera...");
 
     // Create capture thread
-    captureThread = new CaptureThread(sharedImageBuffer, cameraNumber, dropFrameIfBufferFull, width, height);
+    captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height);
     // Attempt to connect to camera
     if(captureThread->connectToCamera())
     {
         // Create processing thread
-        processingThread = new ProcessingThread(sharedImageBuffer, cameraNumber);
+        processingThread = new ProcessingThread(sharedImageBuffer, deviceNumber);
         // Create image processing settings dialog
         //imageProcessingSettingsDialog = new ImageProcessingSettingsDialog(this);
         // Setup signal/slot connections
@@ -184,23 +184,23 @@ void CameraWidget::addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBo
 
 void CameraWidget::stopCaptureThread()
 {
-    qDebug() << "[" << cameraNumber << "] About to stop capture thread...";
+    qDebug() << "[" << deviceNumber << "] About to stop capture thread...";
     captureThread->stop();
     sharedImageBuffer->wakeAll(); // This allows the thread to be stopped if it is in a wait-state
     // Take one frame off a FULL queue to allow the capture thread to finish
-    if(sharedImageBuffer->getByDeviceNumber(cameraNumber)->isFull())
-        sharedImageBuffer->getByDeviceNumber(cameraNumber)->get();
+    if(sharedImageBuffer->getByDeviceNumber(deviceNumber)->isFull())
+        sharedImageBuffer->getByDeviceNumber(deviceNumber)->get();
     captureThread->wait();
-    qDebug() << "[" << cameraNumber << "] Capture thread successfully stopped.";
+    qDebug() << "[" << deviceNumber << "] Capture thread successfully stopped.";
 }
 
 void CameraWidget::stopProcessingThread()
 {
-    qDebug() << "[" << cameraNumber << "] About to stop processing thread...";
+    qDebug() << "[" << deviceNumber << "] About to stop processing thread...";
     processingThread->stop();
     sharedImageBuffer->wakeAll(); // This allows the thread to be stopped if it is in a wait-state
     processingThread->wait();
-    qDebug() << "[" << cameraNumber << "] Processing thread successfully stopped.";
+    qDebug() << "[" << deviceNumber << "] Processing thread successfully stopped.";
 }
 
 QSize CameraWidget::getSize()
