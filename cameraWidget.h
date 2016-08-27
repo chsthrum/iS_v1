@@ -24,6 +24,7 @@ public:
     //CameraWidget(QWidget *parent, int deviceNumber);
     explicit CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer *sharedImageBuffer);
     ~CameraWidget();
+
     bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height);
 
     //void addDefectCameraViewLabels(QVector<QLabel*>& p_Labels, QHBoxLayout* & p_layOut,int i);

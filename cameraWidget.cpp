@@ -9,6 +9,11 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
 
 {
 
+    // Save Device Number
+    this->deviceNumber=deviceNumber;
+    // Initialize internal flag
+    isCameraConnected=false;
+
     setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 
     cameraViewLabel = new QLabel;
@@ -78,21 +83,33 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
  camera stuff
 *********************************************************************/
 
-    // Save Device Number
-    this->deviceNumber=deviceNumber;
-    // Initialize internal flag
-    isCameraConnected=false;
-    //connect to the camera
-    //bool isCam;
-    //bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height);
-    //isCam = connectToCamera(false,DEFAULT_CAP_THREAD_PRIO, DEFAULT_PROC_THREAD_PRIO, true, 640, 480);//this one also works
-    //isCam = connectToCamera(false, 3, 4, true, -1, -1);
-
-
 }
 
 CameraWidget::~CameraWidget()
 {
+    if(isCameraConnected)
+    {
+        // Stop processing thread
+        if(processingThread->isRunning())
+            stopProcessingThread();
+        // Stop capture thread
+        if(captureThread->isRunning())
+            stopCaptureThread();
+
+        // Automatically start frame processing (for other streams)
+        if(sharedImageBuffer->isSyncEnabledForDeviceNumber(deviceNumber))
+            sharedImageBuffer->setSyncEnabled(true);
+
+        // Remove from shared buffer
+        sharedImageBuffer->removeByDeviceNumber(deviceNumber);
+        // Disconnect camera
+        if(captureThread->disconnectCamera())
+            qDebug() << "[" << deviceNumber << "] Camera successfully disconnected.";
+        else
+            qDebug() << "[" << deviceNumber << "] WARNING: Camera already disconnected.";
+    }
+    // Delete UI
+   // delete ui;
 
 }
 
