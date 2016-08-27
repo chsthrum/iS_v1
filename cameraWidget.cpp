@@ -16,6 +16,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
 
     setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 
+    //cameraViewLabel = new ScaledLabel;
     cameraViewLabel = new QLabel;
 
     scoreLabel = new QLabel;
@@ -44,7 +45,9 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
     machStatusLabel->setFixedSize(20,20);
 
     // Set up the camera view label
-    cameraViewLabel->setMinimumSize(250,100);
+    cameraViewLabel->setMinimumSize(250,250);
+    /* do not set the height less than the size it can expand to, else the image will be cropped.
+    The reason is that each cameraViewLabel maximum size is basically determined by the CamaeraContainer layout. */
     cameraViewLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     cameraViewLabel->setText("No camera connected.");
     cameraViewLabel->setAlignment(Qt::AlignCenter);
@@ -177,11 +180,10 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
 
 void CameraWidget::updateFrame(const QImage &frame)
 {
-    // Display frame
-    //int x = frame.width();
-    //qDebug() << "got this far " ;//<< this->cameraViewLabel->width();
+    //set the size of the label holding the image to the scaled image. NOTE THIS FUNCTION MIGHT PROVE TOO EXPENSIVE
+    cameraViewLabel->setFixedSize(cameraViewLabel->width(), heightForWidth(frame, cameraViewLabel->width()));
+    qDebug() << cameraViewLabel->size();
     this->cameraViewLabel->setPixmap(QPixmap::fromImage(frame).scaled(this->cameraViewLabel->width(), this->cameraViewLabel->height(),Qt::KeepAspectRatio));
-
 }
 
 // using a QList
@@ -231,5 +233,14 @@ void CameraWidget::setText(QString text)
 }
 
 
+int CameraWidget::heightForWidth(const QImage&  pix, int labelWidth)      //width comes from the resize instruction width component
+{
+    return pix.isNull() ? this->height() : ((qreal)pix.height()*labelWidth)/pix.width();
+}
+
+//int CameraWidget::heightForWidth(int labelWidth)const
+//{
+//    return pix.isNull() ? this->height() : ((qreal)pix.height()*labelWidth)/pix.width();
+//}
 
 

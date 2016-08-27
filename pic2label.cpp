@@ -6,7 +6,7 @@
 ScaledLabel::ScaledLabel(QWidget *parent) : QLabel(parent)
 {
     //this->setFrameStyle(QFrame::Box | QFrame::Raised);
-    //this->setFixedSize(100,100);
+    //this->setFixedSize(300,300);
 
 
 }

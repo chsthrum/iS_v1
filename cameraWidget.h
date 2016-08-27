@@ -14,6 +14,7 @@
 #include "ImagingStuff/CaptureThread.h"
 #include "ImagingStuff/ProcessingThread.h"
 #include "ImagingStuff/Config.h"
+#include "pic2label.h"
 
 class CameraWidget : public QWidget
 {
@@ -47,7 +48,8 @@ private:
     ProcessingThread *processingThread;
     CaptureThread *captureThread;
 
-    QLabel *cameraViewLabel;
+    //ScaledLabel *cameraViewLabel;
+    QLabel* cameraViewLabel;
     //DefectLabel *cameraViewLabel;
     QLabel *scoreLabel;
     //QLabel *defectLabel;
@@ -63,6 +65,9 @@ private:
     QList <DefectLabel*> labels;
     void stopCaptureThread();
     void stopProcessingThread();
+
+    int heightForWidth(const QImage&, int labelWidth );
+    //int heightForWidth(int)const;
 
 private slots:
     void updateFrame(const QImage &frame);
