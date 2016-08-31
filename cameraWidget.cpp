@@ -61,7 +61,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
 
     setWindowTitle(tr("CameraView"));
 
-    addDefectCameraViewLabels(labels, defectImagesLayoutBox, 8);
+    addDefectCameraViewLabels(labels, defectImagesLayoutBox, 10);
 
     indicatorLampsLayout->addWidget(detectLabel);
     indicatorLampsLayout->addWidget(machStatusLabel);
