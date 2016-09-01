@@ -39,6 +39,7 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
     this->deviceNumber=deviceNumber;
     // Initialize members
    doStop=false;
+   enableDeepLearning = false;
 //    sampleNumber=0;
 //    fpsSum=0;
 //    fps.clear();
@@ -153,6 +154,8 @@ void ProcessingThread::run()
 
         // Inform GUI thread of new frame (QImage)
         emit newFrame(frame);
+        if(enableDeepLearning)
+        emit newFrame((currentFrame));
 
 //       //  Update statistics
 //        updateFPS(processingTime);

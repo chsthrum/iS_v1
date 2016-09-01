@@ -83,6 +83,8 @@ class ProcessingThread : public QThread
         int deviceNumber;
         bool enableFrameProcessing;
 
+        bool enableDeepLearning;
+
     protected:
         void run();
 
@@ -93,6 +95,7 @@ class ProcessingThread : public QThread
 
     signals:
         void newFrame(const QImage &frame);
+        void newFrame(const cv::Mat& mat);
 //        void updateStatisticsInGUI(struct ThreadStatisticsData);
 };
 

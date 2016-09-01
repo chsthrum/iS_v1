@@ -5,8 +5,11 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += concurrent
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 
 QT_CONFIG -= no-pkg-config
 CONFIG += link_pkgconfig

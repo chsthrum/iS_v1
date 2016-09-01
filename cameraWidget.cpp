@@ -135,6 +135,7 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         //imageProcessingSettingsDialog = new ImageProcessingSettingsDialog(this);
         // Setup signal/slot connections
         connect(processingThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
+        //connect (processingThread, SIGNAL(newFrame(cv::Mat), this SLOT (to be done func);
         //connect(captureThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
         //connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
         //connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));

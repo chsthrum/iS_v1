@@ -8,3 +8,13 @@ These should go in the mainwindow holding the container widget
 Connect to camera HOW??????????????
 
 CameraWidget should have a pointer to SharedImageBuffer in its Constructor??????????
+
+http://stackoverflow.com/questions/9996253/qtconcurrent-with-member-function
+
+
+(void)queueOfMats(const Qqueue<cv::mat>& q, const mat& m, int limit)
+{
+    if(q.size()>=limit)
+        q.dequeue();
+    q.enqueue(mat);
+}
