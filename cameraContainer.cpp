@@ -64,6 +64,7 @@ end of the layout
 
     //test
     cams[0]->setText("test");
+
 }
 
 CameraContainer::~CameraContainer()

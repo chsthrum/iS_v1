@@ -19,6 +19,10 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
     //cameraViewLabel = new ScaledLabel;
     cameraViewLabel = new QLabel;
 
+    stopMotionPB = new QPushButton;
+    stopMotionPB->setFixedSize(100,20);
+    stopMotionPB->setText("Stop Enabled");
+
     scoreLabel = new QLabel;
     scoreLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     scoreLabel->setFixedSize(1000,50);
@@ -63,6 +67,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
 
     addDefectCameraViewLabels(labels, defectImagesLayoutBox, 10);
 
+    indicatorLampsLayout->addWidget(stopMotionPB);
     indicatorLampsLayout->addWidget(detectLabel);
     indicatorLampsLayout->addWidget(machStatusLabel);
     indicatorLampsLayout->addWidget(camStatusLabel);
@@ -170,6 +175,7 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         //if(!enableFrameProcessing)
          //   ui->frameLabel->setText("Frame processing disabled.");
         qDebug() << "Camera is connected";
+        setCameraStatusLabel();
     }
     // Failed to connect to camera
     else
@@ -185,6 +191,8 @@ void CameraWidget::updateFrame(const QImage &frame)
     cameraViewLabel->setFixedSize(cameraViewLabel->width(), heightForWidth(frame, cameraViewLabel->width()));
     qDebug() << cameraViewLabel->size();
     this->cameraViewLabel->setPixmap(QPixmap::fromImage(frame).scaled(this->cameraViewLabel->width(), this->cameraViewLabel->height(),Qt::KeepAspectRatio));
+    //TEST//this->labels[3]->setPixmap(QPixmap::fromImage(frame).scaled(this->cameraViewLabel->width(), this->cameraViewLabel->height(),Qt::KeepAspectRatio));
+    //TEST//this->camStatusLabel->setStyleSheet("QLabel { background-color : green; color : blue; }");
 }
 
 // using a QList
@@ -200,6 +208,17 @@ void CameraWidget::addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBo
 
         p_layOut->addWidget(p_Labels[i]);
     }
+}
+
+bool CameraWidget::setCameraStatusLabel()
+{
+    if(isCameraConnected)
+    {
+        camStatusLabel->setStyleSheet("QLabel { background-color : green; color : blue; }");
+        return true;
+    }
+    else
+        return false;
 }
 
 void CameraWidget::stopCaptureThread()

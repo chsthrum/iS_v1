@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QList>
 #include <QLayout>
+#include <QPushButton>
 #include <QMouseEvent>
 //local includes
 #include "defectLabel.h"
@@ -31,6 +32,10 @@ public:
     //void addDefectCameraViewLabels(QVector<QLabel*>& p_Labels, QHBoxLayout* & p_layOut,int i);
     //void addDefectCameraViewLabels(QList<QLabel*>& p_Labels, QHBoxLayout* p_layOut,int i);
     void addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBoxLayout* p_layOut,int i);
+
+    //set the camera status indicator label
+    bool setCameraStatusLabel();
+
 
     QSize getSize(); // gets the size of the QLabel
 
@@ -60,6 +65,7 @@ private:
     QLabel *machStatusLabel;
     QLabel *camStatusLabel;
     QLabel *detectLabel;
+    QPushButton *stopMotionPB;
 
 
     QList <DefectLabel*> labels;
