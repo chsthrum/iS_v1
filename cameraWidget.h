@@ -24,7 +24,7 @@ class CameraWidget : public QWidget
 public:
     //CameraWidget(QWidget *parent = 0, int deviceNumber = 0);
     //CameraWidget(QWidget *parent, int deviceNumber);
-    explicit CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer *sharedImageBuffer);
+    explicit CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer *sharedImageBuffer);
     ~CameraWidget();
 
     bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height);
@@ -35,6 +35,11 @@ public:
 
     //set the camera status indicator label
     bool setCameraStatusLabel();
+    //number of displayed defect images
+   void setNumberOfDefectImages(int);
+   int getNumberOfDefectImages() const;
+
+
 
 
     QSize getSize(); // gets the size of the QLabel
@@ -49,6 +54,7 @@ private:
     SharedImageBuffer *sharedImageBuffer;
     int deviceNumber;
     bool isCameraConnected;
+    int numberOfDefectImages;
 
     ProcessingThread *processingThread;
     CaptureThread *captureThread;

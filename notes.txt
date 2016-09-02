@@ -12,9 +12,15 @@ CameraWidget should have a pointer to SharedImageBuffer in its Constructor??????
 http://stackoverflow.com/questions/9996253/qtconcurrent-with-member-function
 
 
-(void)queueOfMats(const Qqueue<cv::mat>& q, const mat& m, int limit)
-{
-    if(q.size()>=limit)
-        q.dequeue();
-    q.enqueue(mat);
-}
+/*Writing to file
+
+cv::FileStorage storage("test.yml", cv::FileStorage::WRITE);
+storage << "img" << img;
+storage.release();
+
+Reading from file
+
+cv::FileStorage storage("test.yml", cv::FileStorage::READ);
+storage["img"] >> img;
+storage.release();
+*/

@@ -5,7 +5,7 @@
 #include "cameraWidget.h"
 
 //CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), cameraNumber(deviceNumber), sharedImageBuffer(sharedImageBuffer)
-CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer)
+CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
 
 {
 
@@ -65,7 +65,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer*
 
     setWindowTitle(tr("CameraView"));
 
-    addDefectCameraViewLabels(labels, defectImagesLayoutBox, 10);
+    addDefectCameraViewLabels(labels, defectImagesLayoutBox, numberOfDefectImages);
 
     indicatorLampsLayout->addWidget(stopMotionPB);
     indicatorLampsLayout->addWidget(detectLabel);
@@ -219,6 +219,18 @@ bool CameraWidget::setCameraStatusLabel()
     }
     else
         return false;
+}
+
+void CameraWidget::setNumberOfDefectImages(int n)
+{
+    numberOfDefectImages = n;
+
+}
+
+int CameraWidget::getNumberOfDefectImages() const
+{
+    return numberOfDefectImages;
+
 }
 
 void CameraWidget::stopCaptureThread()

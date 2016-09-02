@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     cameraWidget.cpp \
     cameraContainer.cpp \
     ImagingStuff/CaptureThread.cpp \
-    ImagingStuff/ProcessingThread.cpp
+    ImagingStuff/ProcessingThread.cpp \
+    defectimagestorage.cpp
 
 HEADERS  += mainwindow.h \
     defectLabel.h \
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h \
     cameraWidget.h \
     ImagingStuff/CaptureThread.h \
     ImagingStuff/ProcessingThread.h \
-    ImagingStuff/Config.h
+    ImagingStuff/Config.h \
+    defectimagestorage.h
 
 DISTFILES += \
     notes.txt
