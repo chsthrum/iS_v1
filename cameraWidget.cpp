@@ -3,6 +3,7 @@
 #include <QDebug>
 //local includes
 #include "cameraWidget.h"
+#include "ImagingStuff/Structures.h"
 
 //CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), cameraNumber(deviceNumber), sharedImageBuffer(sharedImageBuffer)
 CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
@@ -87,6 +88,9 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
 
     setLayout(cameraView);
 
+    // Register type
+    qRegisterMetaType<struct DefectStructToSave>("DefectStructToSave");
+
 /*********************************************************************
  camera stuff
 *********************************************************************/
@@ -140,7 +144,7 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         //imageProcessingSettingsDialog = new ImageProcessingSettingsDialog(this);
         // Setup signal/slot connections
         connect(processingThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
-        //connect (processingThread, SIGNAL(newFrame(cv::Mat), this SLOT (to be done func);
+        connect(processingThread, SIGNAL(newDefectStruct(struct DefectStructToSave)), this, SLOT (updateDefectStruct(struct DefectStructToSave)));
         //connect(captureThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
         //connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
         //connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));
@@ -193,6 +197,11 @@ void CameraWidget::updateFrame(const QImage &frame)
     this->cameraViewLabel->setPixmap(QPixmap::fromImage(frame).scaled(this->cameraViewLabel->width(), this->cameraViewLabel->height(),Qt::KeepAspectRatio));
     //TEST//this->labels[3]->setPixmap(QPixmap::fromImage(frame).scaled(this->cameraViewLabel->width(), this->cameraViewLabel->height(),Qt::KeepAspectRatio));
     //TEST//this->camStatusLabel->setStyleSheet("QLabel { background-color : green; color : blue; }");
+}
+
+void CameraWidget::updateDefectStruct(const DefectStructToSave & dsts)
+{
+
 }
 
 // using a QList

@@ -11,14 +11,9 @@
 #include "opencv2/core/core.hpp"
 //stl
 #include <iostream>
+//local
+#include "ImagingStuff/Structures.h"
 
-struct DefectStructToSave
-{
-    cv::Mat defectMat;
-    long defectMatNo;
-    long rawtimeS;
-    std::string fileName;
-};
 
 
 

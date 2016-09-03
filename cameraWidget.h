@@ -16,6 +16,7 @@
 #include "ImagingStuff/ProcessingThread.h"
 #include "ImagingStuff/Config.h"
 #include "pic2label.h"
+#include "ImagingStuff/Structures.h"
 
 class CameraWidget : public QWidget
 {
@@ -83,6 +84,7 @@ private:
 
 private slots:
     void updateFrame(const QImage &frame);
+    void updateDefectStruct(const DefectStructToSave &);
 
 signals:
     void setROI(QRect roi);

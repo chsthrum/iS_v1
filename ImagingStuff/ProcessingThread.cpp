@@ -30,8 +30,13 @@
 /*                                                                      */
 /************************************************************************/
 
-#include "ProcessingThread.h"
+//QT
 #include <QDebug>
+//local
+#include "ProcessingThread.h"
+//stl
+#include <ctime>
+
 
 ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber) : QThread(), sharedImageBuffer(sharedImageBuffer)
 {
@@ -39,7 +44,13 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
     this->deviceNumber=deviceNumber;
     // Initialize members
    doStop=false;
-   enableDeepLearning = false;
+   enableDeepLearning = true;
+   defectData.defectMatNo = 0;
+   defectData.fileName = "";
+   defectData.rawtimeS = 0;
+   defectData.cameraNumber = deviceNumber;
+
+
 //    sampleNumber=0;
 //    fpsSum=0;
 //    fps.clear();
@@ -152,10 +163,23 @@ void ProcessingThread::run()
         frame=MatToQImage(currentFrame);
         processingMutex.unlock();
 
+
+
         // Inform GUI thread of new frame (QImage)
         emit newFrame(frame);
+        // Inform GUI thread of new defect structure (DefectStructToSave)
         if(enableDeepLearning)
-        emit newFrame((currentFrame));
+        {
+            time_t rawtime;
+            time(&rawtime);
+            defectData.rawtimeS = rawtime;
+
+            defectData.defectMat = currentFrame;
+            //qDebug() << "rawtime " << defectData.rawtimeS << "secs";
+            emit newDefectStruct((defectData));
+
+        }
+
 
 //       //  Update statistics
 //        updateFPS(processingTime);

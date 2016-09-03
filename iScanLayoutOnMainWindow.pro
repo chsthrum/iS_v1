@@ -18,6 +18,8 @@ PKGCONFIG += opencv
 TARGET = iScanLayoutOnMainWindow
 TEMPLATE = app
 
+INCLUDEPATH += /usr/local/boost_1_61_0
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -42,7 +44,9 @@ HEADERS  += mainwindow.h \
     ImagingStuff/CaptureThread.h \
     ImagingStuff/ProcessingThread.h \
     ImagingStuff/Config.h \
-    defectimagestorage.h
+    defectimagestorage.h \
+    weighteddie.h \
+    ImagingStuff/Structures.h
 
 DISTFILES += \
     notes.txt
