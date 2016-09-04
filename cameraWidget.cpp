@@ -92,7 +92,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
     qRegisterMetaType<struct DefectStructToSave>("DefectStructToSave");
 
 /*********************************************************************
- camera stuff
+ camera stuff........
 *********************************************************************/
 
 }
