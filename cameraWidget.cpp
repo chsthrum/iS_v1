@@ -49,6 +49,22 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
     machStatusLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     machStatusLabel->setFixedSize(20,20);
 
+    captureRateLabel = new QLabel;
+    captureRateLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    captureRateLabel->setFixedSize(100,20);
+
+    nFramesCapturedLabel = new QLabel;
+    nFramesCapturedLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    nFramesCapturedLabel->setFixedSize(100,20);
+
+    processingRateLabel = new QLabel;
+    processingRateLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    processingRateLabel->setFixedSize(100,20);
+
+    nFramesProcessedLabel = new QLabel;
+    nFramesProcessedLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    nFramesProcessedLabel->setFixedSize(100,20);
+
     // Set up the camera view label
     cameraViewLabel->setMinimumSize(250,250);
     /* do not set the height less than the size it can expand to, else the image will be cropped.
@@ -71,6 +87,12 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
     indicatorLampsLayout->addWidget(machStatusLabel);
     indicatorLampsLayout->addWidget(camStatusLabel);
     indicatorLampsLayout->addWidget(camNumberLabel);
+    indicatorLampsLayout->addWidget(captureRateLabel);
+    indicatorLampsLayout->addWidget(nFramesCapturedLabel);
+    indicatorLampsLayout->addWidget(processingRateLabel);
+    indicatorLampsLayout->addWidget(nFramesProcessedLabel);
+
+
 
     charts->addWidget(defectMapLongLabel);
     charts->addWidget(defectMapShortLabel);
@@ -144,7 +166,6 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         // Setup signal/slot connections
         connect(processingThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
         connect(processingThread, SIGNAL(newDefectStruct(struct DefectStructToSave)), this, SLOT (updateDefectStruct(struct DefectStructToSave)));
-        //connect(captureThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
         connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
         connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));
         //connect(imageProcessingSettingsDialog, SIGNAL(newImageProcessingSettings(struct ImageProcessingSettings)), processingThread, SLOT(updateImageProcessingSettings(struct ImageProcessingSettings)));
@@ -186,6 +207,31 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
 
     return -1;
 
+}
+void CameraWidget::updateCaptureThreadStats(struct ThreadStatisticsData statData)
+{
+    // Show [number of images in buffer / image buffer size] in imageBufferLabel
+    //ui->imageBufferLabel->setText(QString("[")+QString::number(sharedImageBuffer->getByDeviceNumber(deviceNumber)->size())+
+    //                              QString("/")+QString::number(sharedImageBuffer->getByDeviceNumber(deviceNumber)->maxSize())+QString("]"));
+    // Show percentage of image bufffer full in imageBufferBar
+    //ui->imageBufferBar->setValue(sharedImageBuffer->getByDeviceNumber(deviceNumber)->size());
+
+    // Show processing rate in captureRateLabel
+    captureRateLabel->setText(QString::number(statData.averageFPS)+" fps");
+    // Show number of frames captured in nFramesCapturedLabel
+    nFramesCapturedLabel->setText(QString("[") + QString::number(statData.nFramesProcessed) + QString("]  frames"));
+}
+void CameraWidget::updateProcessingThreadStats(struct ThreadStatisticsData statData)
+{
+    // Show processing rate in processingRateLabel
+    processingRateLabel->setText(QString::number(statData.averageFPS)+" fps");
+    // Show ROI information in roiLabel
+//    roiLabel->setText(QString("(")+QString::number(processingThread->getCurrentROI().x())+QString(",")+
+//                          QString::number(processingThread->getCurrentROI().y())+QString(") ")+
+//                          QString::number(processingThread->getCurrentROI().width())+
+//                          QString("x")+QString::number(processingThread->getCurrentROI().height()));
+    // Show number of frames processed in nFramesProcessedLabel
+    nFramesProcessedLabel->setText(QString("[") + QString::number(statData.nFramesProcessed) + QString("]  frames"));
 }
 
 void CameraWidget::updateFrame(const QImage &frame)

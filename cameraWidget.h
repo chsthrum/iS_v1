@@ -71,7 +71,12 @@ private:
     QLabel *machStatusLabel;
     QLabel *camStatusLabel;
     QLabel *detectLabel;
+    QLabel *captureRateLabel;
+    QLabel *nFramesCapturedLabel;
+    QLabel *processingRateLabel;
+    QLabel *nFramesProcessedLabel;
     QPushButton *stopMotionPB;
+
 
 
     QList <DefectLabel*> labels;
@@ -84,6 +89,8 @@ private:
 private slots:
     void updateFrame(const QImage &frame);
     void updateDefectStruct(const DefectStructToSave &);
+    void updateProcessingThreadStats(struct ThreadStatisticsData statData);
+    void updateCaptureThreadStats(struct ThreadStatisticsData statData);
 
 signals:
     void setROI(QRect roi);
