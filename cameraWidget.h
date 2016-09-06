@@ -17,6 +17,7 @@
 #include "ImagingStuff/Config.h"
 #include "pic2label.h"
 #include "ImagingStuff/Structures.h"
+#include "defectimagestorage.h"
 
 class CameraWidget : public QWidget
 {
@@ -30,9 +31,6 @@ public:
 
     bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height);
 
-    //void addDefectCameraViewLabels(QVector<QLabel*>& p_Labels, QHBoxLayout* & p_layOut,int i);
-    //void addDefectCameraViewLabels(QList<QLabel*>& p_Labels, QHBoxLayout* p_layOut,int i);
-    void addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBoxLayout* p_layOut,int i);
 
     //set the camera status indicator label
     bool setCameraStatusLabel();
@@ -52,6 +50,7 @@ protected:
 
 private:
 
+    DefectImageStorage *defectImages;
     SharedImageBuffer *sharedImageBuffer;
     int deviceNumber;
     bool isCameraConnected;

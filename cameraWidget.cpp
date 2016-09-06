@@ -5,11 +5,12 @@
 #include "cameraWidget.h"
 #include "ImagingStuff/Structures.h"
 
-//CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), cameraNumber(deviceNumber), sharedImageBuffer(sharedImageBuffer)
+
 CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
 
 {
 
+    defectImages = new DefectImageStorage(this, 5);
     // Save Device Number
     this->deviceNumber=deviceNumber;
     // Initialize internal flag
@@ -17,7 +18,6 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
 
     setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 
-    //cameraViewLabel = new ScaledLabel;
     cameraViewLabel = new QLabel;
 
     stopMotionPB = new QPushButton;
@@ -59,14 +59,12 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
 
 
     QVBoxLayout* indicatorLampsLayout = new QVBoxLayout;
-    QHBoxLayout* defectImagesLayoutBox = new QHBoxLayout;
+    QHBoxLayout* defectImagesLayoutBox = defectImages->getDefectLabelLayout();
     QHBoxLayout* cameraView = new QHBoxLayout;
     QVBoxLayout* chartsAndViews = new QVBoxLayout;
     QVBoxLayout* charts = new QVBoxLayout;
 
     setWindowTitle(tr("CameraView"));
-
-    addDefectCameraViewLabels(labels, defectImagesLayoutBox, numberOfDefectImages);
 
     indicatorLampsLayout->addWidget(stopMotionPB);
     indicatorLampsLayout->addWidget(detectLabel);
@@ -204,20 +202,6 @@ void CameraWidget::updateDefectStruct(const DefectStructToSave & dsts)
 
 }
 
-// using a QList
-void CameraWidget::addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBoxLayout* p_layOut,int limit)
-{
-    for(int i = 0; i != limit ; ++i)
-    {
-        p_Labels.push_back(new DefectLabel);
-        p_Labels[i]->setFixedSize(80,60);
-        p_Labels[i]->setFrameStyle(QFrame::Box | QFrame::Raised);
-        QSize size = p_Labels[i]->sizeHint();
-        //qDebug() << "from CameraWidget::addDefectCameraViewLabels, label size (Width * Height)   " << size;
-
-        p_layOut->addWidget(p_Labels[i]);
-    }
-}
 
 bool CameraWidget::setCameraStatusLabel()
 {

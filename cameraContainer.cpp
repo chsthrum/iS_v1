@@ -5,6 +5,7 @@
 
 
 
+
 CameraContainer::CameraContainer(QWidget *parent)
     : QWidget(parent)
 {
@@ -57,13 +58,13 @@ end of the layout
 ***********************************************************************************/
 
 
-    QSize size = camLayout->sizeHint();
-    qDebug() << "from widget::widget(), label size (Width * Height)   " << size;
-    size = cams[0]->getSize();
-    qDebug() << "from CameraWidget::getSize(), label size (Width * Height)   " << size;
+   //QSize size = camLayout->sizeHint();
+   //qDebug() << "from widget::widget(), label size (Width * Height)   " << size;
+   // size = cams[0]->getSize();
+   // qDebug() << "from CameraWidget::getSize(), label size (Width * Height)   " << size;
 
     //test
-    cams[0]->setText("test");
+   // cams[0]->setText("test");
 
 }
 

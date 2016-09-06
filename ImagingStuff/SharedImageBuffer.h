@@ -70,6 +70,8 @@ class SharedImageBuffer
         QMutex mutex;
         int nArrived;
         bool doSync;
+
+
 };
 
 #endif // SHAREDIMAGEBUFFER_H
