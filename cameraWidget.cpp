@@ -10,7 +10,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
 
 {
 
-    defectImages = new DefectImageStorage(this, 5);
+    defectImages = new DefectImageStorage(this, nDefectImages);
     // Save Device Number
     this->deviceNumber=deviceNumber;
     // Initialize internal flag
@@ -87,6 +87,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
     setLayout(cameraView);
 
     // Register type
+    qRegisterMetaType<struct ThreadStatisticsData>("ThreadStatisticsData");
     qRegisterMetaType<struct DefectStructToSave>("DefectStructToSave");
 
 /*********************************************************************
@@ -107,8 +108,8 @@ CameraWidget::~CameraWidget()
             stopCaptureThread();
 
         // Automatically start frame processing (for other streams)
-        if(sharedImageBuffer->isSyncEnabledForDeviceNumber(deviceNumber))
-            sharedImageBuffer->setSyncEnabled(true);
+        //if(sharedImageBuffer->isSyncEnabledForDeviceNumber(deviceNumber))
+        //    sharedImageBuffer->setSyncEnabled(true);
 
         // Remove from shared buffer
         sharedImageBuffer->removeByDeviceNumber(deviceNumber);
@@ -144,8 +145,8 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         connect(processingThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
         connect(processingThread, SIGNAL(newDefectStruct(struct DefectStructToSave)), this, SLOT (updateDefectStruct(struct DefectStructToSave)));
         //connect(captureThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
-        //connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
-        //connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));
+        connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
+        connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));
         //connect(imageProcessingSettingsDialog, SIGNAL(newImageProcessingSettings(struct ImageProcessingSettings)), processingThread, SLOT(updateImageProcessingSettings(struct ImageProcessingSettings)));
         //connect(this, SIGNAL(newImageProcessingFlags(struct ImageProcessingFlags)), processingThread, SLOT(updateImageProcessingFlags(struct ImageProcessingFlags)));
         connect(this, SIGNAL(setROI(QRect)), processingThread, SLOT(setROI(QRect)));

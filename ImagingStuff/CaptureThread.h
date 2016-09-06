@@ -42,7 +42,7 @@
 #include "SharedImageBuffer.h"
 #include "Config.h"
 #include "MatToQImage.h"
-//#include "Structures.h"
+#include "Structures.h"
 
 using namespace cv;
 
@@ -62,18 +62,18 @@ class CaptureThread : public QThread
         int getInputSourceHeight();
 
     private:
-        //void updateFPS(int);
+        void updateFPS(int);
         SharedImageBuffer *sharedImageBuffer;
         VideoCapture cap;
         Mat grabbedFrame;
         QImage frame;
-        //QTime t;
+        QTime t;
         QMutex doStopMutex;
-        //QQueue<int> fps;
-        //struct ThreadStatisticsData statsData;
+        QQueue<int> fps;
+        struct ThreadStatisticsData statsData;
         volatile bool doStop;
-        //int captureTime;
-        //int sampleNumber;
+        int captureTime;
+        int sampleNumber;
         int fpsSum;
         bool dropFrameIfBufferFull;
         int deviceNumber;
@@ -84,8 +84,8 @@ class CaptureThread : public QThread
         void run();
 
     signals:
-        //void updateStatisticsInGUI(struct ThreadStatisticsData);
-        //void newFrame(const QImage &frame);
+        void updateStatisticsInGUI(struct ThreadStatisticsData);
+        //void newFrame(const QImage &frame); used only for previous testing
 };
 
 #endif // CAPTURETHREAD_H

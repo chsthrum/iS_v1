@@ -51,11 +51,11 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
    defectData.cameraNumber = deviceNumber;
 
 
-//    sampleNumber=0;
-//    fpsSum=0;
-//    fps.clear();
-//    statsData.averageFPS=0;
-//    statsData.nFramesProcessed=0;
+    sampleNumber=0;
+    fpsSum=0;
+    fps.clear();
+    statsData.averageFPS=0;
+    statsData.nFramesProcessed=0;
 }
 
 void ProcessingThread::run()
@@ -77,9 +77,9 @@ void ProcessingThread::run()
         /////////////////////////////////
 
         // Save processing time
-        //processingTime=t.elapsed();
+        processingTime=t.elapsed();
         // Start timer (used to calculate processing rate)
-        //t.start();
+        t.start();
 
         processingMutex.lock();
         // Get frame from queue, store in currentFrame, set ROI
@@ -181,43 +181,43 @@ void ProcessingThread::run()
         }
 
 
-//       //  Update statistics
-//        updateFPS(processingTime);
-//        statsData.nFramesProcessed++;
-//       //  Inform GUI of updated statistics
-//        emit updateStatisticsInGUI(statsData);
+       //  Update statistics
+        updateFPS(processingTime);
+        statsData.nFramesProcessed++;
+       //  Inform GUI of updated statistics
+        emit updateStatisticsInGUI(statsData);
     }
     qDebug() << "Stopping processing thread...";
 }
 
-//void ProcessingThread::updateFPS(int timeElapsed)
-//{
-//    // Add instantaneous FPS value to queue
-//    if(timeElapsed>0)
-//    {
-//        fps.enqueue((int)1000/timeElapsed);
-//        // Increment sample number
-//        sampleNumber++;
-//    }
+void ProcessingThread::updateFPS(int timeElapsed)
+{
+    // Add instantaneous FPS value to queue
+    if(timeElapsed>0)
+    {
+        fps.enqueue((int)1000/timeElapsed);
+        // Increment sample number
+        sampleNumber++;
+    }
 
-//    // Maximum size of queue is DEFAULT_PROCESSING_FPS_STAT_QUEUE_LENGTH
-//    if(fps.size()>PROCESSING_FPS_STAT_QUEUE_LENGTH)
-//        fps.dequeue();
+    // Maximum size of queue is DEFAULT_PROCESSING_FPS_STAT_QUEUE_LENGTH
+    if(fps.size()>PROCESSING_FPS_STAT_QUEUE_LENGTH)
+        fps.dequeue();
 
-//    // Update FPS value every DEFAULT_PROCESSING_FPS_STAT_QUEUE_LENGTH samples
-//    if((fps.size()==PROCESSING_FPS_STAT_QUEUE_LENGTH)&&(sampleNumber==PROCESSING_FPS_STAT_QUEUE_LENGTH))
-//    {
-//        // Empty queue and store sum
-//        while(!fps.empty())
-//            fpsSum+=fps.dequeue();
-//        // Calculate average FPS
-//        statsData.averageFPS=fpsSum/PROCESSING_FPS_STAT_QUEUE_LENGTH;
-//        // Reset sum
-//        fpsSum=0;
-//        // Reset sample number
-//        sampleNumber=0;
-//    }
-//}
+    // Update FPS value every DEFAULT_PROCESSING_FPS_STAT_QUEUE_LENGTH samples
+    if((fps.size()==PROCESSING_FPS_STAT_QUEUE_LENGTH)&&(sampleNumber==PROCESSING_FPS_STAT_QUEUE_LENGTH))
+    {
+        // Empty queue and store sum
+        while(!fps.empty())
+            fpsSum+=fps.dequeue();
+        // Calculate average FPS
+        statsData.averageFPS=fpsSum/PROCESSING_FPS_STAT_QUEUE_LENGTH;
+        // Reset sum
+        fpsSum=0;
+        // Reset sample number
+        sampleNumber=0;
+    }
+}
 
 void ProcessingThread::stop()
 {

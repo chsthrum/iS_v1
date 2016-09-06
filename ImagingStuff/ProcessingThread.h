@@ -75,7 +75,7 @@ class ProcessingThread : public QThread
         Point framePoint;
         //struct ImageProcessingFlags imgProcFlags;
         //struct ImageProcessingSettings imgProcSettings;
-        //struct ThreadStatisticsData statsData;
+        struct ThreadStatisticsData statsData;
         volatile bool doStop;
         int processingTime;
         int fpsSum;
@@ -97,7 +97,7 @@ class ProcessingThread : public QThread
     signals:
         void newFrame(const QImage &frame);
         void newDefectStruct(const DefectStructToSave &defectData);
-//        void updateStatisticsInGUI(struct ThreadStatisticsData);
+        void updateStatisticsInGUI(struct ThreadStatisticsData);
 };
 
 #endif // PROCESSINGTHREAD_H
