@@ -24,3 +24,18 @@ cv::FileStorage storage("test.yml", cv::FileStorage::READ);
 storage["img"] >> img;
 storage.release();
 */
+
+
+Standard for new class
+
+in the header
+class DefectImageStorage : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit DefectImageStorage(QWidget *parent, int numberOfImages);
+    ~DefectImageStorage();
+
+in the implementation (.cpp)
+DefectImageStorage::DefectImageStorage(QWidget *parent, int numberOfImages) : QWidget(parent), queueLength(numberOfImages) etc

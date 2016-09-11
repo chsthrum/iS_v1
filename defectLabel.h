@@ -1,5 +1,8 @@
 #ifndef DEFECTLABEL_H
 #define DEFECTLABEL_H
+
+//makes a label to hold the defect image and allows a mouse press event
+
 //qt includes
 #include <QWidget>
 #include <QMouseEvent>

@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+//Holds the scrollable main page on which all the camera displays fit
+
 //qt includes
 #include <QMainWindow>
 #include <QObject>

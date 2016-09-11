@@ -3,7 +3,7 @@
 
 DefectLabel::DefectLabel(QWidget *parent) : QLabel(parent)
 {
-    this->setText("No Defect.");
+    this->setText("d");
     this->setAlignment(Qt::AlignCenter);
 }
 

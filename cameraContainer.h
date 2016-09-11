@@ -1,5 +1,8 @@
 #ifndef WIDGET_H
 #define WIDGET_H
+
+//generates the entire view for all the cameras
+
 //qt includes
 #include <QWidget>
 #include <QLayout>

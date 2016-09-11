@@ -1,6 +1,8 @@
 #ifndef CAMERAWIDGET_H
 #define CAMERAWIDGET_H
 
+//generates the view for each camera
+
 //qt includes
 #include <QWidget>
 #include <QLabel>

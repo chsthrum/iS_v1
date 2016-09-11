@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     cameraContainer.cpp \
     ImagingStuff/CaptureThread.cpp \
     ImagingStuff/ProcessingThread.cpp \
-    defectimagestorage.cpp
+    defectimagestorage.cpp \
+    defectlabelslayout.cpp
 
 HEADERS  += mainwindow.h \
     defectLabel.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     ImagingStuff/Config.h \
     defectimagestorage.h \
     weighteddie.h \
-    ImagingStuff/Structures.h
+    ImagingStuff/Structures.h \
+    defectlabelslayout.h
 
 DISTFILES += \
     notes.txt
