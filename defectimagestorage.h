@@ -9,10 +9,12 @@
 #include <QDebug>
 #include <QQueue>
 #include <QLayout>
+#include <QTime> //for milliseconds
 //openCV
 #include "opencv2/core/core.hpp"
 //stl
 #include <iostream>
+#include <ctime> //for seconds
 //local
 #include "ImagingStuff/Structures.h"
 #include "defectLabel.h"
@@ -28,28 +30,30 @@ public:
     explicit DefectImageStorage(QWidget *parent, int numberOfImages);
     ~DefectImageStorage();
     void addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBoxLayout* p_layOut,int numberOfImages);
-    QHBoxLayout* getDefectLabelLayout();
+    QHBoxLayout* DefectLabelLayout();
 
 private:
     //QLabel *defectLabel;
     QLabel *defectIndicator;
+    QLabel *defectFrameNumberLabel;
+    long defectFrameNumber;
+    //QLabel *defectClassLabel;
+    //QLabel *productCodeLabel;
+    //QLabel *dateTimeDefectLabel;
     QPushButton *defectStopmotion;
     QString filename;
     DefectStructToSave *ds;
     cv::Mat defectMat;
-    long defectMatNumber;
     long rawTimeSecs;
     QQueue<DefectStructToSave>defectQueue;
     int queueLength;
     cv::FileStorage* storage; // for storing the defect file in xml.gz (zipped xml format)
     struct DefectStructToSave defectData;
-    QList <DefectLabel*> labels;
+    QList <DefectLabel*> defectImageLabels;
     QHBoxLayout *p_layOut;
 
 
-signals:
 
-    void newDefectStruct(const DefectStructToSave &defectData);
 
 
 };

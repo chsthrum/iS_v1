@@ -68,14 +68,15 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
     // Set up the camera view label
     cameraViewLabel->setMinimumSize(250,250);
     /* do not set the height less than the size it can expand to, else the image will be cropped.
-    The reason is that each cameraViewLabel maximum size is basically determined by the CamaeraContainer layout. */
+    The reason is that each cameraViewLabel maximum size is basically determined by the CameraContainer layout. */
     cameraViewLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     cameraViewLabel->setText("No camera connected.");
     cameraViewLabel->setAlignment(Qt::AlignCenter);
 
 
     QVBoxLayout* indicatorLampsLayout = new QVBoxLayout;
-    QHBoxLayout* defectImagesLayoutBox = defectImages->getDefectLabelLayout();
+    // Set up the layout of the defect images
+    QHBoxLayout* defectImagesLayoutBox = defectImages->DefectLabelLayout();
     QHBoxLayout* cameraView = new QHBoxLayout;
     QVBoxLayout* chartsAndViews = new QVBoxLayout;
     QVBoxLayout* charts = new QVBoxLayout;
