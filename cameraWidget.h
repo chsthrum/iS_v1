@@ -43,6 +43,7 @@ public:
 
 
 
+
     QSize getSize(); // gets the size of the QLabel
 
     void setText(QString); // puts some text in a QLabel
@@ -73,6 +74,7 @@ private:
     QLabel *machStatusLabel;
     QLabel *camStatusLabel;
     QLabel *detectLabel;
+    QLabel* imageBufferLabel;
     QLabel *captureRateLabel;
     QLabel *nFramesCapturedLabel;
     QLabel *processingRateLabel;
@@ -93,6 +95,7 @@ private slots:
     void updateDefectStruct(const DefectStructToSave &);
     void updateProcessingThreadStats(struct ThreadStatisticsData statData);
     void updateCaptureThreadStats(struct ThreadStatisticsData statData);
+    void diceTest(QString);
 
 signals:
     void setROI(QRect roi);

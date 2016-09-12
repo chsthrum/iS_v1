@@ -14,7 +14,7 @@
 #include "ImagingStuff/SharedImageBuffer.h"
 
 
-const int NumberOfDevices = 100;
+const int NumberOfDevices = 3;
 const int NumberOfDefectImages = 10;
 
 class CameraContainer : public QWidget

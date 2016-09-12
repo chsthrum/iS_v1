@@ -34,8 +34,11 @@
 #include <QDebug>
 //local
 #include "ProcessingThread.h"
+#include "../weighteddie.h" // for the test program
 //stl
 #include <ctime>
+
+
 
 
 ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber) : QThread(), sharedImageBuffer(sharedImageBuffer)
@@ -44,11 +47,13 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
     this->deviceNumber=deviceNumber;
     // Initialize members
    doStop=false;
-   enableDeepLearning = true;
+   enableDeepLearning = false;
    defectData.defectMatNo = 0;
    defectData.fileName = "";
    defectData.rawtimeS = 0;
    defectData.cameraNumber = deviceNumber;
+
+    flag = false; // for the dice test
 
 
     sampleNumber=0;
@@ -186,6 +191,21 @@ void ProcessingThread::run()
         statsData.nFramesProcessed++;
        //  Inform GUI of updated statistics
         emit updateStatisticsInGUI(statsData);
+
+
+
+        if ((roll_weighted_die() == 6) && (flag == false)) //for testing the output
+        {
+            //qDebug() << "d = "  << d;
+            emit dice_is_6("thanks");
+            flag = true;
+        }
+        if ((roll_weighted_die() == 6) && (flag == true)) //for testing the output
+        {
+            //qDebug() << "d = "  << d;
+            emit dice_is_6("Hello!!!");
+            flag = false;
+        }
     }
     qDebug() << "Stopping processing thread...";
 }

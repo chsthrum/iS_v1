@@ -17,7 +17,7 @@ DefectImageStorage::~DefectImageStorage()
 
 }
 
-// using a QList
+// for the defect labels only
 void DefectImageStorage::addDefectCameraViewLabels(QList<DefectLabel*>& p_DefectImageLabels, QHBoxLayout* layOut,int numberOfImages)
 {
     for(int i = 0; i != numberOfImages ; ++i)
@@ -37,7 +37,7 @@ void DefectImageStorage::addDefectCameraViewLabels(QList<DefectLabel*>& p_Defect
     }
 }
 
-// using a QList
+// for the DefectLabelsLayout
 void DefectImageStorage::addDefectCameraViewLabels(QList<DefectLabelsLayout*>& p_DefectImageLabels, QHBoxLayout* layOut,int numberOfImages)
 {
     for(int i = 0; i != numberOfImages ; ++i)
@@ -59,4 +59,9 @@ QHBoxLayout *DefectImageStorage::DefectLabelLayout()
 {
     return p_layOut;
 
+}
+
+ void DefectImageStorage::getDefectlabels(int i, QString s)
+{
+    defectLabels[i]->setDefectFrameNumber(s);
 }

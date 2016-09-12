@@ -4,6 +4,8 @@
 //local includes
 #include "cameraWidget.h"
 #include "ImagingStuff/Structures.h"
+#include "defectimagestorage.h"
+#include "defectlabelslayout.h"
 
 
 CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
@@ -65,6 +67,10 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
     nFramesProcessedLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     nFramesProcessedLabel->setFixedSize(100,20);
 
+    imageBufferLabel = new QLabel;
+    imageBufferLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    imageBufferLabel->setFixedSize(100,20);
+
     // Set up the camera view label
     cameraViewLabel->setMinimumSize(250,250);
     /* do not set the height less than the size it can expand to, else the image will be cropped.
@@ -73,8 +79,9 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
     cameraViewLabel->setText("No camera connected.");
     cameraViewLabel->setAlignment(Qt::AlignCenter);
 
-
-    QVBoxLayout* indicatorLampsLayout = new QVBoxLayout;
+    QVBoxLayout* labelsAndLamps = new QVBoxLayout;
+    QVBoxLayout* labelsAndButtonsLayout = new QVBoxLayout;
+    QHBoxLayout* indicatorLamps = new QHBoxLayout;
     // Set up the layout of the defect images
     QHBoxLayout* defectImagesLayoutBox = defectImages->DefectLabelLayout();
     QHBoxLayout* cameraView = new QHBoxLayout;
@@ -83,16 +90,21 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
 
     setWindowTitle(tr("CameraView"));
 
-    indicatorLampsLayout->addWidget(stopMotionPB);
-    indicatorLampsLayout->addWidget(detectLabel);
-    indicatorLampsLayout->addWidget(machStatusLabel);
-    indicatorLampsLayout->addWidget(camStatusLabel);
-    indicatorLampsLayout->addWidget(camNumberLabel);
-    indicatorLampsLayout->addWidget(captureRateLabel);
-    indicatorLampsLayout->addWidget(nFramesCapturedLabel);
-    indicatorLampsLayout->addWidget(processingRateLabel);
-    indicatorLampsLayout->addWidget(nFramesProcessedLabel);
+    labelsAndButtonsLayout->addWidget(stopMotionPB);
 
+    labelsAndButtonsLayout->addWidget(captureRateLabel);
+    labelsAndButtonsLayout->addWidget(nFramesCapturedLabel);
+    labelsAndButtonsLayout->addWidget(processingRateLabel);
+    labelsAndButtonsLayout->addWidget(nFramesProcessedLabel);
+    labelsAndButtonsLayout->addWidget(imageBufferLabel);
+
+    indicatorLamps->addWidget(detectLabel);
+    indicatorLamps->addWidget(machStatusLabel);
+    indicatorLamps->addWidget(camStatusLabel);
+    indicatorLamps->addWidget(camNumberLabel);
+
+    labelsAndLamps->addLayout(indicatorLamps);
+    labelsAndLamps->addLayout(labelsAndButtonsLayout);
 
 
     charts->addWidget(defectMapLongLabel);
@@ -103,7 +115,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
     chartsAndViews->addLayout(charts);
 
     cameraView->addWidget(cameraViewLabel);
-    cameraView->addLayout(indicatorLampsLayout);
+    cameraView->addLayout(labelsAndLamps);
     cameraView->addLayout(chartsAndViews);
 
 
@@ -169,6 +181,9 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         connect(processingThread, SIGNAL(newDefectStruct(struct DefectStructToSave)), this, SLOT (updateDefectStruct(struct DefectStructToSave)));
         connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
         connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));
+
+        connect(processingThread, SIGNAL(dice_is_6(QString)), this, SLOT (diceTest(QString)));//defectLabels
+
         //connect(imageProcessingSettingsDialog, SIGNAL(newImageProcessingSettings(struct ImageProcessingSettings)), processingThread, SLOT(updateImageProcessingSettings(struct ImageProcessingSettings)));
         //connect(this, SIGNAL(newImageProcessingFlags(struct ImageProcessingFlags)), processingThread, SLOT(updateImageProcessingFlags(struct ImageProcessingFlags)));
         connect(this, SIGNAL(setROI(QRect)), processingThread, SLOT(setROI(QRect)));
@@ -212,8 +227,8 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
 void CameraWidget::updateCaptureThreadStats(struct ThreadStatisticsData statData)
 {
     // Show [number of images in buffer / image buffer size] in imageBufferLabel
-    //ui->imageBufferLabel->setText(QString("[")+QString::number(sharedImageBuffer->getByDeviceNumber(deviceNumber)->size())+
-    //                              QString("/")+QString::number(sharedImageBuffer->getByDeviceNumber(deviceNumber)->maxSize())+QString("]"));
+    imageBufferLabel->setText(QString("[")+QString::number(sharedImageBuffer->getByDeviceNumber(deviceNumber)->size())+
+                                  QString("/")+QString::number(sharedImageBuffer->getByDeviceNumber(deviceNumber)->maxSize())+QString("]"));
     // Show percentage of image bufffer full in imageBufferBar
     //ui->imageBufferBar->setValue(sharedImageBuffer->getByDeviceNumber(deviceNumber)->size());
 
@@ -221,6 +236,12 @@ void CameraWidget::updateCaptureThreadStats(struct ThreadStatisticsData statData
     captureRateLabel->setText(QString::number(statData.averageFPS)+" fps");
     // Show number of frames captured in nFramesCapturedLabel
     nFramesCapturedLabel->setText(QString("[") + QString::number(statData.nFramesProcessed) + QString("]  frames"));
+}
+
+void CameraWidget::diceTest(QString message)
+{
+   defectImages->getDefectlabels(3, message);
+
 }
 void CameraWidget::updateProcessingThreadStats(struct ThreadStatisticsData statData)
 {
@@ -239,7 +260,7 @@ void CameraWidget::updateFrame(const QImage &frame)
 {
     //set the size of the label holding the image to the scaled image. NOTE THIS FUNCTION MIGHT PROVE TOO EXPENSIVE
     cameraViewLabel->setFixedSize(cameraViewLabel->width(), heightForWidth(frame, cameraViewLabel->width()));
-    qDebug() << cameraViewLabel->size();
+    //qDebug() << cameraViewLabel->size();
     this->cameraViewLabel->setPixmap(QPixmap::fromImage(frame).scaled(this->cameraViewLabel->width(), this->cameraViewLabel->height(),Qt::KeepAspectRatio));
     //TEST//this->labels[3]->setPixmap(QPixmap::fromImage(frame).scaled(this->cameraViewLabel->width(), this->cameraViewLabel->height(),Qt::KeepAspectRatio));
     //TEST//this->camStatusLabel->setStyleSheet("QLabel { background-color : green; color : blue; }");

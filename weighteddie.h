@@ -33,7 +33,8 @@ boost::mt19937 gen;
    the weights.]
 */
 double probabilities[] = {
-    0.5, 0.1, 0.1, 0.1, 0.1, 0.1
+    0.5, 0.12, 0.12, 0.12, 0.12, 0.02
+    //0.5, 0.122, 0.122, 0.122, 0.122, 0.01
 };
 boost::random::discrete_distribution<> dist(probabilities);
 

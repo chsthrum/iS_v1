@@ -35,6 +35,8 @@ public:
     void addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBoxLayout* p_layOut,int numberOfImages);
     void addDefectCameraViewLabels(QList<DefectLabelsLayout*>& p_Labels, QHBoxLayout* p_layOut,int numberOfImages); // adds the defect display widgets
     QHBoxLayout* DefectLabelLayout(); // returns a layout pointer to the CameraWidget objects layout mechanism
+    void getDefectlabels(int, QString);
+
 
 private:
     //QLabel *defectLabel;

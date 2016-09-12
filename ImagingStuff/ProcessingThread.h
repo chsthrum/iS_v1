@@ -37,6 +37,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QTime>
 #include <QtCore/QQueue>
+#include <QString> // for dice test
 // OpenCV
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -46,6 +47,7 @@
 #include "Buffer.h"
 #include "MatToQImage.h"
 #include "SharedImageBuffer.h"
+
 
 using namespace cv;
 
@@ -84,7 +86,10 @@ class ProcessingThread : public QThread
         bool enableFrameProcessing;
         struct DefectStructToSave defectData;
 
+
         bool enableDeepLearning;
+        int d; //for testing
+        bool flag; // for the dice test
 
     protected:
         void run();
@@ -98,6 +103,7 @@ class ProcessingThread : public QThread
         void newFrame(const QImage &frame);
         void newDefectStruct(const DefectStructToSave &defectData);
         void updateStatisticsInGUI(struct ThreadStatisticsData);
+        void dice_is_6(QString);
 };
 
 #endif // PROCESSINGTHREAD_H
