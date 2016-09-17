@@ -240,7 +240,7 @@ void CameraWidget::updateCaptureThreadStats(struct ThreadStatisticsData statData
 
 void CameraWidget::diceTest(QString message)
 {
-   defectImages->getDefectlabels(3, message);
+   defectImages->setDefectLabels(3, message);
 
 }
 void CameraWidget::updateProcessingThreadStats(struct ThreadStatisticsData statData)

@@ -61,7 +61,7 @@ QHBoxLayout *DefectImageStorage::DefectLabelLayout()
 
 }
 
- void DefectImageStorage::getDefectlabels(int i, QString s)
+ void DefectImageStorage::setDefectLabels(int i, QString s)
 {
     defectLabels[i]->setDefectFrameNumber(s);
 }
