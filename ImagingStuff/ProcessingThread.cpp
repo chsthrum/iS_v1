@@ -53,7 +53,7 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
    defectData.rawtimeS = 0;
    defectData.cameraNumber = deviceNumber;
 
-    flag = false; // for the dice test
+   flag = false; // for the dice test
 
 
     sampleNumber=0;
@@ -172,8 +172,20 @@ void ProcessingThread::run()
 
         // Inform GUI thread of new frame (QImage)
         emit newFrame(frame);
+
+        //  Update statistics
+         updateFPS(processingTime);
+         statsData.nFramesProcessed++;
+        //  Inform GUI of updated statistics
+         emit updateStatisticsInGUI(statsData);
+
+        //TEST - roll the biased dice.
         // Inform GUI thread of new defect structure (DefectStructToSave)
-        if(enableDeepLearning && (roll_weighted_die() == 6))
+
+        int d = roll_weighted_die();
+
+
+        if(enableDeepLearning && (d == 6))
         {
             time_t rawtime;
             time(&rawtime);
@@ -186,21 +198,13 @@ void ProcessingThread::run()
         }
 
 
-       //  Update statistics
-        updateFPS(processingTime);
-        statsData.nFramesProcessed++;
-       //  Inform GUI of updated statistics
-        emit updateStatisticsInGUI(statsData);
-
-
-
-        if ((roll_weighted_die() == 6) && (flag == false)) //for testing the output
+        if ((d == 6) && (flag == false)) //for testing the output
         {
             //qDebug() << "d = "  << d;
             emit dice_is_6("thanks");
             flag = true;
         }
-        if ((roll_weighted_die() == 6) && (flag == true)) //for testing the output
+        else if ((d == 6) && (flag == true)) //for testing the output
         {
             //qDebug() << "d = "  << d;
             emit dice_is_6("Hello!!!");

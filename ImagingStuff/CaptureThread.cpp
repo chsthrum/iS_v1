@@ -139,7 +139,7 @@ void CaptureThread::updateFPS(int timeElapsed)
     // Update FPS value every DEFAULT_CAPTURE_FPS_STAT_QUEUE_LENGTH samples
     if((fps.size()==CAPTURE_FPS_STAT_QUEUE_LENGTH)&&(sampleNumber==CAPTURE_FPS_STAT_QUEUE_LENGTH))
     {
-        // Empty queue and store sum
+        // Empty queue in the while loop and store sum
         while(!fps.empty())
             fpsSum+=fps.dequeue();
         // Calculate average FPS

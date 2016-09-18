@@ -8,7 +8,7 @@ DefectLabelsLayout::DefectLabelsLayout(QWidget *parent): QWidget(parent)
     defectImageLabel = new DefectLabel;
     defectFrameNumberandLength = new QLabel;
 
-    defectImageLabel->setFixedSize(100,60);
+    defectImageLabel->setFixedSize(200,140);
     defectImageLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     defectImageLabel->setText("No image");
 
