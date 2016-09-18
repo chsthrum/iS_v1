@@ -12,9 +12,12 @@ DefectImageStorage::DefectImageStorage(QWidget *parent, int numberOfImages) : QW
 {
     p_layOut = new QHBoxLayout;
     //addDefectCameraViewLabels(defectImageLabels, p_layOut, numberOfImages);
-    addCameraWidgetDefectLabels(defectLabels, p_layOut, numberOfImages);
-
+    addCameraWidgetDefectLabels(defectLabels, p_layOut, queueLength);
     defectLabels[3]->setDefectFrameNumber("yippees");
+
+    //clear the queues
+    normalDefectStructQueue.clear();
+    minatureDefectStructQueue.clear();
 
 
 }
@@ -58,6 +61,75 @@ QHBoxLayout *DefectImageStorage::DefectLabelLayout()
 void DefectImageStorage::setDefectLabels(int i, QString s)
 {
     defectLabels[i]->setDefectFrameNumber(s);
+}
+
+void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
+{
+    cv::Mat temp;
+    QImage qI;
+    cv::Size size(getDefectLabelWidth(), getDefectLabelHeight());
+    // C++: void resize(InputArray src, OutputArray dst, Size dsize, double fx=0, double fy=0, int interpolation=INTER_LINEAR )
+    cv::resize(ds.defectMat, temp, size, 0, 0, cv::INTER_LINEAR);
+    //QImage MatToQImage(const Mat& mat)
+    qI = MatToQImage(temp);
+
+    DefectStructToSave minature_Im;
+    minature_Im.pixMinature = QPixmap::fromImage(qI);
+    minature_Im.defectMat.data = 0;
+    minature_Im.defectMatNo = ds.defectMatNo;
+    minature_Im.rawtimeS = ds.rawtimeS;
+
+    DefectStructToSave normal_Im;
+    normal_Im.pixMinature.isNull();
+    normal_Im.defectMat = temp;
+    normal_Im.defectMatNo = ds.defectMatNo;
+    normal_Im.rawtimeS = ds.rawtimeS;
+
+
+//    if ((minatureDefectStructQueue.size() == queueLength) && (normalDefectStructQueue.size() == queueLength))
+//    {
+//        minatureDefectStructQueue.dequeue();
+//        normalDefectStructQueue.dequeue();
+//    }
+
+    if ((minatureDefectStructQueue.size() < queueLength) && (normalDefectStructQueue.size() < queueLength))
+    {
+        minatureDefectStructQueue.prepend(minature_Im);
+        normalDefectStructQueue.prepend(normal_Im);
+    }
+
+    else if ((minatureDefectStructQueue.size() == queueLength) && (normalDefectStructQueue.size() == queueLength))
+    {
+        minatureDefectStructQueue.pop_back();
+        normalDefectStructQueue.pop_back();
+        minatureDefectStructQueue.prepend(minature_Im);
+        normalDefectStructQueue.prepend(normal_Im);
+
+    }
+
+
+    //load images into the defect labels
+    QQueue<DefectStructToSave>::const_iterator minIter = minatureDefectStructQueue.constBegin();
+    int j = 0;
+    //int j = defectLabels.length()-1;
+
+    while (minIter != minatureDefectStructQueue.constEnd())
+    {
+        DefectStructToSave tempStruct;
+        tempStruct = *minIter;
+        defectLabels[j]->setDefectImage(tempStruct.pixMinature);
+        defectLabels[j]->setDefectFrameNumber(tempStruct.defectMatNo);
+        minIter++;
+        j++;
+        //j--;
+    }
+
+
+
+
+
+
+    //defectLabels[i]->setDefectImage(pix);
 }
 
 void DefectImageStorage::setDefectImages(int i, cv::Mat& im)

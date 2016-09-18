@@ -37,6 +37,7 @@ public:
     QHBoxLayout* DefectLabelLayout(); // returns a layout pointer to the CameraWidget objects layout mechanism
     void setDefectLabels(int, QString);
     void setDefectImages(int, cv::Mat&);
+    void setDefectStruct(DefectStructToSave&);
     int getDefectLabelWidth() const;
     int getDefectLabelHeight() const;
 
@@ -54,7 +55,8 @@ private:
     DefectStructToSave *ds;
     cv::Mat defectMat;
     long rawTimeSecs;
-    QQueue<DefectStructToSave>defectQueue;
+    QQueue<DefectStructToSave>normalDefectStructQueue;
+    QQueue<DefectStructToSave>minatureDefectStructQueue;
     int queueLength;
     cv::FileStorage* storage; // for storing the defect file in xml.gz (zipped xml format)
     struct DefectStructToSave defectData;

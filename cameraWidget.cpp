@@ -11,7 +11,7 @@
 CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
 
 {
-
+    //Pointer to object to hold all the local defect images
     defectImages = new DefectImageStorage(this, nDefectImages);
     // Save Device Number
     this->deviceNumber=deviceNumber;
@@ -247,8 +247,9 @@ void CameraWidget::diceTest_withString(QString message) const
 
 void CameraWidget::diceTest_withCvmat(DefectStructToSave dsts)
 {
-    defectImages->setDefectImages(3, dsts.defectMat);
-    defectImages->setDefectLabels(3, dsts.defectMatNo);
+    //defectImages->setDefectImages(3, dsts.defectMat); // the mat image
+    //defectImages->setDefectLabels(3, dsts.defectMatNo); // the frame number
+    defectImages->setDefectStruct(dsts);
 
 }
 void CameraWidget::updateProcessingThreadStats(struct ThreadStatisticsData statData)

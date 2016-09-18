@@ -36,6 +36,7 @@
 // Qt
 #include <QtCore/QRect>
 #include <QString>
+#include <QPixmap>
 
 //opencv
 #include "opencv2/core/core.hpp"
@@ -80,6 +81,7 @@ struct ThreadStatisticsData{
 struct DefectStructToSave
 {
     cv::Mat defectMat;
+    QPixmap pixMinature;
     QString defectMatNo;
     int rawtimeS;
     int cameraNumber;
