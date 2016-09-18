@@ -1,5 +1,6 @@
 #include "defectlabelslayout.h"
 
+
 DefectLabelsLayout::DefectLabelsLayout(QWidget *parent): QWidget(parent)
 {
 
@@ -7,7 +8,7 @@ DefectLabelsLayout::DefectLabelsLayout(QWidget *parent): QWidget(parent)
     defectImageLabel = new DefectLabel;
     defectFrameNumberandLength = new QLabel;
 
-    defectImageLabel->setFixedSize(80,60);
+    defectImageLabel->setFixedSize(100,60);
     defectImageLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
     defectImageLabel->setText("No image");
 
@@ -32,6 +33,20 @@ DefectLabelsLayout::~DefectLabelsLayout()
 void DefectLabelsLayout::setDefectFrameNumber(QString frameNo)
 {
     defectFrameNumberandLength->setText(frameNo);
+}
 
+void DefectLabelsLayout::setDefectImage(QPixmap& defPix)
+{
+    defectImageLabel->setPixmap(defPix);
+}
+
+int DefectLabelsLayout::getDefectLabelWidth() const
+{
+    return defectImageLabel->width();
+}
+
+int DefectLabelsLayout::getDefectLabelHeight() const
+{
+    return defectImageLabel->height();
 }
 

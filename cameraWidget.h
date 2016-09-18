@@ -95,8 +95,8 @@ private slots:
     void updateDefectStruct(const DefectStructToSave &);
     void updateProcessingThreadStats(struct ThreadStatisticsData statData);
     void updateCaptureThreadStats(struct ThreadStatisticsData statData);
-    void diceTest(QString);
-
+    void diceTest_withString(QString) const;
+    void diceTest_withCvmat (struct DefectStructToSave);
 signals:
     void setROI(QRect roi);
 

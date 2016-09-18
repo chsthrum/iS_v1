@@ -178,11 +178,11 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         //imageProcessingSettingsDialog = new ImageProcessingSettingsDialog(this);
         // Setup signal/slot connections
         connect(processingThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
-        connect(processingThread, SIGNAL(newDefectStruct(struct DefectStructToSave)), this, SLOT (updateDefectStruct(struct DefectStructToSave)));
+        connect(processingThread, SIGNAL(updateDefectStruct(struct DefectStructToSave)), this, SLOT(diceTest_withCvmat (struct DefectStructToSave)));
         connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
         connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));
 
-        connect(processingThread, SIGNAL(dice_is_6(QString)), this, SLOT (diceTest(QString)));//defectLabels
+        connect(processingThread, SIGNAL(dice_is_6(QString)), this, SLOT (diceTest_withString(QString)));//defectLabels
 
         //connect(imageProcessingSettingsDialog, SIGNAL(newImageProcessingSettings(struct ImageProcessingSettings)), processingThread, SLOT(updateImageProcessingSettings(struct ImageProcessingSettings)));
         //connect(this, SIGNAL(newImageProcessingFlags(struct ImageProcessingFlags)), processingThread, SLOT(updateImageProcessingFlags(struct ImageProcessingFlags)));
@@ -238,9 +238,15 @@ void CameraWidget::updateCaptureThreadStats(struct ThreadStatisticsData statData
     nFramesCapturedLabel->setText(QString("[") + QString::number(statData.nFramesProcessed) + QString("]  frames"));
 }
 
-void CameraWidget::diceTest(QString message)
+void CameraWidget::diceTest_withString(QString message) const
 {
    defectImages->setDefectLabels(3, message);
+
+}
+
+void CameraWidget::diceTest_withCvmat(DefectStructToSave dsts)
+{
+    defectImages->setDefectImages(3, dsts.defectMat);
 
 }
 void CameraWidget::updateProcessingThreadStats(struct ThreadStatisticsData statData)
@@ -266,7 +272,7 @@ void CameraWidget::updateFrame(const QImage &frame)
     //TEST//this->camStatusLabel->setStyleSheet("QLabel { background-color : green; color : blue; }");
 }
 
-void CameraWidget::updateDefectStruct(const DefectStructToSave & dsts)
+void CameraWidget::updateDefectStruct(const DefectStructToSave &dsts)
 {
 
 }

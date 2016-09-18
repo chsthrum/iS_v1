@@ -101,7 +101,7 @@ class ProcessingThread : public QThread
 
     signals:
         void newFrame(const QImage &frame);
-        void newDefectStruct(const DefectStructToSave &defectData);
+        void updateDefectStruct(const DefectStructToSave &defectData);
         void updateStatisticsInGUI(struct ThreadStatisticsData);
         void dice_is_6(QString);
 };

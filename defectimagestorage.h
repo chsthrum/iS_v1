@@ -32,10 +32,13 @@ class DefectImageStorage : public QWidget
 public:
     explicit DefectImageStorage(QWidget *parent, int numberOfImages);
     ~DefectImageStorage();
-    void addDefectCameraViewLabels(QList<DefectLabel*>& p_Labels, QHBoxLayout* p_layOut,int numberOfImages);
-    void addDefectCameraViewLabels(QList<DefectLabelsLayout*>& p_Labels, QHBoxLayout* p_layOut,int numberOfImages); // adds the defect display widgets
+    void addCameraWidgetDefectLabels(QList<DefectLabel*>& p_Labels, QHBoxLayout* p_layOut,int numberOfImages);
+    void addCameraWidgetDefectLabels(QList<DefectLabelsLayout*>& p_Labels, QHBoxLayout* p_layOut,int numberOfImages); // adds the defect display widgets
     QHBoxLayout* DefectLabelLayout(); // returns a layout pointer to the CameraWidget objects layout mechanism
     void setDefectLabels(int, QString);
+    void setDefectImages(int, cv::Mat&);
+    int getDefectLabelWidth() const;
+    int getDefectLabelHeight() const;
 
 
 private:

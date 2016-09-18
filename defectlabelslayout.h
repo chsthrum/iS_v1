@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <QLayout>
 #include <QVBoxLayout>
+#include <QPixmap>
 #
 //local includes
 #include "defectLabel.h"
@@ -26,6 +27,9 @@ public:
     DefectLabelsLayout(QWidget *parent);
     ~DefectLabelsLayout();
     void setDefectFrameNumber(QString);
+    void setDefectImage(QPixmap &);
+    int getDefectLabelWidth() const;
+    int getDefectLabelHeight() const;
 
 
 

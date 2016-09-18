@@ -47,7 +47,7 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
     this->deviceNumber=deviceNumber;
     // Initialize members
    doStop=false;
-   enableDeepLearning = false;
+   enableDeepLearning = true;
    defectData.defectMatNo = 0;
    defectData.fileName = "";
    defectData.rawtimeS = 0;
@@ -173,15 +173,15 @@ void ProcessingThread::run()
         // Inform GUI thread of new frame (QImage)
         emit newFrame(frame);
         // Inform GUI thread of new defect structure (DefectStructToSave)
-        if(enableDeepLearning)
+        if(enableDeepLearning && (roll_weighted_die() == 6))
         {
             time_t rawtime;
             time(&rawtime);
             defectData.rawtimeS = rawtime;
 
             defectData.defectMat = currentFrame;
-            //qDebug() << "rawtime " << defectData.rawtimeS << "secs";
-            emit newDefectStruct((defectData));
+            qDebug() << "rawtime " << defectData.rawtimeS << "secs";
+            emit updateDefectStruct((defectData));
 
         }
 
