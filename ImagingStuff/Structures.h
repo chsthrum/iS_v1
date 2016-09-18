@@ -80,8 +80,8 @@ struct ThreadStatisticsData{
 struct DefectStructToSave
 {
     cv::Mat defectMat;
-    long defectMatNo;
-    long rawtimeS;
+    QString defectMatNo;
+    int rawtimeS;
     int cameraNumber;
     QString fileName;
 };

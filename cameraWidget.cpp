@@ -244,9 +244,11 @@ void CameraWidget::diceTest_withString(QString message) const
 
 }
 
+
 void CameraWidget::diceTest_withCvmat(DefectStructToSave dsts)
 {
     defectImages->setDefectImages(3, dsts.defectMat);
+    defectImages->setDefectLabels(3, dsts.defectMatNo);
 
 }
 void CameraWidget::updateProcessingThreadStats(struct ThreadStatisticsData statData)

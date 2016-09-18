@@ -48,7 +48,7 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
     // Initialize members
    doStop=false;
    enableDeepLearning = true;
-   defectData.defectMatNo = 0;
+   defectData.defectMatNo = "";
    defectData.fileName = "";
    defectData.rawtimeS = 0;
    defectData.cameraNumber = deviceNumber;
@@ -193,23 +193,25 @@ void ProcessingThread::run()
 
             defectData.defectMat = currentFrame;
             qDebug() << "rawtime " << defectData.rawtimeS << "secs";
+            defectData.defectMatNo = QString::number(statsData.nFramesProcessed);
             emit updateDefectStruct((defectData));
 
+
         }
 
-
-        if ((d == 6) && (flag == false)) //for testing the output
-        {
-            //qDebug() << "d = "  << d;
-            emit dice_is_6("thanks");
-            flag = true;
-        }
-        else if ((d == 6) && (flag == true)) //for testing the output
-        {
-            //qDebug() << "d = "  << d;
-            emit dice_is_6("Hello!!!");
-            flag = false;
-        }
+//TEST
+//        if ((d == 6) && (flag == false)) //for testing the output
+//        {
+//            //qDebug() << "d = "  << d;
+//            emit dice_is_6("thanks");
+//            flag = true;
+//        }
+//        else if ((d == 6) && (flag == true)) //for testing the output
+//        {
+//            //qDebug() << "d = "  << d;
+//            emit dice_is_6("Hello!!!");
+//            flag = false;
+//        }
     }
     qDebug() << "Stopping processing thread...";
 }
