@@ -98,7 +98,8 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
         normalDefectStructQueue.prepend(normal_Im);
     }
 
-    else if ((minatureDefectStructQueue.size() == queueLength) && (normalDefectStructQueue.size() == queueLength))
+    else if ((minatureDefectStructQueue.size() == queueLength) && (normalDefectStructQueue.size() == queueLength) &&
+             (!minatureDefectStructQueue.isEmpty()) && (!normalDefectStructQueue.isEmpty()))
     {
         minatureDefectStructQueue.pop_back();
         normalDefectStructQueue.pop_back();
@@ -111,7 +112,7 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
     //load images into the defect labels
     QQueue<DefectStructToSave>::const_iterator minIter = minatureDefectStructQueue.constBegin();
     int j = 0;
-    //int j = defectLabels.length()-1;
+
 
     while (minIter != minatureDefectStructQueue.constEnd())
     {
@@ -121,15 +122,8 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
         defectLabels[j]->setDefectFrameNumber(tempStruct.defectMatNo);
         minIter++;
         j++;
-        //j--;
     }
 
-
-
-
-
-
-    //defectLabels[i]->setDefectImage(pix);
 }
 
 void DefectImageStorage::setDefectImages(int i, cv::Mat& im)

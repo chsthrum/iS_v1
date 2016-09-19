@@ -11,6 +11,9 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QMouseEvent>
+#include <QThread>
+#include <qtconcurrentrun.h>
+
 //local includes
 #include "defectLabel.h"
 #include "ImagingStuff/SharedImageBuffer.h"
@@ -53,6 +56,7 @@ protected:
 
 private:
 
+    QThreadPool *pool;
     DefectImageStorage *defectImages;
     SharedImageBuffer *sharedImageBuffer;
     int deviceNumber;
@@ -96,7 +100,7 @@ private slots:
     void updateProcessingThreadStats(struct ThreadStatisticsData statData);
     void updateCaptureThreadStats(struct ThreadStatisticsData statData);
     void diceTest_withString(QString) const;
-    void diceTest_withCvmat (struct DefectStructToSave);
+    void diceTest_withCvmat (DefectStructToSave);
 signals:
     void setROI(QRect roi);
 

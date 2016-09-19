@@ -11,6 +11,7 @@
 CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
 
 {
+    pool = new QThreadPool;
     //Pointer to object to hold all the local defect images
     defectImages = new DefectImageStorage(this, nDefectImages);
     // Save Device Number
@@ -189,7 +190,7 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         connect(this, SIGNAL(setROI(QRect)), processingThread, SLOT(setROI(QRect)));
         // Only enable ROI setting/resetting if frame processing is enabled
         //if(enableFrameProcessing)
-        //    connect(ui->frameLabel, SIGNAL(newMouseData(struct MouseData)), this, SLOT(newMouseData(struct MouseData)));
+        //    connect(ui->frameLabel, SIGNAL(nDefectImageStorage::ewMouseData(struct MouseData)), this, SLOT(newMouseData(struct MouseData)));
         // Set initial data in processing thread
         emit setROI(QRect(0, 0, captureThread->getInputSourceWidth(), captureThread->getInputSourceHeight()));
         //emit newImageProcessingFlags(imageProcessingFlags);
@@ -247,9 +248,13 @@ void CameraWidget::diceTest_withString(QString message) const
 
 void CameraWidget::diceTest_withCvmat(DefectStructToSave dsts)
 {
-    //defectImages->setDefectImages(3, dsts.defectMat); // the mat image
-    //defectImages->setDefectLabels(3, dsts.defectMatNo); // the frame number
-    defectImages->setDefectStruct(dsts);
+    //run this function in a separate thread
+    //QThreadPool pool;
+    //QFuture<void> f1 = QtConcurrent::run(&pool, this->defectImages, &DefectImageStorage::setDefectStruct, dsts);
+    QFuture<void> f1 = QtConcurrent::run(this->pool, this->defectImages, &DefectImageStorage::setDefectStruct, dsts);
+    f1.waitForFinished();
+
+    //defectImages->setDefectStruct(dsts); // this works but only in the main thread
 
 }
 void CameraWidget::updateProcessingThreadStats(struct ThreadStatisticsData statData)
