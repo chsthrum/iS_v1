@@ -111,7 +111,8 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
 
     //load images into the defect labels
     QQueue<DefectStructToSave>::const_iterator minIter = minatureDefectStructQueue.constBegin();
-    int j = 0;
+    //int j = 0;
+    int j = defectLabels.size()-1; // from end to begin
 
 
     while (minIter != minatureDefectStructQueue.constEnd())
@@ -121,7 +122,8 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
         defectLabels[j]->setDefectImage(tempStruct.pixMinature);
         defectLabels[j]->setDefectFrameNumber(tempStruct.defectMatNo);
         minIter++;
-        j++;
+        //j++;
+        j--; // from end to begin
     }
 
 }

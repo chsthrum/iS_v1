@@ -15,7 +15,7 @@
 
 
 const int NumberOfDevices = 3;
-const int NumberOfDefectImagesToDisplay = 5;
+const int NumberOfDefectImagesToDisplay = 10;
 
 class CameraContainer : public QWidget
 {
