@@ -65,6 +65,8 @@ void DefectImageStorage::setDefectLabels(int i, QString s)
 
 void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
 {
+
+    //resize the image but retain the original - put these into two different containers
     cv::Mat temp;
     QImage qI;
     cv::Size size(getDefectLabelWidth(), getDefectLabelHeight());
@@ -81,16 +83,11 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
 
     DefectStructToSave normal_Im;
     normal_Im.pixMinature.isNull();
-    normal_Im.defectMat = temp;
+    normal_Im.defectMat = ds.defectMat; // retain the original
     normal_Im.defectMatNo = ds.defectMatNo;
     normal_Im.rawtimeS = ds.rawtimeS;
 
-
-//    if ((minatureDefectStructQueue.size() == queueLength) && (normalDefectStructQueue.size() == queueLength))
-//    {
-//        minatureDefectStructQueue.dequeue();
-//        normalDefectStructQueue.dequeue();
-//    }
+    //Add images to the queue, when the queue is full remove the last image from the end before adding another to the front.
 
     if ((minatureDefectStructQueue.size() < queueLength) && (normalDefectStructQueue.size() < queueLength))
     {
@@ -112,7 +109,7 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
     //load images into the defect labels
     QQueue<DefectStructToSave>::const_iterator minIter = minatureDefectStructQueue.constBegin();
     //int j = 0;
-    int j = defectLabels.size()-1; // from end to begin
+    int j = defectLabels.size()-1; // from end to beginning
 
 
     while (minIter != minatureDefectStructQueue.constEnd())
@@ -123,7 +120,7 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
         defectLabels[j]->setDefectFrameNumber(tempStruct.defectMatNo);
         minIter++;
         //j++;
-        j--; // from end to begin
+        j--; // from end to beginning
     }
 
 }
