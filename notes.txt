@@ -42,3 +42,48 @@ DefectImageStorage::DefectImageStorage(QWidget *parent, int numberOfImages) : QW
 
 http://modbus.control.com/thread/1026241492
 manual - is omron W421-E1-03
+
+
+StopMotion Class - responsible for contolling the stopping logic of the inspection machine.
+Name CstopMotion
+CHS 2OCT2016
+
+Data Members
+
+Private:
+1. Stopping Offest in number of Frames(from camera to repair/mark station).
+Type and name:int mStopOffset
+
+2. OnStopBeforeStartReverse in number of Frames.
+Type and name:int mOnStopBeforeStartReverse
+Description:
+If the machine stops there will be some sub optimal frames during the machines
+deceleration and on start subsequent acceleration.This could lead to a portion of uninspected fabric. It would be desirable to run
+the fabric in reverse to a position such that when we run the fabric (forward) again. We pick up optimum inspection at the position
+when the previous stop was invoked. (This has implications for the frame reference in the database - so needs careful design).
+
+3. StopMotionOn
+Type and name:bool mStopMotionOn.
+
+4.Reversing Mechanism on
+Type and name:bool mReverseOnDefect.
+Description: Enable the reversing Mechanism.
+
+
+NOTE: What happens when there are defects in the web in the frames closely subsequent to the first defect - we do not want to start stop start stop etc OR DO WE???
+
+QLabel *defectWithinExclusionZoneLabel;
+
+    //get the distance in frame from the previous defect frame
+
+    if (minature_Im.SdistanceFromPreviousdefect == "0")
+    {
+        previousDefectFrameNumber = 0;
+    }
+    else
+    {
+        previousDefectFrameNumber = (minature_Im.SdefectMatNo.toInt()) - previousDefectFrameNumber;
+    }
+    minature_Im.SdistanceFromPreviousdefect = QString::number(previousDefectFrameNumber);
+     //defectData.SdefectMatNo = QString::number(statsData.nFramesProcessed);
+     static int previousDefectFrameNumber = 0;

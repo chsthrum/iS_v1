@@ -29,6 +29,7 @@ public:
     void setDefectFrameNumber(QString);
     void setDefectImage(QPixmap &);
     void setDefectPositionInWeb(QString);
+    void setFramesFromPreviousDefectFrame(QString);
     int getDefectLabelWidth() const;
     int getDefectLabelHeight() const;
 
@@ -37,7 +38,7 @@ public:
 private:
     DefectLabel* defectImageLabel;
     QLabel* defectFrameNumber;
-    QLabel* defectFramePositionInWeb;
+    QLabel* framesFromPreviousDefectFrame;
     QVBoxLayout* verticalBox;
 
 };

@@ -7,7 +7,7 @@ DefectLabelsLayout::DefectLabelsLayout(QWidget *parent): QWidget(parent)
     verticalBox = new QVBoxLayout;
     defectImageLabel = new DefectLabel;
     defectFrameNumber = new QLabel;
-    defectFramePositionInWeb = new QLabel;
+    framesFromPreviousDefectFrame = new QLabel;
 
     defectImageLabel->setFixedSize(80,60);
     defectImageLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
@@ -17,13 +17,13 @@ DefectLabelsLayout::DefectLabelsLayout(QWidget *parent): QWidget(parent)
     defectFrameNumber->setAlignment(Qt::AlignCenter);
     defectFrameNumber->setText("No Info");
 
-    defectFramePositionInWeb->setFrameStyle(QFrame::Box | QFrame::Raised);
-    defectFramePositionInWeb->setAlignment(Qt::AlignCenter);
-    defectFramePositionInWeb->setText("No Info");
+    framesFromPreviousDefectFrame->setFrameStyle(QFrame::Box | QFrame::Raised);
+    framesFromPreviousDefectFrame->setAlignment(Qt::AlignCenter);
+    framesFromPreviousDefectFrame->setText("No Info");
 
     verticalBox->addWidget(defectImageLabel);
     verticalBox->addWidget(defectFrameNumber);
-    verticalBox->addWidget(defectFramePositionInWeb);
+    verticalBox->addWidget(framesFromPreviousDefectFrame);
 
     setLayout(verticalBox);
 
@@ -39,6 +39,12 @@ DefectLabelsLayout::~DefectLabelsLayout()
 void DefectLabelsLayout::setDefectFrameNumber(QString frameNo)
 {
     defectFrameNumber->setText(frameNo);
+}
+
+
+void DefectLabelsLayout::setFramesFromPreviousDefectFrame(QString previousFrame)
+{
+    framesFromPreviousDefectFrame->setText(previousFrame);
 }
 
 void DefectLabelsLayout::setDefectImage(QPixmap& defPix)

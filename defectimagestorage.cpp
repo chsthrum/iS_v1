@@ -2,16 +2,20 @@
 #include "opencv2/imgproc/imgproc.hpp"
 
 //qt
-#include "QPixmap"
+#include <QPixmap>
 #include <QThread>
+#include <QString>
 
 #include "defectimagestorage.h"
 #include "defectlabelslayout.h"
 #include "ImagingStuff/MatToQImage.h"
 
+
+
 DefectImageStorage::DefectImageStorage(QWidget *parent, int numberOfImages) : QWidget(parent), queueLength(numberOfImages)
 {
     p_layOut = new QHBoxLayout;
+    previousDefectFrameNumber = new int(0);
     //addDefectCameraViewLabels(defectImageLabels, p_layOut, numberOfImages);
     addCameraWidgetDefectLabels(defectLabels, p_layOut, queueLength);
     defectLabels[3]->setDefectFrameNumber("yippees");
@@ -19,6 +23,8 @@ DefectImageStorage::DefectImageStorage(QWidget *parent, int numberOfImages) : QW
     //clear the queues
     normalDefectStructQueue.clear();
     minatureDefectStructQueue.clear();
+
+
 
 
 }
@@ -72,21 +78,30 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
     QImage qI;
     cv::Size size(getDefectLabelWidth(), getDefectLabelHeight());
     // C++: void resize(InputArray src, OutputArray dst, Size dsize, double fx=0, double fy=0, int interpolation=INTER_LINEAR )
-    cv::resize(ds.defectMat, temp, size, 0, 0, cv::INTER_LINEAR);
+    cv::resize(ds.SdefectMat, temp, size, 0, 0, cv::INTER_LINEAR);
     //QImage MatToQImage(const Mat& mat)
     qI = MatToQImage(temp);
 
     DefectStructToSave minature_Im;
-    minature_Im.pixMinature = QPixmap::fromImage(qI);
-    minature_Im.defectMat.data = 0;
-    minature_Im.defectMatNo = ds.defectMatNo;
-    minature_Im.rawtimeS = ds.rawtimeS;
+    minature_Im.SpixMinature = QPixmap::fromImage(qI);
+    minature_Im.SdefectMat.data = 0;
+    minature_Im.SdefectMatNo = ds.SdefectMatNo;
+    minature_Im.SrawtimeS = ds.SrawtimeS;
 
     DefectStructToSave normal_Im;
-    normal_Im.pixMinature.isNull();
-    normal_Im.defectMat = ds.defectMat; // retain the original
-    normal_Im.defectMatNo = ds.defectMatNo;
-    normal_Im.rawtimeS = ds.rawtimeS;
+    normal_Im.SpixMinature.isNull();
+    normal_Im.SdefectMat = ds.SdefectMat; // retain the original
+    normal_Im.SdefectMatNo = ds.SdefectMatNo;
+    normal_Im.SrawtimeS = ds.SrawtimeS;
+
+    //get the distance in frame from the previous defect frame
+
+//    {
+//        previousDefectFrameNumber = (minature_Im.SdefectMatNo.toInt()) - previousDefectFrameNumber;
+//    }
+    minature_Im.SdistanceFromPreviousdefect = QString::number((minature_Im.SdefectMatNo.toInt()) - *previousDefectFrameNumber);
+    *previousDefectFrameNumber = minature_Im.SdefectMatNo.toInt();
+     //defectData.SdefectMatNo = QString::number(statsData.nFramesProcessed);
 
     //Add images to the queue, when the queue is full remove the last image from the end before adding another to the front.
 
@@ -117,8 +132,9 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
     {
         DefectStructToSave tempStruct;
         tempStruct = *minIter;
-        defectLabels[j]->setDefectImage(tempStruct.pixMinature);
-        defectLabels[j]->setDefectFrameNumber(tempStruct.defectMatNo);
+        defectLabels[j]->setDefectImage(tempStruct.SpixMinature);
+        defectLabels[j]->setDefectFrameNumber(tempStruct.SdefectMatNo);
+        defectLabels[j]->setFramesFromPreviousDefectFrame(tempStruct.SdistanceFromPreviousdefect);
         minIter++;
         //j++;
         j--; // from end to beginning

@@ -48,10 +48,10 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
     // Initialize members
    doStop=false;
    enableDeepLearning = true;
-   defectData.defectMatNo = "";
-   defectData.fileName = "";
-   defectData.rawtimeS = 0;
-   defectData.cameraNumber = deviceNumber;
+   defectData.SdefectMatNo = "";
+   defectData.SfileName = "";
+   defectData.SrawtimeS = 0;
+   defectData.ScameraNumber = deviceNumber;
 
    flag = false; // for the dice test
 
@@ -189,11 +189,11 @@ void ProcessingThread::run()
         {
             time_t rawtime;
             time(&rawtime);
-            defectData.rawtimeS = rawtime;
+            defectData.SrawtimeS = rawtime;
 
-            defectData.defectMat = currentFrame;
-            qDebug() << "rawtime " << defectData.rawtimeS << "secs";
-            defectData.defectMatNo = QString::number(statsData.nFramesProcessed);
+            defectData.SdefectMat = currentFrame;
+            qDebug() << "rawtime " << defectData.SrawtimeS << "secs";
+            defectData.SdefectMatNo = QString::number(statsData.nFramesProcessed);
             emit updateDefectStruct((defectData));
 
 

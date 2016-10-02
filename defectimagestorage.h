@@ -42,10 +42,12 @@ public:
     int getDefectLabelHeight() const;
 
 
+
+
 private:
     //QLabel *defectLabel;
-    QLabel *defectIndicator;
-    QLabel *defectFrameNumberLabel;
+    //QLabel *defectIndicator;
+    //QLabel *defectFrameNumberLabel;
     long defectFrameNumber;
     //QLabel *defectClassLabel;
     //QLabel *productCodeLabel;
@@ -60,10 +62,15 @@ private:
     int queueLength;
     cv::FileStorage* storage; // for storing the defect file in xml.gz (zipped xml format)
     struct DefectStructToSave defectData;
-    QList <DefectLabel*> defectImageLabels;
+    //QList <DefectLabel*> defectImageLabels;
     QList <DefectLabelsLayout*> defectLabels;
     QVBoxLayout *p_vLayOut;
     QHBoxLayout *p_layOut;
+
+    int *previousDefectFrameNumber;
+
+
+
 
 
 

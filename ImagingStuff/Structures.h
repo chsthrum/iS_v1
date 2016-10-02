@@ -80,12 +80,13 @@ struct ThreadStatisticsData{
 
 struct DefectStructToSave
 {
-    cv::Mat defectMat;
-    QPixmap pixMinature;
-    QString defectMatNo;
-    int rawtimeS;
-    int cameraNumber;
-    QString fileName;
+    cv::Mat SdefectMat;
+    QPixmap SpixMinature;
+    QString SdefectMatNo;  // frame number of defect image
+    QString SdistanceFromPreviousdefect; // the distance in frames from the previous image
+    int SrawtimeS;
+    int ScameraNumber;
+    QString SfileName;
 };
 
 #endif // STRUCTURES_H
