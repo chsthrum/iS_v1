@@ -254,6 +254,7 @@ void CameraWidget::diceTest_withCvmat(DefectStructToSave dsts)
     QFuture<void> f1 = QtConcurrent::run(this->pool, this->defectImages, &DefectImageStorage::setDefectStruct, dsts);
     f1.waitForFinished();
 
+
     //defectImages->setDefectStruct(dsts); // this works but only in the main thread
 
 }

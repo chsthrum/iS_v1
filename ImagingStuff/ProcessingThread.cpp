@@ -212,6 +212,7 @@ void ProcessingThread::run()
 //            emit dice_is_6("Hello!!!");
 //            flag = false;
 //        }
+        //qDebug() << "Hello from processing thread" << QThread::currentThread();
     }
     qDebug() << "Stopping processing thread...";
 }

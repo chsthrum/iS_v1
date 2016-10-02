@@ -72,4 +72,4 @@ Description: Enable the reversing Mechanism.
 
 NOTE: What happens when there are defects in the web in the frames closely subsequent to the first defect (also from mutiple Cameras)- we do not want to start stop start stop etc OR DO WE???
 
-new branch
+http://doc.qt.io/qt-4.8/thread-basics.html
