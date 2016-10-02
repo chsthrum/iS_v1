@@ -33,6 +33,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+// Camera Display instancies and labels
+#define NUMBER_OF_CAMERAS                   8
+#define NUMBEROFDEFECTIMAGESTODISPLAY       10
+
 // FPS statistics queue lengths
 #define PROCESSING_FPS_STAT_QUEUE_LENGTH    32
 #define CAPTURE_FPS_STAT_QUEUE_LENGTH       32

@@ -39,3 +39,6 @@ public:
 
 in the implementation (.cpp)
 DefectImageStorage::DefectImageStorage(QWidget *parent, int numberOfImages) : QWidget(parent), queueLength(numberOfImages) etc
+
+http://modbus.control.com/thread/1026241492
+manual - is omron W421-E1-03

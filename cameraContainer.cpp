@@ -2,6 +2,7 @@
 #include <QDebug>
 //local includes
 #include "cameraContainer.h"
+#include"ImagingStuff/Config.h"
 
 
 
@@ -43,7 +44,7 @@ CameraContainer::CameraContainer(QWidget *parent)
     logoLayout->addStretch();
 
 
-    addCameras(cams,camLayout,sharedImageBuffer,NumberOfDevices);
+    addCameras(cams,camLayout,sharedImageBuffer,NUMBER_OF_CAMERAS);
 
     layout->addLayout(logoLayout);
     layout->addLayout(camLayout);
@@ -79,7 +80,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
 {
     for(int i = 0; i != limit ; ++i)
     {
-        p_CamWidgets.push_back(new CameraWidget(this, i, NumberOfDefectImagesToDisplay, sharedImBuf));
+        p_CamWidgets.push_back(new CameraWidget(this, i, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf));
         // p_CamWidgets[i]->setMinimumSize(1000,250);
         p_layOut->addWidget(p_CamWidgets[i]);
         p_layOut->addSpacing(1);

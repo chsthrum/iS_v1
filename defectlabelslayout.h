@@ -28,6 +28,7 @@ public:
     ~DefectLabelsLayout();
     void setDefectFrameNumber(QString);
     void setDefectImage(QPixmap &);
+    void setDefectPositionInWeb(QString);
     int getDefectLabelWidth() const;
     int getDefectLabelHeight() const;
 
@@ -35,9 +36,10 @@ public:
 
 private:
     DefectLabel* defectImageLabel;
-    QLabel* defectFrameNumberandLength;
+    QLabel* defectFrameNumber;
+    QLabel* defectFramePositionInWeb;
     QVBoxLayout* verticalBox;
-    // maybe add the Length as a separate label???
+
 };
 
 #endif // DEFECTIMAGEFIELD_H

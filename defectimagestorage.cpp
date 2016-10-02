@@ -3,6 +3,7 @@
 
 //qt
 #include "QPixmap"
+#include <QThread>
 
 #include "defectimagestorage.h"
 #include "defectlabelslayout.h"
@@ -122,6 +123,7 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
         //j++;
         j--; // from end to beginning
     }
+    qDebug() << "Hello from thread" << QThread::currentThread();
 
 }
 
