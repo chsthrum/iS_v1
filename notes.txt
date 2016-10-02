@@ -70,20 +70,5 @@ Type and name:bool mReverseOnDefect.
 Description: Enable the reversing Mechanism.
 
 
-NOTE: What happens when there are defects in the web in the frames closely subsequent to the first defect - we do not want to start stop start stop etc OR DO WE???
+NOTE: What happens when there are defects in the web in the frames closely subsequent to the first defect (also from mutiple Cameras)- we do not want to start stop start stop etc OR DO WE???
 
-QLabel *defectWithinExclusionZoneLabel;
-
-    //get the distance in frame from the previous defect frame
-
-    if (minature_Im.SdistanceFromPreviousdefect == "0")
-    {
-        previousDefectFrameNumber = 0;
-    }
-    else
-    {
-        previousDefectFrameNumber = (minature_Im.SdefectMatNo.toInt()) - previousDefectFrameNumber;
-    }
-    minature_Im.SdistanceFromPreviousdefect = QString::number(previousDefectFrameNumber);
-     //defectData.SdefectMatNo = QString::number(statsData.nFramesProcessed);
-     static int previousDefectFrameNumber = 0;

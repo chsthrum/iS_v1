@@ -280,12 +280,6 @@ void CameraWidget::updateFrame(const QImage &frame)
     //TEST//this->camStatusLabel->setStyleSheet("QLabel { background-color : green; color : blue; }");
 }
 
-void CameraWidget::updateDefectStruct(const DefectStructToSave &dsts)
-{
-
-}
-
-
 bool CameraWidget::setCameraStatusLabel()
 {
     if(isCameraConnected)

@@ -95,7 +95,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
 // connect to all the cameras after setting up the layout
     for(int i = 0; i != limit ; ++i)
    {
-       bool is_cam = p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1);
+       p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1);
    }
 
 

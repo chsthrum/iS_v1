@@ -37,6 +37,9 @@
 #define NUMBER_OF_CAMERAS                   3
 #define NUMBEROFDEFECTIMAGESTODISPLAY       10
 
+// Machine Reversing after defect stop in distance in Frames
+#define REVERSE_LENGTH_N_FRAMES             13
+
 // FPS statistics queue lengths
 #define PROCESSING_FPS_STAT_QUEUE_LENGTH    32
 #define CAPTURE_FPS_STAT_QUEUE_LENGTH       32

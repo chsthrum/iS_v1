@@ -56,7 +56,7 @@ protected:
 
 private:
 
-    QThreadPool *pool;
+    QThreadPool *pool; // for the setting the defect structure derived from the processed image
     DefectImageStorage *defectImages;
     SharedImageBuffer *sharedImageBuffer;
     int deviceNumber;
@@ -96,7 +96,6 @@ private:
 
 private slots:
     void updateFrame(const QImage &frame);
-    void updateDefectStruct(const DefectStructToSave &);
     void updateProcessingThreadStats(struct ThreadStatisticsData statData);
     void updateCaptureThreadStats(struct ThreadStatisticsData statData);
     void diceTest_withString(QString) const;

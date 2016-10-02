@@ -94,14 +94,11 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
     normal_Im.SdefectMatNo = ds.SdefectMatNo;
     normal_Im.SrawtimeS = ds.SrawtimeS;
 
-    //get the distance in frame from the previous defect frame
+    //get the distance in frames from the previous defect frame
 
-//    {
-//        previousDefectFrameNumber = (minature_Im.SdefectMatNo.toInt()) - previousDefectFrameNumber;
-//    }
     minature_Im.SdistanceFromPreviousdefect = QString::number((minature_Im.SdefectMatNo.toInt()) - *previousDefectFrameNumber);
     *previousDefectFrameNumber = minature_Im.SdefectMatNo.toInt();
-     //defectData.SdefectMatNo = QString::number(statsData.nFramesProcessed);
+
 
     //Add images to the queue, when the queue is full remove the last image from the end before adding another to the front.
 
