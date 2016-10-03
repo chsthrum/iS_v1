@@ -10,6 +10,7 @@
 CameraContainer::CameraContainer(QWidget *parent)
     : QWidget(parent)
 {
+
     // Create SharedImageBuffer object
     sharedImageBuffer = new SharedImageBuffer();
 
@@ -87,11 +88,23 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
 
         // Create ImageBuffer with user-defined size
         Buffer<Mat> *imageBuffer = new Buffer<Mat>(32);
+        bool syncEnabled = true; // setting up the cameras so they have the same frame
+        //rate as the slowest. Set to "true" to enable. For free running cameras set to false
         // Add created ImageBuffer to SharedImageBuffer object
-        sharedImBuf->add(i, imageBuffer, false);
+        sharedImBuf->add(i, imageBuffer, syncEnabled);
 
 
     }
+    //TODO make this syncing command more elegent
+
+    // Start processing
+
+       sharedImageBuffer->setSyncEnabled(true);
+       // setting up the cameras so they have the same frame
+               //rate as the slowest. Set to "true" to enable. For free running cameras set to false
+               // Add created ImageBuffer to SharedImageBuffer object
+
+
 // connect to all the cameras after setting up the layout
     for(int i = 0; i != limit ; ++i)
    {
