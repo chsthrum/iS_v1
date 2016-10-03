@@ -30,6 +30,7 @@ public:
     void setDefectImage(QPixmap &);
     void setDefectPositionInWeb(QString);
     void setFramesFromPreviousDefectFrame(QString);
+    void setBackGroundColourOfLabel_framesFromPreviousDefectFrame(bool);
     int getDefectLabelWidth() const;
     int getDefectLabelHeight() const;
 

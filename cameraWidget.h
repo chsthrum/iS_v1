@@ -56,7 +56,7 @@ protected:
 
 private:
 
-    QThreadPool *pool; // for the setting the defect structure derived from the processed image
+    //QThreadPool *pool; // for the setting the defect structure derived from the processed image
     DefectImageStorage *defectImages;
     SharedImageBuffer *sharedImageBuffer;
     int deviceNumber;

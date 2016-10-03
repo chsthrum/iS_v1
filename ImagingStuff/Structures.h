@@ -84,6 +84,7 @@ struct DefectStructToSave
     QPixmap SpixMinature;
     QString SdefectMatNo;  // frame number of defect image
     QString SdistanceFromPreviousdefect; // the distance in frames from the previous image
+    bool SwithinDefectFreeLength; // if the defect is within the defect free length as defined by its distance from the preveious defect this flag will go on.
     int SrawtimeS;
     int ScameraNumber;
     QString SfileName;

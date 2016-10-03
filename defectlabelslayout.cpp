@@ -47,6 +47,13 @@ void DefectLabelsLayout::setFramesFromPreviousDefectFrame(QString previousFrame)
     framesFromPreviousDefectFrame->setText(previousFrame);
 }
 
+void DefectLabelsLayout::setBackGroundColourOfLabel_framesFromPreviousDefectFrame(bool setBackgroundcolour)
+{
+    if(setBackgroundcolour)
+        framesFromPreviousDefectFrame->setStyleSheet("QLabel { background-color : yellow; color : black; }");
+    else
+        framesFromPreviousDefectFrame->setStyleSheet("QLabel { background-color : none; color : black; }");
+}
 void DefectLabelsLayout::setDefectImage(QPixmap& defPix)
 {
     defectImageLabel->setPixmap(defPix);

@@ -194,6 +194,7 @@ void ProcessingThread::run()
             defectData.SdefectMat = currentFrame;
             qDebug() << "rawtime " << defectData.SrawtimeS << "secs";
             defectData.SdefectMatNo = QString::number(statsData.nFramesProcessed);
+            defectData.ScameraNumber = deviceNumber;
             emit updateDefectStruct((defectData));
 
 

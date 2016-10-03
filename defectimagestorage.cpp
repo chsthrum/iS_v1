@@ -6,9 +6,11 @@
 #include <QThread>
 #include <QString>
 
+//local includes
 #include "defectimagestorage.h"
 #include "defectlabelslayout.h"
 #include "ImagingStuff/MatToQImage.h"
+#include "ImagingStuff/Config.h"
 
 
 
@@ -87,16 +89,24 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
     minature_Im.SdefectMat.data = 0;
     minature_Im.SdefectMatNo = ds.SdefectMatNo;
     minature_Im.SrawtimeS = ds.SrawtimeS;
+    minature_Im.SwithinDefectFreeLength = false;
+    minature_Im.ScameraNumber = ds.ScameraNumber;
 
     DefectStructToSave normal_Im;
     normal_Im.SpixMinature.isNull();
     normal_Im.SdefectMat = ds.SdefectMat; // retain the original
     normal_Im.SdefectMatNo = ds.SdefectMatNo;
     normal_Im.SrawtimeS = ds.SrawtimeS;
+    normal_Im.ScameraNumber = ds.ScameraNumber;
 
     //get the distance in frames from the previous defect frame
-
+    int dfl = DEFECT_FREE_LENGTH;
     minature_Im.SdistanceFromPreviousdefect = QString::number((minature_Im.SdefectMatNo.toInt()) - *previousDefectFrameNumber);
+    //check to see if the defect free length is not affected
+    if (minature_Im.SdistanceFromPreviousdefect.toInt() <= dfl)
+    {
+        minature_Im.SwithinDefectFreeLength = true;
+    }
     *previousDefectFrameNumber = minature_Im.SdefectMatNo.toInt();
 
 
@@ -127,11 +137,16 @@ void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
 
     while (minIter != minatureDefectStructQueue.constEnd())
     {
+        //rest the label backgroung colour to default
+        defectLabels[j]->setBackGroundColourOfLabel_framesFromPreviousDefectFrame(false);
         DefectStructToSave tempStruct;
         tempStruct = *minIter;
         defectLabels[j]->setDefectImage(tempStruct.SpixMinature);
         defectLabels[j]->setDefectFrameNumber(tempStruct.SdefectMatNo);
         defectLabels[j]->setFramesFromPreviousDefectFrame(tempStruct.SdistanceFromPreviousdefect);
+        //set the background colour to highlight the this defect is within the defect free length
+        if (tempStruct.SwithinDefectFreeLength)
+            defectLabels[j]->setBackGroundColourOfLabel_framesFromPreviousDefectFrame(tempStruct.SwithinDefectFreeLength);
         minIter++;
         //j++;
         j--; // from end to beginning

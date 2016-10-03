@@ -11,7 +11,7 @@
 CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
 
 {
-    pool = new QThreadPool;
+    //pool = new QThreadPool; // does not seem to make any difference
     //Pointer to object to hold all the local defect images
     defectImages = new DefectImageStorage(this, nDefectImages);
     // Save Device Number
@@ -249,11 +249,14 @@ void CameraWidget::diceTest_withString(QString message) const
 void CameraWidget::diceTest_withCvmat(DefectStructToSave dsts)
 {
     //run this function in a separate thread
-    //QThreadPool pool;
-    //QFuture<void> f1 = QtConcurrent::run(&pool, this->defectImages, &DefectImageStorage::setDefectStruct, dsts);
-    QFuture<void> f1 = QtConcurrent::run(this->pool, this->defectImages, &DefectImageStorage::setDefectStruct, dsts);
-    f1.waitForFinished();
 
+    QFuture<void> f1 = QtConcurrent::run(this->defectImages, &DefectImageStorage::setDefectStruct, dsts);
+    f1.waitForFinished();
+    /*"Hello from thread QThread(0x14ab590, name = "Thread (pooled)")" is output from the debug statemnt in setDefectStruct
+    when two of the objects have invoked this function at the same time. ie. the run function of 1 object has not returned before it
+    needs to be called again by the second object.
+    If however "Hello from thread QThread(0x13d5320)" is output then the run function is returning in good time and the same thread
+    can be used again.*/
 
     //defectImages->setDefectStruct(dsts); // this works but only in the main thread
 

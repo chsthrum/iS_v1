@@ -37,6 +37,9 @@
 #define NUMBER_OF_CAMERAS                   3
 #define NUMBEROFDEFECTIMAGESTODISPLAY       10
 
+//Defect free length  - 2 or more defects most not occurr within this distance (in frames)
+#define DEFECT_FREE_LENGTH                  20
+
 // Machine Reversing after defect stop in distance in Frames
 #define REVERSE_LENGTH_N_FRAMES             13
 
