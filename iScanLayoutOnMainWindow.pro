@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     ImagingStuff/ProcessingThread.cpp \
     defectimagestorage.cpp \
     defectlabelslayout.cpp \
-    cstopmotion.cpp
+    cstopmotion.cpp \
+    csimpledefectmapLabel.cpp
 
 HEADERS  += mainwindow.h \
     defectLabel.h \
@@ -52,7 +53,8 @@ HEADERS  += mainwindow.h \
     weighteddie.h \
     ImagingStuff/Structures.h \
     defectlabelslayout.h \
-    cstopmotion.h
+    cstopmotion.h \
+    csimpledefectmapLabel.h
 
 DISTFILES += \
     notes.txt

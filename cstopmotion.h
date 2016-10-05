@@ -7,6 +7,7 @@
 //local includes
 #include "ImagingStuff/Structures.h"
 #include "ImagingStuff/Config.h"
+#include "defectimagestorage.h"
 
 
 class CstopMotion : public QWidget
@@ -24,6 +25,7 @@ private:
     QList<DefectStructToSave> imminentDefectsCollection;
     QList<int>nStopDistanceOffsets;
     int numberOfCameras;
+
 
 
 signals:

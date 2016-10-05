@@ -72,7 +72,7 @@ void DefectImageStorage::setDefectLabels(int i, QString s)
     defectLabels[i]->setDefectFrameNumber(s);
 }
 
-void DefectImageStorage::setDefectStruct(DefectStructToSave& ds)
+void DefectImageStorage::setDefectStruct(const DefectStructToSave& ds)
 {
 
     //resize the image but retain the original - put these into two different containers

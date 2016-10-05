@@ -39,15 +39,20 @@ CameraContainer::CameraContainer(QWidget *parent)
     camLayout = new QVBoxLayout;
     logoLayout = new QHBoxLayout;
     layout = new QVBoxLayout;
+    simpleDefectMapLayout = new QHBoxLayout;
 
     logoLayout->addStretch();
     logoLayout->addWidget(logoLabel);
     logoLayout->addStretch();
 
 
+    // add in all the camera widgets
     addCameras(cams,camLayout,sharedImageBuffer,NUMBER_OF_CAMERAS);
 
+    addSimpleMapLabels(list_simpledMapLabels, simpleDefectMapLayout, OFFSET_CAMERA_0_TO_END_IN_FRAMES);
+
     layout->addLayout(logoLayout);
+    layout->addLayout(simpleDefectMapLayout);
     layout->addLayout(camLayout);
 
     this->setLayout(layout);
@@ -97,19 +102,33 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
     }
     //TODO make this syncing command more elegent
 
-    // Start processing
+    // Start processingaddSimpleMapLabels
 
-       sharedImageBuffer->setSyncEnabled(true);
-       // setting up the cameras so they have the same frame
-               //rate as the slowest. Set to "true" to enable. For free running cameras set to false
-               // Add created ImageBuffer to SharedImageBuffer object
+    sharedImageBuffer->setSyncEnabled(true);
+    // setting up the cameras so they have the same frame
+    //rate as the slowest. Set to "true" to enable. For free running cameras set to false
+    // Add created ImageBuffer to SharedImageBuffer object
 
 
-// connect to all the cameras after setting up the layout
+    // connect to all the cameras after setting up the layout
     for(int i = 0; i != nCameras ; ++i)
-   {
-       p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1);
-   }
+    {
+        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1);
+    }
 
+
+}
+
+void CameraContainer::addSimpleMapLabels(QList<CsimpleDefectMapLabel *> pSimpleLabels, QHBoxLayout *p_simpleLayout, int nLabels)
+{
+    for(int i = 0; i != nLabels; ++i)
+    {
+    pSimpleLabels.push_back(new CsimpleDefectMapLabel());
+    pSimpleLabels[i]->setFixedSize(5,20);
+    pSimpleLabels[i]->setFrameStyle(QFrame::Box | QFrame::Raised);
+    // p_CamWidgets[i]->setMinimumSize(1000,250);
+    p_simpleLayout->addWidget(pSimpleLabels[i]);
+    p_simpleLayout->addSpacing(1);
+    }
 
 }
