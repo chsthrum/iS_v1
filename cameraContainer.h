@@ -23,7 +23,7 @@ class CameraContainer : public QWidget
 public:
     CameraContainer(QWidget *parent = 0);
     ~CameraContainer();
-    void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, int limit);
+    void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, int nCameras);
 
 
 private:

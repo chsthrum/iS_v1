@@ -1,7 +1,6 @@
 #include "cstopmotion.h"
 
-CstopMotion::CstopMotion(QWidget *parent) : QWidget(parent)
-
+CstopMotion::CstopMotion(QWidget *parent, int nCameras) : QWidget(parent), numberOfCameras(nCameras)
 {
 
 }

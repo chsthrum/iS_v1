@@ -77,9 +77,9 @@ CameraContainer::~CameraContainer()
 
 //add the Camera Widget and the buffers containing the mats which are all held in a hash table in the SharedImageBuffer class.
 
-void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, int limit)
+void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, int nCameras)
 {
-    for(int i = 0; i != limit ; ++i)
+    for(int i = 0; i != nCameras ; ++i)
     {
         p_CamWidgets.push_back(new CameraWidget(this, i, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf));
         // p_CamWidgets[i]->setMinimumSize(1000,250);
@@ -87,7 +87,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
         p_layOut->addSpacing(1);
 
         // Create ImageBuffer with user-defined size
-        Buffer<Mat> *imageBuffer = new Buffer<Mat>(32);
+        Buffer<Mat> *imageBuffer = new Buffer<Mat>(DEFAULT_IMAGE_BUFFER_SIZE);
         bool syncEnabled = true; // setting up the cameras so they have the same frame
         //rate as the slowest. Set to "true" to enable. For free running cameras set to false
         // Add created ImageBuffer to SharedImageBuffer object
@@ -106,7 +106,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
 
 
 // connect to all the cameras after setting up the layout
-    for(int i = 0; i != limit ; ++i)
+    for(int i = 0; i != nCameras ; ++i)
    {
        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1);
    }

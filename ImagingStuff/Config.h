@@ -43,12 +43,22 @@
 // Machine Reversing after defect stop in distance in Frames
 #define REVERSE_LENGTH_N_FRAMES             13
 
+//Offsets
+//set the end position of set from the further most camera (ie. the first camera to encounter the defect)
+#define OFFSET_CAMERA_0_TO_END_IN_FRAMES           100
+//set the offset from camera0 to camera1
+#define OFFSET_CAMERA_0_TO_CAMERA1_IN_FRAMES       20
+//set the offset from camera0 to camera2
+#define OFFSET_CAMERA_0_TO_CAMERA2_IN_FRAMES       40
+
+
 // FPS statistics queue lengths
 #define PROCESSING_FPS_STAT_QUEUE_LENGTH    32
 #define CAPTURE_FPS_STAT_QUEUE_LENGTH       32
 
 // Image buffer size
-#define DEFAULT_IMAGE_BUFFER_SIZE           1
+#define DEFAULT_IMAGE_BUFFER_SIZE           32
+
 // Drop frame if image/frame buffer is full
 #define DEFAULT_DROP_FRAMES                 false
 // Thread priorities
