@@ -40,6 +40,8 @@ CameraContainer::CameraContainer(QWidget *parent)
     logoLayout = new QHBoxLayout;
     layout = new QVBoxLayout;
     simpleDefectMapLayout = new QHBoxLayout;
+    mapTopBannerLayout = new QHBoxLayout;
+    
 
     logoLayout->addStretch();
     logoLayout->addWidget(logoLabel);
@@ -50,9 +52,12 @@ CameraContainer::CameraContainer(QWidget *parent)
     addCameras(cams,camLayout,sharedImageBuffer,NUMBER_OF_CAMERAS);
 
     addSimpleMapLabels(list_simpledMapLabels, simpleDefectMapLayout, OFFSET_CAMERA_0_TO_END_IN_FRAMES);
+    
+    mapTopBannerLayout->addStretch();
+    mapTopBannerLayout->addLayout(simpleDefectMapLayout);
 
     layout->addLayout(logoLayout);
-    layout->addLayout(simpleDefectMapLayout);
+    layout->addLayout(mapTopBannerLayout);
     layout->addLayout(camLayout);
 
     this->setLayout(layout);

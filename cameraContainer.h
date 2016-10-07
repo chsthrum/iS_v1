@@ -35,6 +35,7 @@ private:
     QVBoxLayout* camLayout;
     QHBoxLayout* logoLayout;
     QVBoxLayout* layout;
+    QHBoxLayout* mapTopBannerLayout;
     QHBoxLayout* simpleDefectMapLayout;
     ScaledLabel* logoLabel;
     QMap<int, int> deviceNumberMap;
