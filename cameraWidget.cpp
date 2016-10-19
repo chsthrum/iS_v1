@@ -250,8 +250,10 @@ void CameraWidget::diceTest_withCvmat(DefectStructToSave dsts)
 {
     //run this function in a separate thread
 
-    QFuture<void> f1 = QtConcurrent::run(this->defectImages, &DefectImageStorage::setDefectStruct, dsts);
-    f1.waitForFinished();
+    QFuture<DefectStructToSave> f1 = QtConcurrent::run(this->defectImages, &DefectImageStorage::setDefectStruct, dsts);
+    DefectStructToSave result = f1.result();
+    //f1.waitForFinished();
+    defectImages->incrementDefectLabels(result);
     /*"Hello from thread QThread(0x14ab590, name = "Thread (pooled)")" is output from the debug statemnt in setDefectStruct
     when two of the objects have invoked this function at the same time. ie. the run function of 1 object has not returned before it
     needs to be called again by the second object.
@@ -259,6 +261,7 @@ void CameraWidget::diceTest_withCvmat(DefectStructToSave dsts)
     can be used again.*/
 
     //defectImages->setDefectStruct(dsts); // this works but only in the main thread
+    ;
 
 }
 void CameraWidget::updateProcessingThreadStats(struct ThreadStatisticsData statData)

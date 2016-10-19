@@ -37,7 +37,8 @@ public:
     QHBoxLayout* DefectLabelLayout(); // returns a layout pointer to the CameraWidget objects layout mechanism
     void setDefectLabels(int, QString);
     void setDefectImages(int, cv::Mat&);
-    void setDefectStruct(const DefectStructToSave &);
+    DefectStructToSave setDefectStruct(const DefectStructToSave &);
+    void incrementDefectLabels(const DefectStructToSave &);
     int getDefectLabelWidth() const;
     int getDefectLabelHeight() const;
 

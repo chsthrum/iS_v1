@@ -72,10 +72,10 @@ void DefectImageStorage::setDefectLabels(int i, QString s)
     defectLabels[i]->setDefectFrameNumber(s);
 }
 
-void DefectImageStorage::setDefectStruct(const DefectStructToSave& ds)
+DefectStructToSave DefectImageStorage::setDefectStruct(const DefectStructToSave& ds)
 {
 
-    //resize the image but retain the original - put these into two different containers
+    //resize the image but retain the original
     cv::Mat temp;
     QImage qI;
     cv::Size size(getDefectLabelWidth(), getDefectLabelHeight());
@@ -86,18 +86,13 @@ void DefectImageStorage::setDefectStruct(const DefectStructToSave& ds)
 
     DefectStructToSave minature_Im;
     minature_Im.SpixMinature = QPixmap::fromImage(qI);
-    minature_Im.SdefectMat.data = 0;
+    minature_Im.SdefectMat = ds.SdefectMat;
+    //minature_Im.SdefectMat.data = 0;
     minature_Im.SdefectMatNo = ds.SdefectMatNo;
     minature_Im.SrawtimeS = ds.SrawtimeS;
     minature_Im.SwithinDefectFreeLength = false;
     minature_Im.ScameraNumber = ds.ScameraNumber;
 
-    DefectStructToSave normal_Im;
-    normal_Im.SpixMinature.isNull();
-    normal_Im.SdefectMat = ds.SdefectMat; // retain the original
-    normal_Im.SdefectMatNo = ds.SdefectMatNo;
-    normal_Im.SrawtimeS = ds.SrawtimeS;
-    normal_Im.ScameraNumber = ds.ScameraNumber;
 
     //get the distance in frames from the previous defect frame
     int dfl = DEFECT_FREE_LENGTH;
@@ -106,52 +101,55 @@ void DefectImageStorage::setDefectStruct(const DefectStructToSave& ds)
     if (minature_Im.SdistanceFromPreviousdefect.toInt() <= dfl)
     {
         minature_Im.SwithinDefectFreeLength = true;
+
     }
     *previousDefectFrameNumber = minature_Im.SdefectMatNo.toInt();
 
 
+
+    qDebug() << "Hello from thread" << QThread::currentThread();
+
+    return minature_Im;
+}
+
+void DefectImageStorage::incrementDefectLabels(const DefectStructToSave & ds)
+{
     //Add images to the queue, when the queue is full remove the last image from the end before adding another to the front.
 
-    if ((minatureDefectStructQueue.size() < queueLength) && (normalDefectStructQueue.size() < queueLength))
+    if (minatureDefectStructQueue.size() < queueLength)
     {
-        minatureDefectStructQueue.prepend(minature_Im);
-        normalDefectStructQueue.prepend(normal_Im);
+        minatureDefectStructQueue.prepend(ds);
     }
 
-    else if ((minatureDefectStructQueue.size() == queueLength) && (normalDefectStructQueue.size() == queueLength) &&
-             (!minatureDefectStructQueue.isEmpty()) && (!normalDefectStructQueue.isEmpty()))
+    else if ((minatureDefectStructQueue.size() == queueLength) && (!minatureDefectStructQueue.isEmpty()))
+
     {
         minatureDefectStructQueue.pop_back();
-        normalDefectStructQueue.pop_back();
-        minatureDefectStructQueue.prepend(minature_Im);
-        normalDefectStructQueue.prepend(normal_Im);
-
+        minatureDefectStructQueue.prepend(ds);
     }
 
-    //TODO
     //load images into the defect labels
-    QQueue<DefectStructToSave>::const_iterator minIter = minatureDefectStructQueue.constBegin();
-    //int j = 0;
-    int j = defectLabels.size()-1; // from end to beginning
+   QQueue<DefectStructToSave>::const_iterator Iter = minatureDefectStructQueue.constBegin();
+
+   int j = defectLabels.size()-1; // from end to beginning
 
 
-    while (minIter != minatureDefectStructQueue.constEnd())
+    while (Iter != minatureDefectStructQueue.constEnd())
     {
-        //rest the label backgroung colour to default
+        //reset the label backgroung colour to default
         defectLabels[j]->setBackGroundColourOfLabel_framesFromPreviousDefectFrame(false);
         DefectStructToSave tempStruct;
-        tempStruct = *minIter;
+        tempStruct = *Iter;
         defectLabels[j]->setDefectImage(tempStruct.SpixMinature);
         defectLabels[j]->setDefectFrameNumber(tempStruct.SdefectMatNo);
         defectLabels[j]->setFramesFromPreviousDefectFrame(tempStruct.SdistanceFromPreviousdefect);
         //set the background colour to highlight the this defect is within the defect free length
         if (tempStruct.SwithinDefectFreeLength)
             defectLabels[j]->setBackGroundColourOfLabel_framesFromPreviousDefectFrame(tempStruct.SwithinDefectFreeLength);
-        minIter++;
-        //j++;
+        Iter++;
         j--; // from end to beginning
     }
-    qDebug() << "Hello from thread" << QThread::currentThread();
+
 
 }
 
