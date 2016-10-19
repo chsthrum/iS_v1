@@ -128,7 +128,7 @@ void DefectImageStorage::setDefectStruct(const DefectStructToSave& ds)
 
     }
 
-
+    //TODO
     //load images into the defect labels
     QQueue<DefectStructToSave>::const_iterator minIter = minatureDefectStructQueue.constBegin();
     //int j = 0;
