@@ -77,3 +77,5 @@ http://doc.qt.io/qt-4.8/thread-basics.html
 http://answers.opencv.org/question/73260/how-to-access-basler-gige-camera-through-opencv-in-ubuntu-1404/
 
 Set the speed of the basler camera (say 30fps).
+
+
