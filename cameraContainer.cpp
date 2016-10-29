@@ -41,8 +41,15 @@ CameraContainer::CameraContainer(QWidget *parent)
     layout = new QVBoxLayout;
     simpleDefectMapLayout = new QHBoxLayout;
     mapTopBannerLayout = new QHBoxLayout;
-    
+    globalGrabButton = new QPushButton;
 
+    globalGrabButton->setText("Start Camera(s)");
+    globalGrabButton->setFocus();
+    globalGrabButton->setFixedSize(200,50);
+    globalGrabButton->setStyleSheet("QPushButton { background-color : lime; color : black; }");
+    isGrabbing = false;
+
+    logoLayout->addWidget(globalGrabButton);
     logoLayout->addStretch();
     logoLayout->addWidget(logoLabel);
     logoLayout->addStretch();
@@ -68,6 +75,9 @@ CameraContainer::CameraContainer(QWidget *parent)
 /*********************************************************************************
 end of the layout
 ***********************************************************************************/
+
+    // Connect button signal to appropriate slot
+    connect(globalGrabButton, SIGNAL (clicked()), this, SLOT (handleGrabButton()));
 
 
    //QSize size = camLayout->sizeHint();
@@ -98,7 +108,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
 
         // Create ImageBuffer with user-defined size
         Buffer<Mat> *imageBuffer = new Buffer<Mat>(DEFAULT_IMAGE_BUFFER_SIZE);
-        bool syncEnabled = true; // setting up the cameras so they have the same frame
+        bool syncEnabled = false; // setting up the cameras so they have the same frame
         //rate as the slowest. Set to "true" to enable. For free running cameras set to false
         // Add created ImageBuffer to SharedImageBuffer object
         sharedImBuf->add(i, imageBuffer, syncEnabled);
@@ -109,7 +119,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
 
     // Start processingaddSimpleMapLabels
 
-    sharedImageBuffer->setSyncEnabled(true);
+    sharedImageBuffer->setSyncEnabled(false);
     // setting up the cameras so they have the same frame
     //rate as the slowest. Set to "true" to enable. For free running cameras set to false
     // Add created ImageBuffer to SharedImageBuffer object
@@ -135,5 +145,29 @@ void CameraContainer::addSimpleMapLabels(QList<CsimpleDefectMapLabel *> pSimpleL
     p_simpleLayout->addWidget(pSimpleLabels[i]);
     p_simpleLayout->addSpacing(1);
     }
+
+}
+
+void CameraContainer::handleGrabButton()
+{
+   if (!isGrabbing)
+   {
+    isGrabbing = true;
+    globalGrabButton->setStyleSheet("QPushButton { background-color : pink; color : black; }");
+    globalGrabButton->setText("Freeze Camera(s)");
+   }
+   else
+   {
+       isGrabbing = false;
+       globalGrabButton->setStyleSheet("QPushButton { background-color : lime; color : black; }");
+       globalGrabButton->setText("Start Camera(s)");
+
+   }
+
+   for (int i = 0; i < cams.size(); i++)
+   {
+       cams[i]->setGrab(isGrabbing);
+       cams[i]->setGrab(isGrabbing);
+   }
 
 }

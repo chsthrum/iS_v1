@@ -144,8 +144,8 @@ CameraWidget::~CameraWidget()
             stopCaptureThread();
 
         // Automatically start frame processing (for other streams)
-        //if(sharedImageBuffer->isSyncEnabledForDeviceNumber(deviceNumber))
-        //    sharedImageBuffer->setSyncEnabled(true);
+        if(sharedImageBuffer->isSyncEnabledForDeviceNumber(deviceNumber))
+           sharedImageBuffer->setSyncEnabled(true);
 
         // Remove from shared buffer
         sharedImageBuffer->removeByDeviceNumber(deviceNumber);
@@ -155,18 +155,16 @@ CameraWidget::~CameraWidget()
         else
             qDebug() << "[" << deviceNumber << "] WARNING: Camera already disconnected.";
     }
-    // Delete UI
-   // delete ui;
 
 }
 
 bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio, int procThreadPrio, bool enableFrameProcessing, int width, int height)
 {
     // Set frame label text
-    //if(sharedImageBuffer->isSyncEnabledForDeviceNumber(deviceNumber))
-    //    ui->frameLabel->setText("Camera connected. Waiting...");
-    //else
-    //    ui->frameLabel->setText("Connecting to camera...");
+    if(sharedImageBuffer->isSyncEnabledForDeviceNumber(deviceNumber))
+        this->cameraViewLabel->setText("Camera connected. Waiting...");
+    else
+        this->cameraViewLabel->setText("Connecting to camera...");
 
     // Create capture thread
     captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height);
@@ -217,12 +215,12 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
          //   ui->frameLabel->setText("Frame processing disabled.");
         qDebug() << "Camera is connected";
         setCameraStatusLabel();
+        return true;
     }
     // Failed to connect to camera
     else
         return false;
 
-    return -1;
 
 }
 void CameraWidget::updateCaptureThreadStats(struct ThreadStatisticsData statData)
@@ -310,11 +308,17 @@ int CameraWidget::getNumberOfDefectImages() const
 
 }
 
+void CameraWidget::setGrab(bool sG)
+{
+    captureThread->setGrab(sG);
+    processingThread->setGrab(sG);
+}
+
 void CameraWidget::stopCaptureThread()
 {
     qDebug() << "[" << deviceNumber << "] About to stop capture thread...";
     captureThread->stop();
-    sharedImageBuffer->wakeAll(); // This allows the thread to be stopped if it is in a wait-state
+    sharedImageBuffer->wakeAll(); // This allows the thread to be stopped even if it is in a wait-state
     // Take one frame off a FULL queue to allow the capture thread to finish
     if(sharedImageBuffer->getByDeviceNumber(deviceNumber)->isFull())
         sharedImageBuffer->getByDeviceNumber(deviceNumber)->get();
@@ -326,7 +330,7 @@ void CameraWidget::stopProcessingThread()
 {
     qDebug() << "[" << deviceNumber << "] About to stop processing thread...";
     processingThread->stop();
-    sharedImageBuffer->wakeAll(); // This allows the thread to be stopped if it is in a wait-state
+    sharedImageBuffer->wakeAll(); // This allows the thread to be stopped even if it is in a wait-state
     processingThread->wait();
     qDebug() << "[" << deviceNumber << "] Processing thread successfully stopped.";
 }

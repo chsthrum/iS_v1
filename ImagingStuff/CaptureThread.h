@@ -55,6 +55,7 @@ class CaptureThread : public QThread
     public:
         CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height);
         void stop();
+        void setGrab(bool);
         bool connectToCamera();
         bool disconnectCamera();
         bool isCameraConnected();
@@ -69,9 +70,11 @@ class CaptureThread : public QThread
         QImage frame;
         QTime t;
         QMutex doStopMutex;
+        QMutex doGrabMutex;
         QQueue<int> fps;
         struct ThreadStatisticsData statsData;
         volatile bool doStop;
+        volatile bool doGrab;
         int captureTime;
         int sampleNumber;
         int fpsSum;
@@ -85,7 +88,7 @@ class CaptureThread : public QThread
 
     signals:
         void updateStatisticsInGUI(struct ThreadStatisticsData);
-        //void newFrame(const QImage &frame); used only for previous testing
+
 };
 
 #endif // CAPTURETHREAD_H

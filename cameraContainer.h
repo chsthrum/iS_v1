@@ -7,14 +7,20 @@
 #include <QWidget>
 #include <QLayout>
 #include <QScrollArea>
+#include <QPushButton>
+
 //local includes
 #include "cameraWidget.h"
 #include "pic2label.h"
 #include "ImagingStuff/Buffer.h"
 #include "ImagingStuff/SharedImageBuffer.h"
+#include "ImagingStuff/CaptureThread.h"
+#include "ImagingStuff/ProcessingThread.h"
 #include "csimpledefectmapLabel.h"
 
 
+//class ProcessingThread; //check that these forward declarations are necessary
+//class CaptureThread;
 
 
 class CameraContainer : public QWidget
@@ -40,6 +46,14 @@ private:
     ScaledLabel* logoLabel;
     QMap<int, int> deviceNumberMap;
     SharedImageBuffer *sharedImageBuffer;
+    QPushButton* globalGrabButton;
+    bool isGrabbing;
+
+private slots:
+
+    void handleGrabButton();
+
+
 
 };
 

@@ -42,6 +42,7 @@ public:
     //number of displayed defect images
    void setNumberOfDefectImages(int);
    int getNumberOfDefectImages() const;
+   void setGrab(bool);
 
 
 
@@ -93,6 +94,8 @@ private:
 
     int heightForWidth(const QImage&, int labelWidth );
     //int heightForWidth(int)const;
+
+
 
 private slots:
     void updateFrame(const QImage &frame);

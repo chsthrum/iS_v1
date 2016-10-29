@@ -47,6 +47,7 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
     this->deviceNumber=deviceNumber;
     // Initialize members
    doStop=false;
+   doGrab=false;
    enableDeepLearning = true;
    defectData.SdefectMatNo = "";
    defectData.SfileName = "";
@@ -80,22 +81,52 @@ void ProcessingThread::run()
         doStopMutex.unlock();
         /////////////////////////////////
         /////////////////////////////////
+        while(1)    //this inner while loop does all the work, - we also need to include doStop detection.
+        {
+            ////////////////////////////////
+            // Stop thread if doStop=TRUE //
+            ////////////////////////////////
+            doStopMutex.lock();
+            if(doStop)
+            {
+                //doStop=false;
+                doStopMutex.unlock();
+                break;
+            }
+            doStopMutex.unlock();
+            /////////////////////////////////
+            /////////////////////////////////
 
-        // Save processing time
-        processingTime=t.elapsed();
-        // Start timer (used to calculate processing rate)
-        t.start();
 
-        processingMutex.lock();
-        // Get frame from queue, store in currentFrame, set ROI
-        currentFrame=Mat(sharedImageBuffer->getByDeviceNumber(deviceNumber)->get().clone(), currentROI);
-        //qDebug() << "current ROI width " << currentROI.width << "   currentFrame width " << currentFrame.cols;
+            /////////////////////////////////
+            //grab images if doGrab = TRUE
+            /////////////////////////////////
+            doGrabMutex.lock();
+            if(!doGrab)
+            {
+                doGrabMutex.unlock();
+                break; // break from the inner loop
+            }
+            doGrabMutex.unlock();
+            /////////////////////////////////
+            /////////////////////////////////
+
+
+            // Save processing time
+            processingTime=t.elapsed();
+            // Start timer (used to calculate processing rate)
+            t.start();
+
+            processingMutex.lock();
+            // Get frame from queue, store in currentFrame, set ROI
+            currentFrame=Mat(sharedImageBuffer->getByDeviceNumber(deviceNumber)->get().clone(), currentROI);
+            //qDebug() << "current ROI width " << currentROI.width << "   currentFrame width " << currentFrame.cols;
 
 
 
-        // Example of how to grab a frame from another stream (where Device Number=1)
-        // Note: This requires stream synchronization to be ENABLED (in the Options menu of MainWindow) and frame processing for the stream you are grabbing FROM to be DISABLED.
-        /*
+            // Example of how to grab a frame from another stream (where Device Number=1)
+            // Note: This requires stream synchronization to be ENABLED (in the Options menu of MainWindow) and frame processing for the stream you are grabbing FROM to be DISABLED.
+            /*
         if(sharedImageBuffer->containsImageBufferForDeviceNumber(1))
         {
             // Grab frame from another stream (connected to camera with Device Number=1)
@@ -105,116 +136,120 @@ void ProcessingThread::run()
         }
         */
 
-        ////////////////////////////////////
-        // PERFORM IMAGE PROCESSING BELOW //
-        ////////////////////////////////////
-//        // Grayscale conversion (in-place operation)
-//        if(imgProcFlags.grayscaleOn && (currentFrame.channels() == 3 || currentFrame.channels() == 4))
-//            cvtColor(currentFrame, currentFrame, CV_BGR2GRAY);
+            ////////////////////////////////////
+            // PERFORM IMAGE PROCESSING BELOW //
+            ////////////////////////////////////
+            //        // Grayscale conversion (in-place operation)
+            //        if(imgProcFlags.grayscaleOn && (currentFrame.channels() == 3 || currentFrame.channels() == 4))
+            //            cvtColor(currentFrame, currentFrame, CV_BGR2GRAY);
 
-//        // Smooth (in-place operations)
-//        if(imgProcFlags.smoothOn)
-//        {
-//            switch(imgProcSettings.smoothType)
-//            {
-//                // BLUR
-//                case 0:
-//                    blur(currentFrame, currentFrame,
-//                         Size(imgProcSettings.smoothParam1, imgProcSettings.smoothParam2));
-//                    break;
-//                // GAUSSIAN
-//                case 1:
-//                    GaussianBlur(currentFrame, currentFrame,
-//                                 Size(imgProcSettings.smoothParam1, imgProcSettings.smoothParam2),
-//                                 imgProcSettings.smoothParam3, imgProcSettings.smoothParam4);
-//                    break;
-//                // MEDIAN
-//                case 2:
-//                    medianBlur(currentFrame, currentFrame,
-//                               imgProcSettings.smoothParam1);
-//                    break;
-//            }
-//        }
-//        // Dilate
-//        if(imgProcFlags.dilateOn)
-//        {
-//            dilate(currentFrame, currentFrame,
-//                   Mat(), Point(-1, -1), imgProcSettings.dilateNumberOfIterations);
-//        }
-//        // Erode
-//        if(imgProcFlags.erodeOn)
-//        {
-//            erode(currentFrame, currentFrame,
-//                  Mat(), Point(-1, -1), imgProcSettings.erodeNumberOfIterations);
-//        }
-//        // Flip
-//        if(imgProcFlags.flipOn)
-//        {
-//            flip(currentFrame, currentFrame,
-//                 imgProcSettings.flipCode);
-//        }
-//        // Canny edge detection
-//        if(imgProcFlags.cannyOn)
-//        {
-//            Canny(currentFrame, currentFrame,
-//                  imgProcSettings.cannyThreshold1, imgProcSettings.cannyThreshold2,
-//                  imgProcSettings.cannyApertureSize, imgProcSettings.cannyL2gradient);
-//        }
-//        ////////////////////////////////////
-        // PERFORM IMAGE PROCESSING ABOVE //
-        ////////////////////////////////////
+            //        // Smooth (in-place operations)
+            //        if(imgProcFlags.smoothOn)
+            //        {
+            //            switch(imgProcSettings.smoothType)
+            //            {
+            //                // BLUR
+            //                case 0:
+            //                    blur(currentFrame, currentFrame,
+            //                         Size(imgProcSettings.smoothParam1, imgProcSettings.smoothParam2));
+            //                    break;
+            //                // GAUSSIAN
+            //                case 1:
+            //                    GaussianBlur(currentFrame, currentFrame,
+            //                                 Size(imgProcSettings.smoothParam1, imgProcSettings.smoothParam2),
+            //                                 imgProcSettings.smoothParam3, imgProcSettings.smoothParam4);
+            //                    break;
+            //                // MEDIAN
+            //                case 2:
+            //                    medianBlur(currentFrame, currentFrame,
+            //                               imgProcSettings.smoothParam1);
+            //                    break;
+            //            }
+            //        }
+            //        // Dilate
+            //        if(imgProcFlags.dilateOn)
+            //        {
+            //            dilate(currentFrame, currentFrame,
+            //                   Mat(), Point(-1, -1), imgProcSettings.dilateNumberOfIterations);
+            //        }
+            //        // Erode
+            //        if(imgProcFlags.erodeOn)
+            //        {
+            //            erode(currentFrame, currentFrame,
+            //                  Mat(), Point(-1, -1), imgProcSettings.erodeNumberOfIterations);
+            //        }
+            //        // Flip
+            //        if(imgProcFlags.flipOn)
+            //        {
+            //            flip(currentFrame, currentFrame,
+            //                 imgProcSettings.flipCode);
+            //        }
+            //        // Canny edge detection
+            //        if(imgProcFlags.cannyOn)
+            //        {
+            //            Canny(currentFrame, currentFrame,
+            //                  imgProcSettings.cannyThreshold1, imgProcSettings.cannyThreshold2,
+            //                  imgProcSettings.cannyApertureSize, imgProcSettings.cannyL2gradient);
+            //        }
+            //        ////////////////////////////////////
+            // PERFORM IMAGE PROCESSING ABOVE //
+            ////////////////////////////////////
 
-        // Convert Mat to QImage
-        frame=MatToQImage(currentFrame);
-        processingMutex.unlock();
-
-
-
-        // Inform GUI thread of new frame (QImage)
-        emit newFrame(frame);
-
-        //  Update statistics
-         updateFPS(processingTime);
-         statsData.nFramesProcessed++;
-        //  Inform GUI of updated statistics
-         emit updateStatisticsInGUI(statsData);
-
-        //TEST - roll the biased dice.
-        // Inform GUI thread of new defect structure (DefectStructToSave)
-
-        int d = roll_weighted_die();
+            // Convert Mat to QImage
+            frame=MatToQImage(currentFrame);
+            processingMutex.unlock();
 
 
-        if(enableDeepLearning && (d == 6))
-        {
-            time_t rawtime;
-            time(&rawtime);
-            defectData.SrawtimeS = rawtime;
 
-            defectData.SdefectMat = currentFrame;
-            qDebug() << "rawtime " << defectData.SrawtimeS << "secs";
-            defectData.SdefectMatNo = QString::number(statsData.nFramesProcessed);
-            defectData.ScameraNumber = deviceNumber;
-            emit updateDefectStruct((defectData));
+            // Inform GUI thread of new frame (QImage)
+            emit newFrame(frame);
+
+            //  Update statistics
+            updateFPS(processingTime);
+            statsData.nFramesProcessed++;
+            //  Inform GUI of updated statistics
+            emit updateStatisticsInGUI(statsData);
+
+            //TEST - roll the biased dice.
+            // Inform GUI thread of new defect structure (DefectStructToSave)
+
+            int d = roll_weighted_die();
 
 
+            if(enableDeepLearning && (d == 6))
+            {
+                time_t rawtime;
+                time(&rawtime);
+                defectData.SrawtimeS = rawtime;
+
+                defectData.SdefectMat = currentFrame;
+                qDebug() << "rawtime " << defectData.SrawtimeS << "secs";
+                defectData.SdefectMatNo = QString::number(statsData.nFramesProcessed);
+                defectData.ScameraNumber = deviceNumber;
+                emit updateDefectStruct((defectData));
+
+
+            }
         }
 
-//TEST
-//        if ((d == 6) && (flag == false)) //for testing the output
-//        {
-//            //qDebug() << "d = "  << d;
-//            emit dice_is_6("thanks");
-//            flag = true;
-//        }
-//        else if ((d == 6) && (flag == true)) //for testing the output
-//        {
-//            //qDebug() << "d = "  << d;
-//            emit dice_is_6("Hello!!!");
-//            flag = false;
-//        }
-        //qDebug() << "Hello from processing thread" << QThread::currentThread();
+
+        //TEST
+        //        if ((d == 6) && (flag == false)) //for testing the output
+        //        {
+        //            //qDebug() << "d = "  << d;
+        //            emit dice_is_6("thanks");
+        //            flag = true;
+        //        }
+        //        else if ((d == 6) && (flag == true)) //for testing the output
+        //        {
+        //            //qDebug() << "d = "  << d;
+        //            emit dice_is_6("Hello!!!");
+        //            flag = false;
+        //        }
+       // qDebug() << "Hello from processing thread" << QThread::currentThread();
+       // qDebug() << "Hello from processing thread";
     }
+
     qDebug() << "Stopping processing thread...";
 }
 
@@ -251,6 +286,12 @@ void ProcessingThread::stop()
 {
     QMutexLocker locker(&doStopMutex);
     doStop=true;
+}
+
+void ProcessingThread::setGrab(bool dG)
+{
+    QMutexLocker locker(&doGrabMutex);
+    doGrab = dG;
 }
 
 //void ProcessingThread::updateImageProcessingFlags(struct ImageProcessingFlags imgProcFlags)

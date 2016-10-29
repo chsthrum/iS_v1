@@ -59,6 +59,7 @@ class ProcessingThread : public QThread
         ProcessingThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber);
         QRect getCurrentROI();
         void stop();
+        void setGrab(bool);
 
     private:
         void updateFPS(int);
@@ -72,6 +73,7 @@ class ProcessingThread : public QThread
         QTime t;
         QQueue<int> fps;
         QMutex doStopMutex;
+        QMutex doGrabMutex;
         QMutex processingMutex;
         Size frameSize;
         Point framePoint;
@@ -79,6 +81,7 @@ class ProcessingThread : public QThread
         //struct ImageProcessingSettings imgProcSettings;
         struct ThreadStatisticsData statsData;
         volatile bool doStop;
+        volatile bool doGrab;
         int processingTime;
         int fpsSum;
         int sampleNumber;

@@ -41,6 +41,7 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
     this->height = height;
     // Initialize variables(s)
     doStop=false;
+    doGrab=false;
     sampleNumber=0;
     fpsSum=0;
     fps.clear();
@@ -50,7 +51,7 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
 
 void CaptureThread::run()
 {
-    while(1)
+    while(1) // This outer loop controls the camera state active or stopped
     {
         ////////////////////////////////
         // Stop thread if doStop=TRUE //
@@ -60,36 +61,66 @@ void CaptureThread::run()
         {
             doStop=false;
             doStopMutex.unlock();
-            break;
+            break; // break from the outer loop
         }
         doStopMutex.unlock();
         /////////////////////////////////
         /////////////////////////////////
 
-        // Save capture time
-        captureTime=t.elapsed();
-        // Start timer (used to calculate capture rate)
-        t.start();
-
-        // Synchronize with other streams (if enabled for this stream)
-        sharedImageBuffer->sync(deviceNumber);
-
-        // Capture frame (if available)
-        if (!cap.grab())
-            continue;
-
-        // Retrieve frame
-        cap.retrieve(grabbedFrame);
-        // Add frame to buffer
-        sharedImageBuffer->getByDeviceNumber(deviceNumber)->add(grabbedFrame, dropFrameIfBufferFull);
-
-        // Update statistics
-        updateFPS(captureTime); //temp note bugs here
-        statsData.nFramesProcessed++;
-        // Inform GUI of updated statistics
-        emit updateStatisticsInGUI(statsData);
+        while(1)    //this inner while loop does all the work, - we also need to include doStop detection.
+        {
+            ////////////////////////////////
+            // Stop thread if doStop=TRUE //
+            ////////////////////////////////
+            doStopMutex.lock();
+            if(doStop)
+            {
+                //doStop=false;
+                doStopMutex.unlock();
+                break; // break from the outer loop
+            }
+            doStopMutex.unlock();
+            /////////////////////////////////
+            /////////////////////////////////
 
 
+            /////////////////////////////////
+            //grab images if doGrab = TRUE
+            /////////////////////////////////
+            doGrabMutex.lock();
+            if(!doGrab)
+            {
+                doGrabMutex.unlock();
+                break; // break from the inner loop
+            }
+            doGrabMutex.unlock();
+            /////////////////////////////////
+            /////////////////////////////////
+
+            // Save capture time
+            captureTime=t.elapsed();
+            // Start timer (used to calculate capture rate)
+            t.start();
+
+            // Synchronize with other streams (if enabled for this stream)
+            sharedImageBuffer->sync(deviceNumber);
+
+            // Capture frame (if available)
+            if (!cap.grab())
+                continue;
+
+            // Retrieve frame
+            cap.retrieve(grabbedFrame);
+            // Add frame to buffer
+            sharedImageBuffer->getByDeviceNumber(deviceNumber)->add(grabbedFrame, dropFrameIfBufferFull);
+
+            // Update statistics
+            updateFPS(captureTime); //temp note bugs here
+            statsData.nFramesProcessed++;
+            // Inform GUI of updated statistics
+            emit updateStatisticsInGUI(statsData);
+        }
+    //qDebug() << "Hello from captureThread";
     }
     qDebug() << "Stopping capture thread...";
 }
@@ -152,6 +183,13 @@ void CaptureThread::stop()
 {
     QMutexLocker locker(&doStopMutex);
     doStop=true;
+}
+
+void CaptureThread::setGrab(bool dG)
+{
+    QMutexLocker locker(&doGrabMutex);
+    doGrab = dG;
+
 }
 
 bool CaptureThread::isCameraConnected()
