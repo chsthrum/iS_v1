@@ -197,5 +197,8 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../opencv24
 }
 # end win32
 
+DISTFILES += \
+    Operational_Notes.txt
+
 
 

@@ -1,0 +1,2 @@
+1.CHS 301016. when sync between camera is used (CameraContainer.cpp). If the correct amount of cameras is not called from the Config.h
+then the system will crash. This does not occurrs whether sync is set to true or false.

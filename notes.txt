@@ -79,3 +79,26 @@ http://answers.opencv.org/question/73260/how-to-access-basler-gige-camera-throug
 Set the speed of the basler camera (say 30fps).
 
 
+Camera classses
+
+closely akin to the opencv Videocapture Class
+
+http://docs.opencv.org/2.4/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-open
+
+so
+Constructor
+Destructor
+open
+isopen
+grab
+retrieve (decode)
+read (grab and decode)
+get property
+set property
+
+
+good example
+http://www.siliconsoftware.de/download/live_docu/RT5/en/documents/SDK/SDK.html#_4.4.1.1
+
+
+

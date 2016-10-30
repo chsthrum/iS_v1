@@ -47,7 +47,7 @@ CameraContainer::CameraContainer(QWidget *parent)
     globalGrabButton->setFocus();
     globalGrabButton->setFixedSize(200,50);
     globalGrabButton->setStyleSheet("QPushButton { background-color : lime; color : black; }");
-    isGrabbing = false;
+    isGrabbing = false; //set to true for grabbing as soon as the camera opens or false for start grabbing on button press
 
     logoLayout->addWidget(globalGrabButton);
     logoLayout->addStretch();
@@ -108,7 +108,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
 
         // Create ImageBuffer with user-defined size
         Buffer<Mat> *imageBuffer = new Buffer<Mat>(DEFAULT_IMAGE_BUFFER_SIZE);
-        bool syncEnabled = false; // setting up the cameras so they have the same frame
+        bool syncEnabled = true; // setting up the cameras so they have the same frame
         //rate as the slowest. Set to "true" to enable. For free running cameras set to false
         // Add created ImageBuffer to SharedImageBuffer object
         sharedImBuf->add(i, imageBuffer, syncEnabled);
@@ -119,7 +119,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
 
     // Start processingaddSimpleMapLabels
 
-    sharedImageBuffer->setSyncEnabled(false);
+    sharedImageBuffer->setSyncEnabled(true);
     // setting up the cameras so they have the same frame
     //rate as the slowest. Set to "true" to enable. For free running cameras set to false
     // Add created ImageBuffer to SharedImageBuffer object
