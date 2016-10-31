@@ -109,67 +109,40 @@ LIBS +=$$quote(-LC:\Program Files\SiliconSoftware\Runtime5.2.1\lib\visualc)\ -li
 
 
 SOURCES += main.cpp\
-
-        mainwindow.cpp \
-
+    mainwindow.cpp \
     defectLabel.cpp \
-
     pic2label.cpp \
-
     ImagingStuff/MatToQImage.cpp \
-
     ImagingStuff/SharedImageBuffer.cpp \
-
     cameraWidget.cpp \
-
     cameraContainer.cpp \
-
     ImagingStuff/CaptureThread.cpp \
-
     ImagingStuff/ProcessingThread.cpp \
-
     defectimagestorage.cpp \
-
     defectlabelslayout.cpp \
-
     cstopmotion.cpp \
-
-    csimpledefectmapLabel.cpp
+    csimpledefectmapLabel.cpp \
+    CameraDrivers/sisodrive.cpp
 
 
 HEADERS  += mainwindow.h \
-
     defectLabel.h \
-
     pic2label.h \
-
     ImagingStuff/Buffer.h \
-
     ImagingStuff/MatToQImage.h \
-
     ImagingStuff/SharedImageBuffer.h \
-
     cameraContainer.h \
-
     cameraWidget.h \
-
     ImagingStuff/CaptureThread.h \
-
     ImagingStuff/ProcessingThread.h \
-
     ImagingStuff/Config.h \
-
     defectimagestorage.h \
-
     weighteddie.h \
-
     ImagingStuff/Structures.h \
-
     defectlabelslayout.h \
-
     cstopmotion.h \
-
-    csimpledefectmapLabel.h
+    csimpledefectmapLabel.h \
+    CameraDrivers/sisodrive.h
 
 
 DISTFILES += \
@@ -199,6 +172,7 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../opencv24
 
 DISTFILES += \
     Operational_Notes.txt
+
 
 
 
