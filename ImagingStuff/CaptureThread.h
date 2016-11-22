@@ -65,7 +65,7 @@ class CaptureThread : public QThread
     private:
         void updateFPS(int);
         SharedImageBuffer *sharedImageBuffer;
-        VideoCapture cap;
+        VideoCapture *cap;
         Mat grabbedFrame;
         QImage frame;
         QTime t;

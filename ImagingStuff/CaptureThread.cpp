@@ -34,6 +34,7 @@
 
 CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height) : QThread(), sharedImageBuffer(sharedImageBuffer)
 {
+    cap = new(VideoCapture);
     // Save passed parameters
     this->dropFrameIfBufferFull=dropFrameIfBufferFull;
     this->deviceNumber=deviceNumber;
@@ -106,11 +107,11 @@ void CaptureThread::run()
             sharedImageBuffer->sync(deviceNumber);
 
             // Capture frame (if available)
-            if (!cap.grab())
+            if (!cap->grab())
                 continue;
 
             // Retrieve frame
-            cap.retrieve(grabbedFrame);
+            cap->retrieve(grabbedFrame);
             // Add frame to buffer
             sharedImageBuffer->getByDeviceNumber(deviceNumber)->add(grabbedFrame, dropFrameIfBufferFull);
 
@@ -128,12 +129,12 @@ void CaptureThread::run()
 bool CaptureThread::connectToCamera()
 {
     // Open camera
-    bool camOpenResult = cap.open(deviceNumber);
+    bool camOpenResult = cap->open(deviceNumber);
     // Set resolution
     if(width != -1)
-        cap.set(CV_CAP_PROP_FRAME_WIDTH, width);
+        cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
     if(height != -1)
-        cap.set(CV_CAP_PROP_FRAME_HEIGHT, height);
+        cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
     // Return result
     return camOpenResult;
 }
@@ -141,10 +142,10 @@ bool CaptureThread::connectToCamera()
 bool CaptureThread::disconnectCamera()
 {
     // Camera is connected
-    if(cap.isOpened())
+    if(cap->isOpened())
     {
         // Disconnect camera
-        cap.release();
+        cap->release();
         return true;
     }
     // Camera is NOT connected
@@ -194,15 +195,15 @@ void CaptureThread::setGrab(bool dG)
 
 bool CaptureThread::isCameraConnected()
 {
-    return cap.isOpened();
+    return cap->isOpened();
 }
 
 int CaptureThread::getInputSourceWidth()
 {
-    return cap.get(CV_CAP_PROP_FRAME_WIDTH);
+    return cap->get(CV_CAP_PROP_FRAME_WIDTH);
 }
 
 int CaptureThread::getInputSourceHeight()
 {
-    return cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+    return cap->get(CV_CAP_PROP_FRAME_HEIGHT);
 }
