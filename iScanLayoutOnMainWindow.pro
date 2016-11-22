@@ -173,6 +173,9 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../opencv24
 DISTFILES += \
     Operational_Notes.txt
 
+HEADERS += \
+    CameraDrivers/fs_cameraconfig.h
+
 
 
 

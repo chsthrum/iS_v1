@@ -11,7 +11,7 @@
 CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
 
 {
-    //pool = new QThreadPool; // does not seem to make any difference
+
     //Pointer to object to hold all the local defect images
     defectImages = new DefectImageStorage(this, nDefectImages);
     // Save Device Number
