@@ -151,7 +151,14 @@ CameraWidget::~CameraWidget()
         sharedImageBuffer->removeByDeviceNumber(deviceNumber);
         // Disconnect camera
         if(captureThread->disconnectCamera())
+        {
             qDebug() << "[" << deviceNumber << "] Camera successfully disconnected.";
+            delete captureThread;
+            captureThread = NULL;
+            delete processingThread;
+            processingThread = NULL;
+
+        }
         else
             qDebug() << "[" << deviceNumber << "] WARNING: Camera already disconnected.";
     }
@@ -195,7 +202,7 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
         //imageProcessingSettingsDialog->updateStoredSettingsFromDialog();
 
         // Start capturing frames from camera
-        captureThread->start((QThread::Priority)capThreadPrio);
+        captureThread->start((QThread::Priority)capThreadPrio); //TODO GRAB BUTTON CONTROLS THIS POINT
         // Start processing captured frames (if enabled)
         if(enableFrameProcessing)
             processingThread->start((QThread::Priority)procThreadPrio);

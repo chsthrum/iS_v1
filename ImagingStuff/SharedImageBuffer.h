@@ -53,6 +53,7 @@ class SharedImageBuffer
 {
     public:
         SharedImageBuffer();
+        ~SharedImageBuffer();
         void add(int deviceNumber, Buffer<Mat> *imageBuffer, bool sync=false);
         Buffer<Mat>* getByDeviceNumber(int deviceNumber);
         void removeByDeviceNumber(int deviceNumber);

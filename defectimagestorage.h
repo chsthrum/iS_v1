@@ -68,7 +68,9 @@ private:
     QVBoxLayout *p_vLayOut;
     QHBoxLayout *p_layOut;
 
-    int *previousDefectFrameNumber;
+    //int *previousDefectFrameNumber;
+    int previousDefectFrameNumber;
+
 
 
 

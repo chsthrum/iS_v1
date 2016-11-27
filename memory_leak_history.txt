@@ -1,0 +1,8 @@
+CHS 24NOV16
+
+From Windows Task manger running on the Lab PC
+                                                    DIFF             DIFF
+Time                                        21:04           23:24           08:25
+Available memory (MBytes)                   7586            7400            7017
+Free memory (MBytes)                        2818            2368            782
+Memory Used on the bar Graphic (GByte       4.49            4.67            5.05

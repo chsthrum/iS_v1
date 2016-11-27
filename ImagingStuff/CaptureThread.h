@@ -54,6 +54,7 @@ class CaptureThread : public QThread
 
     public:
         CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height);
+        ~CaptureThread();
         void stop();
         void setGrab(bool);
         bool connectToCamera();

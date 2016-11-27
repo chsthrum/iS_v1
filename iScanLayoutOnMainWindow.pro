@@ -198,7 +198,14 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../opencv24
 # end win32
 
 DISTFILES += \
-    Operational_Notes.txt
+    Operational_Notes.txt \
+    memory_leak_history.txt
+
+HEADERS += \
+    ExternalHardwareSoftware/siliconsoftwaregrabber_1.h
+
+SOURCES += \
+    ExternalHardwareSoftware/siliconsoftwaregrabber_1.cpp
 
 
 

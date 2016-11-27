@@ -35,7 +35,7 @@
 
 // Camera Display instancies and labels
 #define NUMBER_OF_CAMERAS                   1// when using in synced mode this number must match the number connected cameras
-#define NUMBEROFDEFECTIMAGESTODISPLAY       10
+#define NUMBEROFDEFECTIMAGESTODISPLAY       5
 
 //Defect free length  - 2 or more defects most not occurr within this distance (in frames)
 #define DEFECT_FREE_LENGTH                  20

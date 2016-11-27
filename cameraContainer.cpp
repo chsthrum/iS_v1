@@ -92,7 +92,8 @@ end of the layout
 
 CameraContainer::~CameraContainer()
 {
-
+    //delete sharedImageBuffer;
+    //sharedImageBuffer = NULL;
 }
 
 //add the Camera Widget and the buffers containing the mats which are all held in a hash table in the SharedImageBuffer class.
@@ -112,6 +113,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
         //rate as the slowest. Set to "true" to enable. For free running cameras set to false
         // Add created ImageBuffer to SharedImageBuffer object
         sharedImBuf->add(i, imageBuffer, syncEnabled);
+
 
 
     }
@@ -146,6 +148,11 @@ void CameraContainer::addSimpleMapLabels(QList<CsimpleDefectMapLabel *> pSimpleL
     p_simpleLayout->addSpacing(1);
     }
 
+}
+
+SharedImageBuffer *CameraContainer::getSharedImageBuffer() const
+{
+    return sharedImageBuffer;
 }
 
 void CameraContainer::handleGrabButton()
