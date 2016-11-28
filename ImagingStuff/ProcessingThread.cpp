@@ -64,6 +64,11 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
     statsData.nFramesProcessed=0;
 }
 
+ProcessingThread::~ProcessingThread()
+{
+
+}
+
 void ProcessingThread::run()
 {
     while(1)

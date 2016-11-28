@@ -44,6 +44,7 @@ template<class T> class Buffer
 {
     public:
         Buffer(int size);
+        ~Buffer();
         void add(const T& data, bool dropIfFull=false);
         T get();
         int size();
@@ -72,6 +73,20 @@ template<class T> Buffer<T>::Buffer(int size)
     clearBuffer_add = new QSemaphore(1);
     clearBuffer_get = new QSemaphore(1);
 }
+
+template<class T> Buffer<T>::~Buffer()
+{
+    // Destroy semaphores
+    delete freeSlots;
+    freeSlots = NULL;
+    delete usedSlots;
+    usedSlots = NULL;
+    delete clearBuffer_add;
+    clearBuffer_add = NULL;
+    delete clearBuffer_get;
+    clearBuffer_get = NULL;
+}
+
 
 template<class T> void Buffer<T>::add(const T& data, bool dropIfFull)
 {

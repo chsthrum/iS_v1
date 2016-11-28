@@ -92,7 +92,8 @@ end of the layout
 
 CameraContainer::~CameraContainer()
 {
-
+    //delete sharedImageBuffer;  // crashes if used
+    //sharedImageBuffer = NULL;  // crashes if used
 }
 
 //add the Camera Widget and the buffers containing the mats which are all held in a hash table in the SharedImageBuffer class.
@@ -128,8 +129,8 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
     // connect to all the cameras after setting up the layout
     for(int i = 0; i != nCameras ; ++i)
     {
-        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, LOCAL_CAM);
-       // p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, SISO_CIS_RGB);
+        //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, LOCAL_CAM);
+        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, SISO_CIS_RGB);
     }
 
 
@@ -148,6 +149,13 @@ void CameraContainer::addSimpleMapLabels(QList<CsimpleDefectMapLabel *> pSimpleL
     }
 
 }
+
+SharedImageBuffer *CameraContainer::getSharedImageBuffer() const
+{
+    return sharedImageBuffer;
+}
+
+
 
 void CameraContainer::handleGrabButton()
 {

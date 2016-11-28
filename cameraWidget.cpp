@@ -136,6 +136,7 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
 
 CameraWidget::~CameraWidget()
 {
+
     if(isCameraConnected)
     {
         // Stop processing thread
@@ -153,7 +154,14 @@ CameraWidget::~CameraWidget()
         sharedImageBuffer->removeByDeviceNumber(deviceNumber);
         // Disconnect camera
         if(captureThread->disconnectCamera())
+        {
             qDebug() << "[" << deviceNumber << "] Camera successfully disconnected.";
+            delete captureThread;
+            captureThread = NULL;
+            delete processingThread;
+            processingThread = NULL;
+        }
+
         else
             qDebug() << "[" << deviceNumber << "] WARNING: Camera already disconnected.";
     }

@@ -39,6 +39,11 @@ SharedImageBuffer::SharedImageBuffer()
     doSync=false;
 }
 
+SharedImageBuffer::~SharedImageBuffer()
+{
+
+}
+
 void SharedImageBuffer::add(int deviceNumber, Buffer<Mat>* imageBuffer, bool sync)
 {
     // Device stream is to be synchronized
@@ -60,7 +65,10 @@ Buffer<Mat>* SharedImageBuffer::getByDeviceNumber(int deviceNumber)
 void SharedImageBuffer::removeByDeviceNumber(int deviceNumber)
 {
     // Remove buffer for device from imageBufferMap
-    imageBufferMap.remove(deviceNumber);
+    //imageBufferMap.remove(deviceNumber) // WAS;
+    delete imageBufferMap.take(deviceNumber); // chs 27NOV2016 http://www.qtcentre.org/threads/43240-will-QHash-remove-call-delete
+    //delete _childern.take(key) from http://www.qtcentre.org/threads/43240-will-QHash-remove-call-delete
+
 
     // Also remove from syncSet (if present)
     mutex.lock();

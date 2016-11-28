@@ -87,6 +87,12 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
     statsData.nFramesProcessed=0;
 }
 
+CaptureThread::~CaptureThread()
+{
+
+}
+
+
 void CaptureThread::run()
 {
     while(1) // This outer loop controls the camera state active or stopped
@@ -145,8 +151,8 @@ void CaptureThread::run()
 
             // Capture frame (if available)
             if (!cap->grab())
-                continue;
-            //cap->grab();
+                continue;   //go to the very end of the while loop, to avoid the next statements
+
 
             // Retrieve frame
             cap->retrieve(grabbedFrame);

@@ -32,6 +32,7 @@ public:
     ~CameraContainer();
     void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, int nCameras);
     void addSimpleMapLabels(QList<CsimpleDefectMapLabel*>, QHBoxLayout* p_simple, int nLabels);
+    SharedImageBuffer* getSharedImageBuffer() const;
 
 
 private:

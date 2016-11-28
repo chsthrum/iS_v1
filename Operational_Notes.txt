@@ -1,2 +1,9 @@
 1.CHS 301016. when sync between camera is used (CameraContainer.cpp). If the correct amount of cameras is not called from the Config.h
 then the system will crash. This does not occurrs whether sync is set to true or false.
+
+-2.VALGRIND IN THE CONSOLE
+-chs@Chs-linux-HP-G72-Notebook-PC:~/workspace/MyGuiExpts/build-iScanLayoutOnMainWindow-Desktop_Qt_5_4_0_GCC_64bit-Debug$ valgrind --tool=memcheck --leak-check=yes ./iScanLayoutOnMainWindow
+-http://www.cprogramming.com/debugging/valgrind.html
+-http://www.valgrind.org/docs/manual/index.html
+-useful  http://stackoverflow.com/questions/25224575/how-to-safely-destruct-a-qthread
+

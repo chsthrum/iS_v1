@@ -57,6 +57,7 @@ class ProcessingThread : public QThread
 
     public:
         ProcessingThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber);
+        ~ProcessingThread();
         QRect getCurrentROI();
         void stop();
         void setGrab(bool);
