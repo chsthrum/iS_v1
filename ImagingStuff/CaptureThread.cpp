@@ -31,15 +31,52 @@
 /************************************************************************/
 
 #include "CaptureThread.h"
+#include "ImagingStuff/Config.h"
+#include "../ExternalHardwareSoftware/siliconsoftwaregrabber_1.h"
 
-CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height) : QThread(), sharedImageBuffer(sharedImageBuffer)
+
+//CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height): QThread(), sharedImageBuffer(sharedImageBuffer)
+//{
+//    cap = new VideoCapture;
+//    // Save passed parameters
+//    this->dropFrameIfBufferFull=dropFrameIfBufferFull;
+//    this->deviceNumber=deviceNumber;
+//    this->width = width;
+//    this->height = height;
+//    // Initialize variables(s)
+//    doStop=false;
+//    doGrab=false;
+//    sampleNumber=0;
+//    fpsSum=0;
+//    fps.clear();
+//    statsData.averageFPS=0;
+//    statsData.nFramesProcessed=0;
+
+//}
+
+CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height, int camType) : QThread(), sharedImageBuffer(sharedImageBuffer), cameraType(camType)
 {
-    cap = new(VideoCapture);
+    switch(cameraType)
+    {
+    case LOCAL_CAM:
+        cap = new VideoCapture;
+        break;
+    case SISO_CIS_GRAY:
+        break;
+    case SISO_CIS_RGB:
+        cap = new SiliconSoftwareGrabber(0, 0, "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf");
+        break;
+    default:
+        std::cout << " passed thru to default option CaptureThread Constructor switch statement)" << std::endl;
+        break;
+    }
+
     // Save passed parameters
     this->dropFrameIfBufferFull=dropFrameIfBufferFull;
     this->deviceNumber=deviceNumber;
     this->width = width;
     this->height = height;
+    this->cameraType = camType;
     // Initialize variables(s)
     doStop=false;
     doGrab=false;
@@ -109,6 +146,7 @@ void CaptureThread::run()
             // Capture frame (if available)
             if (!cap->grab())
                 continue;
+            //cap->grab();
 
             // Retrieve frame
             cap->retrieve(grabbedFrame);
@@ -130,9 +168,11 @@ bool CaptureThread::connectToCamera()
 {
     // Open camera
     bool camOpenResult = cap->open(deviceNumber);
+
     // Set resolution
     if(width != -1)
         cap->set(CV_CAP_PROP_FRAME_WIDTH, width);
+
     if(height != -1)
         cap->set(CV_CAP_PROP_FRAME_HEIGHT, height);
     // Return result
@@ -200,7 +240,7 @@ bool CaptureThread::isCameraConnected()
 
 int CaptureThread::getInputSourceWidth()
 {
-    return cap->get(CV_CAP_PROP_FRAME_WIDTH);
+        return cap->get(CV_CAP_PROP_FRAME_WIDTH);
 }
 
 int CaptureThread::getInputSourceHeight()

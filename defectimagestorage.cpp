@@ -17,7 +17,8 @@
 DefectImageStorage::DefectImageStorage(QWidget *parent, int numberOfImages) : QWidget(parent), queueLength(numberOfImages)
 {
     p_layOut = new QHBoxLayout;
-    previousDefectFrameNumber = new int(0);
+    //previousDefectFrameNumber = new int(0);
+    previousDefectFrameNumber = 0;
     //addDefectCameraViewLabels(defectImageLabels, p_layOut, numberOfImages);
     addCameraWidgetDefectLabels(defectLabels, p_layOut, queueLength);
     defectLabels[3]->setDefectFrameNumber("yippees");
@@ -96,14 +97,14 @@ DefectStructToSave DefectImageStorage::setDefectStruct(const DefectStructToSave&
 
     //get the distance in frames from the previous defect frame
     int dfl = DEFECT_FREE_LENGTH;
-    minature_Im.SdistanceFromPreviousdefect = QString::number((minature_Im.SdefectMatNo.toInt()) - *previousDefectFrameNumber);
+    minature_Im.SdistanceFromPreviousdefect = QString::number((minature_Im.SdefectMatNo.toInt()) - previousDefectFrameNumber);
     //check to see if the defect free length is not affected
     if (minature_Im.SdistanceFromPreviousdefect.toInt() <= dfl)
     {
         minature_Im.SwithinDefectFreeLength = true;
 
     }
-    *previousDefectFrameNumber = minature_Im.SdefectMatNo.toInt();
+    previousDefectFrameNumber = minature_Im.SdefectMatNo.toInt();
 
 
 

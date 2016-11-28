@@ -40,6 +40,11 @@
 //Defect free length  - 2 or more defects most not occurr within this distance (in frames)
 #define DEFECT_FREE_LENGTH                  20
 
+// Camara Types
+#define LOCAL_CAM               0           // the local cameras called by videocapture
+#define SISO_CIS_GRAY           1           //CIS camera with grayscale applet
+#define SISO_CIS_RGB            2           //CIS camera with RGB applet
+
 // Machine Reversing after defect stop in distance in Frames
 #define REVERSE_LENGTH_N_FRAMES             13
 

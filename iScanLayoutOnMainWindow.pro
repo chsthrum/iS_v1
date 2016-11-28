@@ -122,7 +122,7 @@ SOURCES += main.cpp\
     defectlabelslayout.cpp \
     cstopmotion.cpp \
     csimpledefectmapLabel.cpp \
-    CameraDrivers/sisodrive.cpp
+
 
 
 HEADERS  += mainwindow.h \
@@ -142,7 +142,7 @@ HEADERS  += mainwindow.h \
     defectlabelslayout.h \
     cstopmotion.h \
     csimpledefectmapLabel.h \
-    CameraDrivers/sisodrive.h
+
 
 
 DISTFILES += \
@@ -174,7 +174,11 @@ DISTFILES += \
     Operational_Notes.txt
 
 HEADERS += \
-    CameraDrivers/fs_cameraconfig.h
+    CameraDrivers/fs_cameraconfig.h \
+    ExternalHardwareSoftware/siliconsoftwaregrabber_1.h
+
+SOURCES += \
+    ExternalHardwareSoftware/siliconsoftwaregrabber_1.cpp
 
 
 

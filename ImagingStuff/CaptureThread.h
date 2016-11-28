@@ -53,7 +53,10 @@ class CaptureThread : public QThread
     Q_OBJECT
 
     public:
+        //for local Camera
         CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height);
+        //for machine vision camera
+        CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height, int camType);
         void stop();
         void setGrab(bool);
         bool connectToCamera();
@@ -82,6 +85,7 @@ class CaptureThread : public QThread
         int deviceNumber;
         int width;
         int height;
+        int cameraType;
 
     protected:
         void run();

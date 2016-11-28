@@ -31,10 +31,10 @@ class CameraWidget : public QWidget
 public:
     //CameraWidget(QWidget *parent = 0, int deviceNumber = 0);
     //CameraWidget(QWidget *parent, int deviceNumber);
-    explicit CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer *sharedImageBuffer);
+    explicit CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer *sharedImageBuffer, int camType);
     ~CameraWidget();
 
-    bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height);
+    bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height, int cameraType);
 
 
     //set the camera status indicator label
@@ -94,6 +94,8 @@ private:
 
     int heightForWidth(const QImage&, int labelWidth );
     //int heightForWidth(int)const;
+
+    int cameraType; // the type of camera being called ie. silicon software, Dalsa, etc
 
 
 

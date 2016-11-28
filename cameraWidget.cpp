@@ -8,12 +8,14 @@
 #include "defectlabelslayout.h"
 
 
-CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
+CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer, int camType) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
 
 {
 
     //Pointer to object to hold all the local defect images
     defectImages = new DefectImageStorage(this, nDefectImages);
+    //The type of Camera
+    cameraType = camType;
     // Save Device Number
     this->deviceNumber=deviceNumber;
     // Initialize internal flag
@@ -158,16 +160,21 @@ CameraWidget::~CameraWidget()
 
 }
 
-bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio, int procThreadPrio, bool enableFrameProcessing, int width, int height)
+bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio, int procThreadPrio, bool enableFrameProcessing, int width, int height, int cameraType)
 {
+
     // Set frame label text
     if(sharedImageBuffer->isSyncEnabledForDeviceNumber(deviceNumber))
         this->cameraViewLabel->setText("Camera connected. Waiting...");
     else
         this->cameraViewLabel->setText("Connecting to camera...");
 
-    // Create capture thread
-    captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height);
+    // Create capture thread using either of the overloaded constructors
+    //if (!cameraType) // for local camera
+    //captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height);
+    //else // for machine vision camera
+    captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height, cameraType);
+
     // Attempt to connect to camera
     if(captureThread->connectToCamera())
     {
@@ -220,8 +227,6 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
     // Failed to connect to camera
     else
         return false;
-
-
 }
 void CameraWidget::updateCaptureThreadStats(struct ThreadStatisticsData statData)
 {
