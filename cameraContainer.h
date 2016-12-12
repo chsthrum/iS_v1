@@ -18,6 +18,8 @@
 #include "ImagingStuff/ProcessingThread.h"
 #include "csimpledefectmapLabel.h"
 
+#include "ExternalHardwareSoftware/baslerpylondart_1.h"
+
 
 //class ProcessingThread; //check that these forward declarations are necessary
 //class CaptureThread;
@@ -49,6 +51,8 @@ private:
     SharedImageBuffer *sharedImageBuffer;
     QPushButton* globalGrabButton;
     bool isGrabbing;
+
+    //CTlFactory& tlFactory;
 
 private slots:
 

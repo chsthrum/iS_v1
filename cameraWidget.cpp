@@ -7,6 +7,8 @@
 #include "defectimagestorage.h"
 #include "defectlabelslayout.h"
 
+#include "ExternalHardwareSoftware/baslerpylondart_1.h"
+
 
 CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer* sharedImageBuffer, int camType) : QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
 
@@ -160,6 +162,10 @@ CameraWidget::~CameraWidget()
             captureThread = NULL;
             delete processingThread;
             processingThread = NULL;
+            // Releases all pylon resources.
+            //Pylon::PylonTerminate();
+            qDebug() << "[" << deviceNumber << "] CameraWidget destructor called.";
+
         }
 
         else

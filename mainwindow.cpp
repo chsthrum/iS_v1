@@ -20,5 +20,5 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
+qDebug() << "MainWindow destructor called.";
 }

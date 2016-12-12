@@ -100,5 +100,17 @@ set property
 good example
 http://www.siliconsoftware.de/download/live_docu/RT5/en/documents/SDK/SDK.html#_4.4.1.1
 
+http://stackoverflow.com/questions/7719373/initialise-reference-variable-as-a-class-member
+class myClass
+{
+public:
+    myClass( type& some_var ) \\in the call, type = CTlFactory and some_var = CTlFactory::GetInstance()
+      : var( some_var )
+    {}
+
+private:
+    type& var;
+};
+
 
 

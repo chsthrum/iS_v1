@@ -2,7 +2,8 @@
 #include <QDebug>
 //local includes
 #include "cameraContainer.h"
-#include"ImagingStuff/Config.h"
+#include "ImagingStuff/Config.h"
+#include "ExternalHardwareSoftware/baslerpylondart_1.h"
 
 
 
@@ -10,6 +11,11 @@
 CameraContainer::CameraContainer(QWidget *parent)
     : QWidget(parent)
 {
+    //PylonAutoInitTerm autoInitTerm;
+    PylonInitialize();
+    // Note PylonTerminate() which releases all pylon resources is not used ????
+    // Get the transport layer factory. (Singleton so Global scope, so get by reference)
+    CTlFactory& tlFactory = CTlFactory::GetInstance();
 
     // Create SharedImageBuffer object
     sharedImageBuffer = new SharedImageBuffer();
@@ -92,8 +98,12 @@ end of the layout
 
 CameraContainer::~CameraContainer()
 {
+    // autoInitTerm's destructor calls PylonTerminate() now
+    // Releases all pylon resources.
+    //Pylon::PylonTerminate();
     //delete sharedImageBuffer;  // crashes if used
     //sharedImageBuffer = NULL;  // crashes if used
+    qDebug() << "CameraContainer Destructor called.";
 }
 
 //add the Camera Widget and the buffers containing the mats which are all held in a hash table in the SharedImageBuffer class.
@@ -125,12 +135,26 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
     //rate as the slowest. Set to "true" to enable. For free running cameras set to false
     // Add created ImageBuffer to SharedImageBuffer object
 
+    //if one of the cameras is a Basler Pylon series than allow pylon initilaisation
+    // remember the destructor goes in the cameraContainer destructor
+//    if (FS_BASLER_DART_PYLON_AREA)
+//    {
+//        //PylonAutoInitTerm autoInitTerm;
+//        PylonInitialize();
+//        // Note PylonTerminate() which releases all pylon resources is in the CameraContainer destructor.
+//        // Get the transport layer factory. (Singleton so Global scope, so get by reference)
+//        CTlFactory& tlFactory = CTlFactory::GetInstance();
+//    }
+
+
+
 
     // connect to all the cameras after setting up the layout
     for(int i = 0; i != nCameras ; ++i)
     {
-        //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, LOCAL_CAM);
-        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, SISO_CIS_RGB);
+        //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, FS_LOCAL_CAM);
+        //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, FS_SISO_CIS_RGB);
+        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, FS_BASLER_DART_PYLON_AREA);
     }
 
 

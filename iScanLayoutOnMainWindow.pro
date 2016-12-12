@@ -167,18 +167,38 @@ win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../opencv2410/
 
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../opencv2410/opencv/build/x64/vc12/lib/ -lopencv_imgproc2410d
 
-}
-# end win32
+
+
+#pylon
+INCLUDEPATH +=$$quote(C:/Program Files/Basler/pylon 5/Development/include)
+#Note: PYLON_DEV_DIR = C:\Program Files\Basler\pylon 5\Development
+LIBS +=$$quote(-LC:\Program Files\Basler\pylon 5\Development\lib\x64)\
+#LIBS +=-L$(PYLON_DEV_DIR)\lib\x64\
+              -lGCBase_MD_VC120_v3_0_Basler_pylon_v5_0\
+              -lGenApi_MD_VC120_v3_0_Basler_pylon_v5_0\
+              -lPylonBase_MD_VC120_v5_0\
+              -lPylonC_MD_VC120\
+              -lPylonGUI_MD_VC120_v5_0\
+              -lPylonUtility_MD_VC120_v5_0
+
+
 
 DISTFILES += \
     Operational_Notes.txt
 
 HEADERS += \
     CameraDrivers/fs_cameraconfig.h \
-    ExternalHardwareSoftware/siliconsoftwaregrabber_1.h
+    ExternalHardwareSoftware/siliconsoftwaregrabber_1.h \
+    ExternalHardwareSoftware/baslerpylondart_1.h
 
 SOURCES += \
-    ExternalHardwareSoftware/siliconsoftwaregrabber_1.cpp
+    ExternalHardwareSoftware/siliconsoftwaregrabber_1.cpp \
+    ExternalHardwareSoftware/baslerpylondart_1.cpp
+
+}
+# end win32
+
+
 
 
 

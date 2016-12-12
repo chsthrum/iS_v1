@@ -41,9 +41,10 @@
 #define DEFECT_FREE_LENGTH                  20
 
 // Camara Types
-#define LOCAL_CAM               0           // the local cameras called by videocapture
-#define SISO_CIS_GRAY           1           //CIS camera with grayscale applet
-#define SISO_CIS_RGB            2           //CIS camera with RGB applet
+#define FS_LOCAL_CAM                   0           // the local cameras called by videocapture
+#define FS_SISO_CIS_GRAY               1           //CIS camera with grayscale applet
+#define FS_SISO_CIS_RGB                2           //CIS camera with RGB applet
+#define FS_BASLER_DART_PYLON_AREA      3           //Basler Area Camera
 
 // Machine Reversing after defect stop in distance in Frames
 #define REVERSE_LENGTH_N_FRAMES             13

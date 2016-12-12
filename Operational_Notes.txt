@@ -7,3 +7,177 @@ then the system will crash. This does not occurrs whether sync is set to true or
 -http://www.valgrind.org/docs/manual/index.html
 -useful  http://stackoverflow.com/questions/25224575/how-to-safely-destruct-a-qthread
 
+
+Protective Rubbish
+
+#include "basler_pylon_area_1.h"
+
+//qt includes
+#include <QDebug>
+
+using namespace Pylon;
+
+int exitCode = 0;
+
+BaslerPylonArea::BaslerPylonArea(int cameraNumber, const char *configFile)
+    :cameraNo(cameraNumber), config(configFile) // directly initialize our member variables
+{
+    //PylonInitialize()  called in CameraContainer::CameraContainer
+
+}
+
+BaslerPylonArea::~BaslerPylonArea()
+{
+
+}
+
+bool BaslerPylonArea::open(int n_cam)
+{
+    n_cam = 0; // purely for compatability has no effect
+
+
+    try
+    {
+        // Get the transport layer factory.
+        CTlFactory& tlFactory = CTlFactory::GetInstance();
+
+        // Get all attached devices and exit application if no device is found.
+        DeviceInfoList_t devices;
+        if ( tlFactory.EnumerateDevices(devices) == 0 )
+        {
+            throw RUNTIME_EXCEPTION( "No camera present.");
+        }
+        //serialNo = devices[cameraNo].GetSerialNumber();
+        //numberOfBaslerCamsInSystem = devices.size();
+
+        cam.Attach( tlFactory.CreateDevice( devices[cameraNo]));
+
+    }
+
+    catch (const GenericException &e)
+    {
+        // Error handling
+        std::cerr << "An exception occurred." << std::endl
+                  << e.GetDescription() << std::endl;
+        exitCode = -1;
+    }
+
+    cam.Open();
+
+    try
+    {
+    //read the content of the file back to the camera's node map with enabled validation.
+    qDebug() << "Reading file back to camera's node map..."<< endl;
+    CFeaturePersistence::Load(config, &cam.GetNodeMap(), true);
+    }
+
+
+    catch (const GenericException & e)
+    {
+        cerr << "failed to load the file: "
+             << e.GetDescription() << endl;
+    }
+
+
+    // Close the camera/
+    cam.Close();
+    // According to their default configuration, the cameras are
+    // set up for free-running continuous acquisition.
+    //GenApi::INodeMap& nodemap = cam->GetNodeMap();
+    //cam.Open();
+    //GenApi::CIntegerPtr width = nodemap.GetNode("Width");
+
+    try
+    {
+    cam.StartGrabbing();
+
+
+    }
+    catch (const GenericException &e)
+    {
+        // Error handling
+        std::cerr << "An exception occurred in grab()." << std::endl
+                  << e.GetDescription() << std::endl;
+        exitCode = -1;
+        return exitCode;
+    }
+
+
+    return 1;
+}
+
+void BaslerPylonArea::release()
+{
+
+}
+
+bool BaslerPylonArea::grab()
+{
+    return 1;
+}
+
+bool BaslerPylonArea::retrieve(cv::Mat &im, int i)
+{
+
+//    i = 0; // for compatibility
+//    im = cv::Mat(height, width, CV_8UC3, Fg_getImagePtrEx(fg, last_pic_nr, portNo, mem));
+
+//    if (!im.data)
+//    {
+//        printf (" error in retrieve() - no image data.\n");
+//        return false;
+//    }
+
+//    else return true;
+    return 0;
+}
+
+bool BaslerPylonArea::retrieve(cv::Mat &im)
+{
+    // Wait for an image and then retrieve it. A timeout of 5000 ms is used
+    cam.RetrieveResult( 5000, ptrGrabResult, TimeoutHandling_ThrowException);
+
+    width = ptrGrabResult->GetWidth();
+    height = ptrGrabResult->GetHeight();
+
+    im = cv::Mat(height, width, CV_8UC3, pylonImage.GetBuffer());
+
+    if (!im.data)
+    {
+        printf (" error in retrieve() - no image data.\n");
+        return false;
+    }
+
+    else return true;
+
+    return 0;
+
+}
+
+double BaslerPylonArea::get(int propId)
+{
+    return 0.0;
+}
+
+bool BaslerPylonArea::set(int propId, double value)
+{
+    return 0;
+}
+
+bool BaslerPylonArea::isOpened() const
+{
+    return 0;
+}
+
+unsigned int BaslerPylonArea::getWidth() const
+{
+    return 0;
+}
+
+unsigned int BaslerPylonArea::getHeight() const
+{
+    return 0;
+}
+
+Protective rubbish
+

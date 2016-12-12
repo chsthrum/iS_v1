@@ -62,12 +62,12 @@ SiliconSoftwareGrabber::SiliconSoftwareGrabber(int grabberNumber, unsigned int p
 
 SiliconSoftwareGrabber::~SiliconSoftwareGrabber()
 {
-    printf ("\nThe SiliconSoftwareGrabber destructor has beemn invoked\n\n");
+    printf ("\nThe SiliconSoftwareGrabber destructor has been invoked\n\n");
 }
 
 bool SiliconSoftwareGrabber::open(int grabber)
 {
-    grabber = 0; // purely for compatability
+    grabber = 0; // purely for compatability has no effect
 
     // total buffer memory size for grabber board
     totalBuffersSizeInBytes = width * height * bytesPerPixel* nBuffers;
@@ -137,7 +137,7 @@ double SiliconSoftwareGrabber::get(int propId)
 
 bool SiliconSoftwareGrabber::set(int propId, double value)
 {
-    propId = 0; // both are purely for compatability
+    propId = 0; // both are purely for compatability have no effect
     value = 0;
     return true;
 }
@@ -242,5 +242,5 @@ frameindex_t SiliconSoftwareGrabber::getCurrentPicNo() const
     return current_pic_nr;
 }
 
-#endif
+#endif //_WIN32
 
