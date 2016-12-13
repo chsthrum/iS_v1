@@ -90,4 +90,18 @@ struct DefectStructToSave
     QString SfileName;
 };
 
+struct MachCamConfigFileXMLData
+{
+    QString NumberOfCameras = "";
+    QString Mach_SerialNumber = "";
+    QString Mach_YearOfManufacture = "";
+    QString Mach_ModelNumber = "";
+    QString CameraNumber = "";
+    QString filePathName = "";
+    QString ManufacturerType = "";
+    QString SerialNumber = "";
+    QString Model = "";
+    QString CameraReferenceDistance_mm = "";
+};
+
 #endif // STRUCTURES_H

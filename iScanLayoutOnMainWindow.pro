@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += xml
 QT       += concurrent
 
 QT       += concurrent widgets
@@ -197,6 +198,16 @@ SOURCES += \
 
 }
 # end win32
+
+SOURCES += \
+    xmlStuff/writemachcamconfigfilexml.cpp \
+    xmlStuff/readxmldatafromfile.cpp \
+    xmlStuff/listxml_elements.cpp
+
+HEADERS += \
+    xmlStuff/writemachcamconfigfilexml.h \
+    xmlStuff/readxmldatafromfile.h \
+    xmlStuff/listxml_elements.h
 
 
 

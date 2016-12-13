@@ -3,7 +3,9 @@
 //local includes
 #include "cameraContainer.h"
 #include "ImagingStuff/Config.h"
+#include "ImagingStuff/Structures.h"
 #include "ExternalHardwareSoftware/baslerpylondart_1.h"
+#include "xmlStuff/readxmldatafromfile.h"
 
 
 
@@ -11,6 +13,10 @@
 CameraContainer::CameraContainer(QWidget *parent)
     : QWidget(parent)
 {
+    //read the MachineCameraConfiguration file
+    QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig.xml");
+
+
     //PylonAutoInitTerm autoInitTerm;
     PylonInitialize();
     // Note PylonTerminate() which releases all pylon resources is not used ????
@@ -84,6 +90,7 @@ end of the layout
 
     // Connect button signal to appropriate slot
     connect(globalGrabButton, SIGNAL (clicked()), this, SLOT (handleGrabButton()));
+
 
 
    //QSize size = camLayout->sizeHint();
