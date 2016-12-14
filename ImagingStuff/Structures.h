@@ -98,10 +98,12 @@ struct MachCamConfigFileXMLData
     QString Mach_ModelNumber = "";
     QString CameraNumber = "";
     QString filePathName = "";
-    QString ManufacturerType = "";
+    int ManufacturerType = 0;
     QString SerialNumber = "";
     QString Model = "";
     QString CameraReferenceDistance_mm = "";
+    QString FrameGrabberNumber = ""; // for Silicon Software Frame grabber
+    QString FrameGrabberPortNumber = "";  // for Silicon Software Frame grabber
 };
 
 #endif // STRUCTURES_H

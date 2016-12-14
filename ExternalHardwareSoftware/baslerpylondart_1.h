@@ -28,6 +28,8 @@ using namespace GenApi;
 #include <iostream>
 #include <string>
 
+#include <QString>
+
 
 
 #ifdef _WIN32
@@ -35,7 +37,8 @@ class BaslerPylonDart : public cv::VideoCapture
 {
 public:
 
-    explicit BaslerPylonDart(CTlFactory& tlFac, int grabberNumber, const char *configFile);
+    //explicit BaslerPylonDart(CTlFactory& tlFac, int grabberNumber, const char *configFile);
+    explicit BaslerPylonDart(CTlFactory& tlFac, int grabberNumber, QString configFile);
     virtual ~BaslerPylonDart();
 
     virtual bool open(int) override;
@@ -64,6 +67,7 @@ private:
     int grabNo;
     int portNo;
     const char* config;
+
 
     CTlFactory& tlFactory;
     CInstantCamera* cam;

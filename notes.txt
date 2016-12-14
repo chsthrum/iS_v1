@@ -200,6 +200,8 @@ int main()
 
 }
 
+ QString.c_str()
+
 
 
 

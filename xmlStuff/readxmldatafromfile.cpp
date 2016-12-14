@@ -1,5 +1,6 @@
 #include "readxmldatafromfile.h"
 #include "listxml_elements.h"
+#include "../ImagingStuff/Config.h" //for the Machine Camera config file
 
 #include <QDebug>
 
@@ -40,17 +41,21 @@ QVector<MachCamConfigFileXMLData> readXMLDataFromFile(QString filename)
             retVec.push_back(cFig);
 
 
-        /* Structure elements
-        QString NumberOfCameras;
-        QString Mach_SerialNumber;
-        QString Mach_YearOfManufacture;
-        QString Mach_ModelNumber;
-        QString CameraNumber;
-        QString filePathName;
-        QString ManufacturerType;
-        QString SerialNumber;
-        QString Model;
-        QString CameraReferenceDistance_mm;*/
+/* Structure elements of MachCamConfigFileXMLData
+
+    QString NumberOfCameras = "";
+    QString Mach_SerialNumber = "";
+    QString Mach_YearOfManufacture = "";
+    QString Mach_ModelNumber = "";
+    QString CameraNumber = "";
+    QString filePathName = "";
+    int ManufacturerType = 0;
+    QString SerialNumber = "";
+    QString Model = "";
+    QString CameraReferenceDistance_mm = "";
+    QString FrameGrabberNumber = ""; // for Silicon Software Frame grabber
+    QString FrameGrabberPortNumber = "";  // for Silicon Software Frame grabber
+*/
 
 
         QStringList sL;
@@ -106,8 +111,16 @@ QVector<MachCamConfigFileXMLData> readXMLDataFromFile(QString filename)
         sL = ListXmlElements(document, "Camera", "ManufacturerType");
         for(int i = 0; i < sL.size(); i++)
         {
-            //fill the vector
-            retVec[i].ManufacturerType = sL[i];
+           if (sL[i]== "FS_LOCAL_CAM")
+           retVec[i].ManufacturerType = FS_LOCAL_CAM;
+           if (sL[i]== "FS_SISO_CIS_GRAY")
+           retVec[i].ManufacturerType = FS_SISO_CIS_GRAY;
+           if (sL[i]== "FS_SISO_CIS_RGB")
+           retVec[i].ManufacturerType = FS_SISO_CIS_RGB;
+           if (sL[i]== "FS_BASLER_DART_PYLON_AREA")
+           retVec[i].ManufacturerType = FS_BASLER_DART_PYLON_AREA;
+           //and more when available
+
         }
 
         sL = ListXmlElements(document, "Camera", "SerialNumber");
@@ -131,10 +144,20 @@ QVector<MachCamConfigFileXMLData> readXMLDataFromFile(QString filename)
             retVec[i].CameraReferenceDistance_mm = sL[i];
         }
 
+        sL = ListXmlElements(document, "Camera", "FrameGrabberNumber");
+        for(int i = 0; i < sL.size(); i++)
+        {
+            //fill the vector
+            retVec[i].FrameGrabberNumber = sL[i];
+        }
 
-        //sL = ListXmlElements(document, "region", "contour_points");
-        //sL = ListXmlElements(document, "map", "threshold");
-        //sL = ListXmlElements(document, "region", "area");
+        sL = ListXmlElements(document, "Camera", "FrameGrabberPortNumber");
+        for(int i = 0; i < sL.size(); i++)
+        {
+            //fill the vector
+            retVec[i].FrameGrabberPortNumber = sL[i];
+        }
+
 
         for (int i = 0; i!=sL.count(); i++)
             qDebug()  << sL[i];

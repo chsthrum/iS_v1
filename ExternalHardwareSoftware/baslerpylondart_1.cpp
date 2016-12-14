@@ -2,12 +2,16 @@
 
 #ifdef _WIN32
 
-BaslerPylonDart::BaslerPylonDart(CTlFactory& tlFac, int grabberNumber, const char *configFile)
-:tlFactory(tlFac), grabNo(grabberNumber), config(configFile) // directly initialize our member variables
+BaslerPylonDart::BaslerPylonDart(CTlFactory& tlFac, int grabberNumber, QString configFile)
+:tlFactory(tlFac), grabNo(grabberNumber)//, config(configFile) // directly initialize our member variables
 {
     //variable initialisation
     grabbedImages = 0;
+    // convert QString to const char*
+    //QByteArray ba = configFile.toLatin1();
+    //config = ba.data();
 
+    config = "C:/Users/Fibrescan/Documents/BaslerFeatureFiles/daA1280-54uc_21917870.pfs";
 
     // Get all attached devices and exit application if no device is found.
     DeviceInfoList_t devices;
@@ -41,18 +45,22 @@ bool BaslerPylonDart::open(int device)
     //open the camer for loading the configuration file and interrogating the nodemap.
     cam->Open();
 
-    try
-    {
-     //read the content of the file back to the camera's node map with enabled validation.
-     cout << "Reading file back to camera's node map..."<< endl;
-     CFeaturePersistence::Load(config, &cam->GetNodeMap(), true);
-     cout << "file: " << config << " loaded into camera number: " << device << endl;
-    }
-    catch (const GenericException & e)
-    {
-      cerr << "Failed to set the Load the configuration file to the nodemap. Reason: "
-      << e.GetDescription() << endl;
-    }
+    cout << "file: " << config << " loaded into camera number: " << device << endl;
+    CFeaturePersistence::Load(config, &cam->GetNodeMap(), false);
+
+
+    //    try
+    //    {
+    //     //read the content of the file back to the camera's node map with enabled validation.
+    //     cout << "Reading file back to camera's node map..."<< endl;
+    //     CFeaturePersistence::Load(config, &cam->GetNodeMap(), false);
+    //     cout << "file: " << config << " loaded into camera number: " << device << endl;
+    //    }
+    //    catch (const GenericException & e)
+    //    {
+    //      cerr << "Failed to set the Load the configuration file to the nodemap. Reason: "
+    //      << e.GetDescription() << endl;
+    //    }
 
     INodeMap& nodemap = cam->GetNodeMap();
 

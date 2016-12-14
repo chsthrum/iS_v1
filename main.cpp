@@ -7,9 +7,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
     if(!writeMachCamConfigFileXML())
         std::cout << " did not write XML file" << std::endl;
+    MainWindow w;
     w.show();
 
 

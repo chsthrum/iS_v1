@@ -2,9 +2,10 @@
 #include "siliconsoftwaregrabber_1.h"
 
 #ifdef _WIN32
-SiliconSoftwareGrabber::SiliconSoftwareGrabber(int grabberNumber, unsigned int portNumber, const char* configFile)
-    :grabNo(grabberNumber),  portNo(portNumber), config(configFile) // directly initialize our member variables
+SiliconSoftwareGrabber::SiliconSoftwareGrabber(int grabberNumber, unsigned int portNumber, QString configFile)
+    :grabNo(grabberNumber),  portNo(portNumber)// config(configFile) // directly initialize our member variables
 {
+    config = "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf";
     boardType = 0;
     fg = NULL;
     applet = NULL;

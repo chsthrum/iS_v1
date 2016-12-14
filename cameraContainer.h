@@ -8,6 +8,7 @@
 #include <QLayout>
 #include <QScrollArea>
 #include <QPushButton>
+#include <QVector>
 
 //local includes
 #include "cameraWidget.h"
@@ -17,6 +18,7 @@
 #include "ImagingStuff/CaptureThread.h"
 #include "ImagingStuff/ProcessingThread.h"
 #include "csimpledefectmapLabel.h"
+
 
 #include "ExternalHardwareSoftware/baslerpylondart_1.h"
 
@@ -32,7 +34,8 @@ class CameraContainer : public QWidget
 public:
     CameraContainer(QWidget *parent = 0);
     ~CameraContainer();
-    void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, int nCameras);
+   //void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, int nCameras);
+    void addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, QVector <MachCamConfigFileXMLData>);
     void addSimpleMapLabels(QList<CsimpleDefectMapLabel*>, QHBoxLayout* p_simple, int nLabels);
     SharedImageBuffer* getSharedImageBuffer() const;
 

@@ -54,9 +54,9 @@
 
 //}
 
-CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height, int camType) : QThread(), sharedImageBuffer(sharedImageBuffer), cameraType(camType)
+CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height, MachCamConfigFileXMLData machCamData) : QThread(), sharedImageBuffer(sharedImageBuffer)
 {
-    switch(cameraType)
+    switch(machCamData.ManufacturerType)
     {
     case FS_LOCAL_CAM:
         cap = new VideoCapture;
@@ -65,10 +65,12 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
         break;
     case FS_SISO_CIS_RGB:
         // this should be a refer to a centrally located setup file
+        //cap = new SiliconSoftwareGrabber(0, 0, "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf");
         cap = new SiliconSoftwareGrabber(0, 0, "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf");
         break;
     case FS_BASLER_DART_PYLON_AREA:
-        cap = new BaslerPylonDart(CTlFactory::GetInstance(), 2, "C:/Users/Fibrescan/Documents/BaslerFeatureFiles/daA1280-54uc_21917870.pfs");
+        //cap = new BaslerPylonDart(CTlFactory::GetInstance(), 2, "C:/Users/Fibrescan/Documents/BaslerFeatureFiles/daA1280-54uc_21917870.pfs");
+        cap = new BaslerPylonDart(CTlFactory::GetInstance(), machCamData.CameraNumber.toInt(), machCamData.filePathName);
         break;
     default:
         std::cout << " passed thru to default option CaptureThread Constructor switch statement)" << std::endl;
@@ -80,7 +82,7 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
     this->deviceNumber=deviceNumber;
     this->width = width;
     this->height = height;
-    this->cameraType = camType;
+    this->cameraType = machCamData.ManufacturerType;
     // Initialize variables(s)
     doStop=false;
     doGrab=false;

@@ -136,6 +136,131 @@ CameraWidget::CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages,
 
 }
 
+CameraWidget::CameraWidget(QWidget *parent, int nDefectImages, SharedImageBuffer *sharedImageBuffer, MachCamConfigFileXMLData machCamConfig): QWidget(parent), sharedImageBuffer(sharedImageBuffer), numberOfDefectImages(nDefectImages)
+
+{
+    //Pointer to object to hold all the local defect images
+    defectImages = new DefectImageStorage(this, nDefectImages);
+    //The type of Camera
+    cameraType = machCamConfig.ManufacturerType;
+    // Save Device Number
+    this->deviceNumber = machCamConfig.CameraNumber.toInt();
+    // Initialize internal flag
+    isCameraConnected=false;
+
+    setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
+
+    cameraViewLabel = new QLabel;
+
+    stopMotionPB = new QPushButton;
+    stopMotionPB->setFixedSize(100,20);
+    stopMotionPB->setText("Stop Enabled");
+
+    scoreLabel = new QLabel;
+    scoreLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    scoreLabel->setFixedSize(1000,50);
+    defectMapLongLabel = new QLabel;
+    defectMapLongLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    defectMapShortLabel = new QLabel;
+    defectMapShortLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+
+    //indicator labels like old fashioned indicator lamps
+    camNumberLabel = new QLabel;
+    camNumberLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    camNumberLabel->setFixedSize(20,20);
+    //camNumberLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    camNumberLabel->setText(QString::number(deviceNumber));
+    camNumberLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+    detectLabel = new QLabel;
+    detectLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    detectLabel->setFixedSize(20,20);
+    camStatusLabel = new QLabel;
+    camStatusLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    camStatusLabel->setFixedSize(20,20);
+    machStatusLabel = new QLabel;
+    machStatusLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    machStatusLabel->setFixedSize(20,20);
+
+    captureRateLabel = new QLabel;
+    captureRateLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    captureRateLabel->setFixedSize(100,20);
+
+    nFramesCapturedLabel = new QLabel;
+    nFramesCapturedLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    nFramesCapturedLabel->setFixedSize(100,20);
+
+    processingRateLabel = new QLabel;
+    processingRateLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    processingRateLabel->setFixedSize(100,20);
+
+    nFramesProcessedLabel = new QLabel;
+    nFramesProcessedLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    nFramesProcessedLabel->setFixedSize(100,20);
+
+    imageBufferLabel = new QLabel;
+    imageBufferLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    imageBufferLabel->setFixedSize(100,20);
+
+    // Set up the camera view label
+    cameraViewLabel->setMinimumSize(250,250);
+    /* do not set the height less than the size it can expand to, else the image will be cropped.
+    The reason is that each cameraViewLabel maximum size is basically determined by the CameraContainer layout. */
+    cameraViewLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+    cameraViewLabel->setText("No camera connected.");
+    cameraViewLabel->setAlignment(Qt::AlignCenter);
+
+    QVBoxLayout* labelsAndLamps = new QVBoxLayout;
+    QVBoxLayout* labelsAndButtonsLayout = new QVBoxLayout;
+    QHBoxLayout* indicatorLamps = new QHBoxLayout;
+    // Set up the layout of the defect images
+    QHBoxLayout* defectImagesLayoutBox = defectImages->DefectLabelLayout();
+    QHBoxLayout* cameraView = new QHBoxLayout;
+    QVBoxLayout* chartsAndViews = new QVBoxLayout;
+    QVBoxLayout* charts = new QVBoxLayout;
+
+    setWindowTitle(tr("CameraView"));
+
+    labelsAndButtonsLayout->addWidget(stopMotionPB);
+
+    labelsAndButtonsLayout->addWidget(captureRateLabel);
+    labelsAndButtonsLayout->addWidget(nFramesCapturedLabel);
+    labelsAndButtonsLayout->addWidget(processingRateLabel);
+    labelsAndButtonsLayout->addWidget(nFramesProcessedLabel);
+    labelsAndButtonsLayout->addWidget(imageBufferLabel);
+
+    indicatorLamps->addWidget(detectLabel);
+    indicatorLamps->addWidget(machStatusLabel);
+    indicatorLamps->addWidget(camStatusLabel);
+    indicatorLamps->addWidget(camNumberLabel);
+
+    labelsAndLamps->addLayout(indicatorLamps);
+    labelsAndLamps->addLayout(labelsAndButtonsLayout);
+
+
+    charts->addWidget(defectMapLongLabel);
+    charts->addWidget(defectMapShortLabel);
+    charts->addWidget(scoreLabel);
+
+    chartsAndViews->addLayout(defectImagesLayoutBox);
+    chartsAndViews->addLayout(charts);
+
+    cameraView->addWidget(cameraViewLabel);
+    cameraView->addLayout(labelsAndLamps);
+    cameraView->addLayout(chartsAndViews);
+
+
+    setLayout(cameraView);
+
+    // Register type
+    qRegisterMetaType<struct ThreadStatisticsData>("ThreadStatisticsData");
+    qRegisterMetaType<struct DefectStructToSave>("DefectStructToSave");
+
+/*********************************************************************
+ camera stuff........
+*********************************************************************/
+
+}
+
 CameraWidget::~CameraWidget()
 {
 
@@ -174,7 +299,8 @@ CameraWidget::~CameraWidget()
 
 }
 
-bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio, int procThreadPrio, bool enableFrameProcessing, int width, int height, int cameraType)
+//bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio, int procThreadPrio, bool enableFrameProcessing, int width, int height, int cameraType)
+bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio, int procThreadPrio, bool enableFrameProcessing, int width, int height, MachCamConfigFileXMLData machCamData)
 {
 
     // Set frame label text
@@ -187,7 +313,9 @@ bool CameraWidget::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio
     //if (!cameraType) // for local camera
     //captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height);
     //else // for machine vision camera
-    captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height, cameraType);
+    //captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height, cameraType);
+    captureThread = new CaptureThread(sharedImageBuffer, deviceNumber, dropFrameIfBufferFull, width, height, machCamData);
+
 
     // Attempt to connect to camera
     if(captureThread->connectToCamera())

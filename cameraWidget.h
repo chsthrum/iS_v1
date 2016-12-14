@@ -32,10 +32,11 @@ public:
     //CameraWidget(QWidget *parent = 0, int deviceNumber = 0);
     //CameraWidget(QWidget *parent, int deviceNumber);
     explicit CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer *sharedImageBuffer, int camType);
+    explicit CameraWidget(QWidget *parent, int nDefectImages, SharedImageBuffer *sharedImageBuffer, MachCamConfigFileXMLData);
     ~CameraWidget();
 
-    bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height, int cameraType);
-
+    //bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height, int cameraType);
+    bool connectToCamera(bool dropFrame, int capThreadPrio, int procThreadPrio, bool createProcThread, int width, int height, MachCamConfigFileXMLData);
 
     //set the camera status indicator label
     bool setCameraStatusLabel();

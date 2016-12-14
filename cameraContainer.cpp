@@ -14,7 +14,7 @@ CameraContainer::CameraContainer(QWidget *parent)
     : QWidget(parent)
 {
     //read the MachineCameraConfiguration file
-    QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig.xml");
+    QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig2.xml");
 
 
     //PylonAutoInitTerm autoInitTerm;
@@ -68,7 +68,7 @@ CameraContainer::CameraContainer(QWidget *parent)
 
 
     // add in all the camera widgets
-    addCameras(cams,camLayout,sharedImageBuffer,NUMBER_OF_CAMERAS);
+    addCameras(cams,camLayout,sharedImageBuffer,vecXMLData);
 
     addSimpleMapLabels(list_simpledMapLabels, simpleDefectMapLayout, OFFSET_CAMERA_0_TO_END_IN_FRAMES);
     
@@ -115,11 +115,17 @@ CameraContainer::~CameraContainer()
 
 //add the Camera Widget and the buffers containing the mats which are all held in a hash table in the SharedImageBuffer class.
 
-void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, int nCameras)
+//void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, int nCameras)
+void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, QVector<MachCamConfigFileXMLData> vec )
 {
+    int nCameras = vec[0].NumberOfCameras.toInt();
+
     for(int i = 0; i != nCameras ; ++i)
     {
-        p_CamWidgets.push_back(new CameraWidget(this, i, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, 0));
+        //p_CamWidgets.push_back(new CameraWidget(this, i, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, 0));
+        //p_CamWidgets.push_back(new CameraWidget(this, i, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, vec[i].ManufacturerType));
+        p_CamWidgets.push_back(new CameraWidget(this, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, vec[i]));
+
         // p_CamWidgets[i]->setMinimumSize(1000,250);
         p_layOut->addWidget(p_CamWidgets[i]);
         p_layOut->addSpacing(1);
@@ -161,7 +167,8 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
     {
         //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, FS_LOCAL_CAM);
         //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, FS_SISO_CIS_RGB);
-        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, FS_BASLER_DART_PYLON_AREA);
+        //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, vec[i].ManufacturerType);
+        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, vec[i]);
     }
 
 

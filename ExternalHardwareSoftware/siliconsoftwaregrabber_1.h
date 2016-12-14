@@ -25,12 +25,14 @@
 #include <iostream>
 #include <string>
 
+#include <QString>
+
 #ifdef _WIN32
 class SiliconSoftwareGrabber : public cv::VideoCapture
 {
 public:
 
-    explicit SiliconSoftwareGrabber(int grabberNumber, unsigned int portNumber, const char *configFile);
+    explicit SiliconSoftwareGrabber(int grabberNumber, unsigned int portNumber, QString configFile);
     virtual ~SiliconSoftwareGrabber();
 
     virtual bool open(int) override;
