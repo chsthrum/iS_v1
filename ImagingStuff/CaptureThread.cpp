@@ -36,6 +36,8 @@
 #include "../ExternalHardwareSoftware/baslerpylondart_1.h"
 #include "../ExternalHardwareSoftware/teledynedalsasapera_1.h"
 
+using namespace cv;
+
 //CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height): QThread(), sharedImageBuffer(sharedImageBuffer)
 //{
 //    cap = new VideoCapture;

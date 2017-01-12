@@ -32,6 +32,9 @@
 
 #include "SharedImageBuffer.h"
 
+using namespace cv;
+
+
 SharedImageBuffer::SharedImageBuffer()
 {
     // Initialize variables(s)

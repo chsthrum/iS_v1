@@ -15,6 +15,7 @@
     //FS_SISO_CIS_RGB
     //FS_SISO_CIS_GRAY
     //FS_BASLER_DART_PYLON_AREA
+    //FS_TDALSA_GIGE_LINE_GRAY
 
     bool writeMachCamConfigFileXML();
 

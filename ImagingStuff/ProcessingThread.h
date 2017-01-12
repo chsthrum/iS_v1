@@ -40,7 +40,6 @@
 #include <QString> // for dice test
 // OpenCV
 #include <opencv2/opencv.hpp>
-#include <opencv2/highgui/highgui.hpp>
 // Local
 #include "Structures.h"
 #include "Config.h"
@@ -48,8 +47,6 @@
 #include "MatToQImage.h"
 #include "SharedImageBuffer.h"
 
-
-using namespace cv;
 
 class ProcessingThread : public QThread
 {
@@ -67,17 +64,17 @@ class ProcessingThread : public QThread
         void setROI();
         void resetROI();
         SharedImageBuffer *sharedImageBuffer;
-        Mat currentFrame;
-        Mat currentFrameGrayscale;
-        Rect currentROI;
+        cv::Mat currentFrame;
+        cv::Mat currentFrameGrayscale;
+        cv::Rect currentROI;
         QImage frame;
         QTime t;
         QQueue<int> fps;
         QMutex doStopMutex;
         QMutex doGrabMutex;
         QMutex processingMutex;
-        Size frameSize;
-        Point framePoint;
+        cv::Size frameSize;
+        cv::Point framePoint;
         //struct ImageProcessingFlags imgProcFlags;
         //struct ImageProcessingSettings imgProcSettings;
         struct ThreadStatisticsData statsData;

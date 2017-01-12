@@ -40,6 +40,8 @@
 #include <QByteArray>
 #include <QDebug>
 
+
+
 template<class T> class Buffer
 {
     public:

@@ -42,20 +42,19 @@
 //#include <opencv/cv.h>
 #include "opencv2/core/core.hpp"
 //#include <opencv/highgui.h>
-#include "opencv2/highgui/highgui.hpp"
+//#include "opencv2/highgui/highgui.hpp"
 // Local
 #include "Buffer.h"
 
 
-using namespace cv;
 
 class SharedImageBuffer
 {
     public:
         SharedImageBuffer();
         ~SharedImageBuffer();
-        void add(int deviceNumber, Buffer<Mat> *imageBuffer, bool sync=false);
-        Buffer<Mat>* getByDeviceNumber(int deviceNumber);
+        void add(int deviceNumber, Buffer<cv::Mat> *imageBuffer, bool sync=false);
+        Buffer<cv::Mat>* getByDeviceNumber(int deviceNumber);
         void removeByDeviceNumber(int deviceNumber);
         void sync(int deviceNumber);
         void wakeAll();
@@ -65,7 +64,7 @@ class SharedImageBuffer
         bool containsImageBufferForDeviceNumber(int deviceNumber);
 
     private:
-        QHash<int, Buffer<Mat>*> imageBufferMap;
+        QHash<int, Buffer<cv::Mat>*> imageBufferMap;
         QSet<int> syncSet;
         QWaitCondition wc;
         QMutex mutex;

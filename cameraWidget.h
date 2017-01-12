@@ -25,6 +25,8 @@
 #include "defectimagestorage.h"
 //#include "cameraContainer.h"
 
+
+
 class CameraWidget : public QWidget
 {
     Q_OBJECT

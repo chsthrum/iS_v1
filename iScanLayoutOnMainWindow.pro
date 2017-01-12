@@ -122,27 +122,36 @@ SOURCES += main.cpp\
     defectimagestorage.cpp \
     defectlabelslayout.cpp \
     cstopmotion.cpp \
-    csimpledefectmapLabel.cpp \
+    csimpledefectmapLabel.cpp
 
 
 
 HEADERS  += mainwindow.h \
     defectLabel.h \
     pic2label.h \
+    #ImagingStuff/Buffer.h \
+    #ImagingStuff/MatToQImage.h \
+    #ImagingStuff/SharedImageBuffer.h \
+    cameraContainer.h \
+    cameraWidget.h \
+    #ImagingStuff/CaptureThread.h \
+    #ImagingStuff/ProcessingThread.h \
+    #ImagingStuff/Config.h \
+    defectimagestorage.h \
+    weighteddie.h \
+    #ImagingStuff/Structures.h \
+    defectlabelslayout.h \
+    cstopmotion.h \
+    csimpledefectmapLabel.h
+
+HEADERS += \
     ImagingStuff/Buffer.h \
     ImagingStuff/MatToQImage.h \
     ImagingStuff/SharedImageBuffer.h \
-    cameraContainer.h \
-    cameraWidget.h \
     ImagingStuff/CaptureThread.h \
     ImagingStuff/ProcessingThread.h \
     ImagingStuff/Config.h \
-    defectimagestorage.h \
-    weighteddie.h \
-    ImagingStuff/Structures.h \
-    defectlabelslayout.h \
-    cstopmotion.h \
-    csimpledefectmapLabel.h \
+    ImagingStuff/Structures.h
 
 
 
@@ -187,9 +196,8 @@ INCLUDEPATH += $$quote(C:\Program Files\Teledyne DALSA\Sapera\Classes\Basic)
 INCLUDEPATH += $$quote(C:\Program Files\Teledyne DALSA\Sapera\Include)
 
 LIBS +=$$quote(-LC:\Program Files\Teledyne DALSA\Sapera\Lib\Win64)\
-                -lSapClassBasic
-
-
+                -lSapClassBasic \
+                -lcorapi
 
 DISTFILES += \
     Operational_Notes.txt
@@ -203,9 +211,6 @@ SOURCES += \
     ExternalHardwareSoftware/siliconsoftwaregrabber_1.cpp \
     ExternalHardwareSoftware/baslerpylondart_1.cpp
 
-}
-# end win32
-
 SOURCES += \
     xmlStuff/writemachcamconfigfilexml.cpp \
     xmlStuff/readxmldatafromfile.cpp \
@@ -218,8 +223,12 @@ HEADERS += \
     xmlStuff/listxml_elements.h \
     ExternalHardwareSoftware/teledynedalsasapera_1.h
 
+}
+# end win32
 
+HEADERS +=
 
+SOURCES +=
 
 
 

@@ -33,6 +33,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+
 // Camera Display instancies and labels
 #define NUMBER_OF_CAMERAS                   1// when using in synced mode this number must match the number connected cameras
 #define NUMBEROFDEFECTIMAGESTODISPLAY       8

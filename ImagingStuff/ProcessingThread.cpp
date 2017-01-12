@@ -38,7 +38,7 @@
 //stl
 #include <ctime>
 
-
+using namespace cv;
 
 
 ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber) : QThread(), sharedImageBuffer(sharedImageBuffer)

@@ -12,13 +12,6 @@
 //local includes
 #include "defectLabel.h"
 
-//struct defectlabels
-//{
-//   DefectLabel defectimageLabel;
-
-
-
-//};
 
 class DefectLabelsLayout : public QWidget
 {

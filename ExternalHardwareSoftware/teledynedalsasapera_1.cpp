@@ -1,6 +1,9 @@
+//#include "../ImagingStuff/Structures.h"
 #include "teledynedalsasapera_1.h"
 
 #ifdef _WIN32
+
+
 
 //TeleDalsaSaperaLT::TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, int grabberNumber, const char *configFile)
 //:camLocs(cameras), grabNo(grabberNumber) // directly initialize our member variables
@@ -14,7 +17,7 @@
 //    }
 //}
 
-TeleDalsaSaperaLT::TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, MachCamConfigFileXMLData & machCamData): camLocs(cameras), macCamXML(machCamData)
+TeleDalsaSaperaLT::TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, MachCamConfigFileXMLData& machCamData): camLocs(cameras), macCamXML(machCamData)
 {
     grabNo = machCamData.CameraNumber.toInt();
 

@@ -34,12 +34,13 @@
 #define STRUCTURES_H
 
 // Qt
-#include <QtCore/QRect>
 #include <QString>
 #include <QPixmap>
+#include <QRect>
 
 //opencv
 #include "opencv2/core/core.hpp"
+
 
 struct ImageProcessingSettings{
     int smoothType;

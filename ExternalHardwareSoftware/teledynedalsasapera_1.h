@@ -6,7 +6,7 @@
 #pragma warning(disable: 4995)
 #endif
 
-#define CAMERA_NUMBER  2
+//#define CAMERA_NUMBER  2
 
 // Teledyne Dalsa includes
 #include "sapclassbasic.h"
@@ -31,7 +31,8 @@
 class TeleDalsaSaperaLT : public cv::VideoCapture
 {
 public:
-    //explicit TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, int grabberNumber, const char *configFile);
+
+    //explicit TeleDalsaSaperaLT(std::vector<SapLocation> cameras, int grabberNumber, const char *configFile);
     explicit TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, MachCamConfigFileXMLData& ); // for i4060 application
     virtual ~TeleDalsaSaperaLT();
     virtual bool open(int) override;

@@ -34,6 +34,8 @@
 // Qt
 #include <QDebug>
 
+using namespace cv;
+
 QImage MatToQImage(const Mat& mat)
 {
     // 8-bits unsigned, NO. OF CHANNELS=1
