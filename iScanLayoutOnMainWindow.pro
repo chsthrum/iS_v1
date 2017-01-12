@@ -182,6 +182,13 @@ LIBS +=$$quote(-LC:\Program Files\Basler\pylon 5\Development\lib\x64)\
               -lPylonGUI_MD_VC120_v5_0\
               -lPylonUtility_MD_VC120_v5_0
 
+#TDalsa
+INCLUDEPATH += $$quote(C:\Program Files\Teledyne DALSA\Sapera\Classes\Basic)
+INCLUDEPATH += $$quote(C:\Program Files\Teledyne DALSA\Sapera\Include)
+
+LIBS +=$$quote(-LC:\Program Files\Teledyne DALSA\Sapera\Lib\Win64)\
+                -lSapClassBasic
+
 
 
 DISTFILES += \
@@ -202,12 +209,14 @@ SOURCES += \
 SOURCES += \
     xmlStuff/writemachcamconfigfilexml.cpp \
     xmlStuff/readxmldatafromfile.cpp \
-    xmlStuff/listxml_elements.cpp
+    xmlStuff/listxml_elements.cpp \
+    ExternalHardwareSoftware/teledynedalsasapera_1.cpp
 
 HEADERS += \
     xmlStuff/writemachcamconfigfilexml.h \
     xmlStuff/readxmldatafromfile.h \
-    xmlStuff/listxml_elements.h
+    xmlStuff/listxml_elements.h \
+    ExternalHardwareSoftware/teledynedalsasapera_1.h
 
 
 

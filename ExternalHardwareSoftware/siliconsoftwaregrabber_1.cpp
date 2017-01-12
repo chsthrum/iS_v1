@@ -1,16 +1,84 @@
 #include <stdio.h>
 #include "siliconsoftwaregrabber_1.h"
 
+
+
 #ifdef _WIN32
-SiliconSoftwareGrabber::SiliconSoftwareGrabber(int grabberNumber, unsigned int portNumber, QString configFile)
-    :grabNo(grabberNumber),  portNo(portNumber)// config(configFile) // directly initialize our member variables
+//SiliconSoftwareGrabber::SiliconSoftwareGrabber(int grabberNumber, unsigned int portNumber, QString configFile)
+//    :grabNo(grabberNumber),  portNo(portNumber)// config(configFile) // directly initialize our member variables
+//{
+//    config = "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf";
+//    boardType = 0;
+//    fg = NULL;
+//    applet = NULL;
+//    printf ("starting the grabber board\n");
+//    boardType = (Fg_getBoardType(grabberNumber));
+//    last_pic_nr = 0;
+//    current_pic_nr = 0;
+
+//    // initialise the board.
+
+//    if (boardType == PN_MICROENABLE4AD4CL)
+//        applet = "DualLineRGB30";
+
+//    if ((fg = Fg_InitConfig(config, grabNo))== NULL) //initilise the grabber board using a cammera configuration file
+//    {
+//        ErrorMessageWait(fg);
+//        Fg_FreeGrabber(fg);
+//    }
+
+//    if (Fg_getParameter(fg,FG_WIDTH,&width,portNo) < 0) // Get the image width parameter
+//    {
+//        ErrorMessageWait(fg);
+//        Fg_FreeGrabber(fg);
+
+//    }
+
+//    if (Fg_getParameter(fg,FG_HEIGHT,&height,portNo) < 0)  // Get the image height parameter
+//    {
+//        ErrorMessageWait(fg);
+//        Fg_FreeGrabber(fg);
+
+//    }
+
+//    if (Fg_getParameter(fg,FG_FORMAT,&format,portNo) < 0)  // Get the image format
+//    {
+//        ErrorMessageWait(fg);
+//        Fg_FreeGrabber(fg);
+
+//    }
+
+//    switch (format)   //// Get the image bytes per pixel ie RGB=3
+//    {
+//    case FG_GRAY:
+//        bytesPerPixel = 1;
+//        break;
+//    case FG_COL24:
+//        bytesPerPixel = 3;
+//        break;
+//    default:
+//        bytesPerPixel = 3;
+//        break;
+//    }
+
+//}
+
+SiliconSoftwareGrabber::SiliconSoftwareGrabber(MachCamConfigFileXMLData machCamData)
 {
-    config = "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf";
+    // of construction Fg_Struct *Fg_InitEx(const char *FileName, unsigned int BoardIndex, int isSlave)
+    //convert QString via std::string to c_string;
+    QString text = machCamData.filePathName;
+    std::string str = text.toLatin1().constData();
+    const char* config = str.c_str();
+
+    portNo = machCamData.FrameGrabberPortNumber.toInt();
+    grabNo = machCamData.FrameGrabberNumber.toInt();
+
     boardType = 0;
     fg = NULL;
-    applet = NULL;
+    const char* applet = NULL;
     printf ("starting the grabber board\n");
-    boardType = (Fg_getBoardType(grabberNumber));
+    boardType = (Fg_getBoardType(grabNo));
     last_pic_nr = 0;
     current_pic_nr = 0;
 
@@ -45,6 +113,26 @@ SiliconSoftwareGrabber::SiliconSoftwareGrabber(int grabberNumber, unsigned int p
         Fg_FreeGrabber(fg);
 
     }
+
+    if((serialNumber = Fg_getSerialNumber(fg)) > 0)
+    {
+        printf("Silicon Software grabber board serial number (HEX) = %x.\n", serialNumber);
+
+        const QString str = machCamData.SerialNumber;
+        bool ok;
+        unsigned int parsedValue = str.toUInt(&ok, 16);
+        if (!ok) {
+            printf (" parsing failed while getting the siso serial number\n");
+        }
+
+        if (parsedValue != serialNumber)
+        {
+            printf (" %s incorrectly assigned serial number in XML data.\n", machCamData.SerialNumber);
+            exit(0); //toAscii().toHex()
+        }
+
+    }
+
 
     switch (format)   //// Get the image bytes per pixel ie RGB=3
     {
@@ -217,6 +305,12 @@ int SiliconSoftwareGrabber::ErrorMessageWait(Fg_Struct *fg)
     getchar();
     return error;
 }
+
+unsigned int SiliconSoftwareGrabber::getSerialNumber() const
+{
+    return serialNumber;
+}
+
 
 unsigned int SiliconSoftwareGrabber::getWidth() const
 {

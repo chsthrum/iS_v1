@@ -2,34 +2,50 @@
 
 #ifdef _WIN32
 
-BaslerPylonDart::BaslerPylonDart(CTlFactory& tlFac, int grabberNumber, QString configFile)
-:tlFactory(tlFac), grabNo(grabberNumber)//, config(configFile) // directly initialize our member variables
+//BaslerPylonDart::BaslerPylonDart(CTlFactory &tlFac, MachCamConfigFileXMLData machCamData):tlFactory(tlFac)
+BaslerPylonDart::BaslerPylonDart(MachCamConfigFileXMLData& machCamData): macCamXML(machCamData)
 {
-    //variable initialisation
-    grabbedImages = 0;
-    // convert QString to const char*
-    //QByteArray ba = configFile.toLatin1();
-    //config = ba.data();
+    CTlFactory& tlFactory = CTlFactory::GetInstance();
 
-    config = "C:/Users/Fibrescan/Documents/BaslerFeatureFiles/daA1280-54uc_21917870.pfs";
+    //variable initialisation
+    grabbedImages = 0.;
+    int cameraNumber = machCamData.CameraNumber.toInt();
 
     // Get all attached devices and exit application if no device is found.
     DeviceInfoList_t devices;
-    if ( tlFactory.EnumerateDevices(devices) == 0 )
-    {
-        throw RUNTIME_EXCEPTION( "No camera present.");
-    }
+
+    tlFactory.EnumerateDevices(devices);
+
+//    if ( tlFactory.EnumerateDevices(devices) == 0 )
+//    {
+//        throw RUNTIME_EXCEPTION( "No camera present.");
+//    }
     cout << "number of cameras: " << devices.size() << endl;
-
-    String_t serialNo = devices[grabberNumber].GetSerialNumber();
-
-    cout << "serial number of the camera number " << grabberNumber << " = " << serialNo << endl;
 
     cam = new CInstantCamera;
 
-    cam->Attach( tlFactory.CreateDevice( devices[grabberNumber]));
+    // choose the camera
+    bool noMatchingString = true;
+    for (int i = 0; i < devices.size(); i++ )
+    {
+        string sn = devices[i].GetSerialNumber();
+        if (sn == macCamXML.SerialNumber.toStdString())
+        {
+            cam->Attach( tlFactory.CreateDevice( devices[i]));
+            cout << "Detected Basler Camera has serial number " << sn << endl;
+            this->serialNo = sn;
+            noMatchingString = false;
+        }
+    }
+
+    if (noMatchingString)
+    {
+        cout << "MachCamXML File : Basler Transport Layer - no matching serial number. Exit(0). " << endl;
+        exit(0);
+    }
+
     // Print the model name of the camera.
-    cout << "Using Camera No " << grabberNumber << " Device type " << cam->GetDeviceInfo().GetModelName()
+    cout << "Using Camera No " << cameraNumber << " Device type " << cam->GetDeviceInfo().GetModelName()
     << " Serial Number " << cam->GetDeviceInfo().GetSerialNumber()<< endl;
 }
 
@@ -40,13 +56,19 @@ cout << "The SiliconSoftwareGrabber destructor has been invoked." << endl;
 
 bool BaslerPylonDart::open(int device)
 {
-    //device = 0; // purely for compatability - no effect
+    device = 0; // purely for compatability - no effect
 
+    QString text = macCamXML.filePathName;
+    std::string s = text.toLatin1().constData();
+    const char* configFile = s.c_str();
+
+
+    //const char* test = config;
     //open the camer for loading the configuration file and interrogating the nodemap.
     cam->Open();
 
-    cout << "file: " << config << " loaded into camera number: " << device << endl;
-    CFeaturePersistence::Load(config, &cam->GetNodeMap(), false);
+    //cout << "file: " << test << " loaded into camera number: " << device << endl;
+    CFeaturePersistence::Load(configFile, &cam->GetNodeMap(), false); // config
 
 
     //    try

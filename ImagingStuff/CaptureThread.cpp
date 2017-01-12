@@ -34,6 +34,7 @@
 #include "ImagingStuff/Config.h"
 #include "../ExternalHardwareSoftware/siliconsoftwaregrabber_1.h"
 #include "../ExternalHardwareSoftware/baslerpylondart_1.h"
+#include "../ExternalHardwareSoftware/teledynedalsasapera_1.h"
 
 //CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height): QThread(), sharedImageBuffer(sharedImageBuffer)
 //{
@@ -66,12 +67,16 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
     case FS_SISO_CIS_RGB:
         // this should be a refer to a centrally located setup file
         //cap = new SiliconSoftwareGrabber(0, 0, "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf");
-        cap = new SiliconSoftwareGrabber(0, 0, "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf");
+        cap = new SiliconSoftwareGrabber(machCamData);
         break;
     case FS_BASLER_DART_PYLON_AREA:
         //cap = new BaslerPylonDart(CTlFactory::GetInstance(), 2, "C:/Users/Fibrescan/Documents/BaslerFeatureFiles/daA1280-54uc_21917870.pfs");
-        cap = new BaslerPylonDart(CTlFactory::GetInstance(), machCamData.CameraNumber.toInt(), machCamData.filePathName);
+        //cap = new BaslerPylonDart(CTlFactory::GetInstance(), machCamData);
+        cap = new BaslerPylonDart(machCamData);
         break;
+//    case FS_TDALSA_GIGE_LINE_GRAY:
+//        //TeleDalsaSaperaLT::TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, MachCamConfigFileXMLData & machCamData)
+//        cap = new TeleDalsaSaperaLT()
     default:
         std::cout << " passed thru to default option CaptureThread Constructor switch statement)" << std::endl;
         break;
@@ -96,7 +101,7 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
 
 CaptureThread::~CaptureThread()
 {
-
+qDebug() << "[ " << deviceNumber << " ] CaptureThread Destructor called.";
 }
 
 

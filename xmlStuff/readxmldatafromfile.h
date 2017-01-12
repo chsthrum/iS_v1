@@ -15,6 +15,9 @@
 
 QVector<MachCamConfigFileXMLData> readXMLDataFromFile(QString);
 
+//check for a dupicate string
+bool checkForDuplicateSerialNumber(QVector<MachCamConfigFileXMLData>&);
+
 
 
 #endif // READXMLDATAFROMFILE

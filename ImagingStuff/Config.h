@@ -35,7 +35,7 @@
 
 // Camera Display instancies and labels
 #define NUMBER_OF_CAMERAS                   1// when using in synced mode this number must match the number connected cameras
-#define NUMBEROFDEFECTIMAGESTODISPLAY       10
+#define NUMBEROFDEFECTIMAGESTODISPLAY       8
 
 //Defect free length  - 2 or more defects most not occurr within this distance (in frames)
 #define DEFECT_FREE_LENGTH                  20
@@ -45,6 +45,7 @@
 #define FS_SISO_CIS_GRAY               1           //CIS camera with grayscale applet
 #define FS_SISO_CIS_RGB                2           //CIS camera with RGB applet
 #define FS_BASLER_DART_PYLON_AREA      3           //Basler Area Camera
+#define FS_TDALSA_GIGE_LINE_GRAY       4           //Teledyne Dalsa Grayscale linescan
 
 // Machine Reversing after defect stop in distance in Frames
 #define REVERSE_LENGTH_N_FRAMES             13

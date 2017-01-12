@@ -5,6 +5,7 @@
 #include "ImagingStuff/Config.h"
 #include "ImagingStuff/Structures.h"
 #include "ExternalHardwareSoftware/baslerpylondart_1.h"
+#include "ExternalHardwareSoftware/teledynedalsasapera_1.h"
 #include "xmlStuff/readxmldatafromfile.h"
 
 
@@ -16,12 +17,25 @@ CameraContainer::CameraContainer(QWidget *parent)
     //read the MachineCameraConfiguration file
     QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig2.xml");
 
+#ifdef FS_BASLER_DART_PYLON_AREA
 
     //PylonAutoInitTerm autoInitTerm;
     PylonInitialize();
     // Note PylonTerminate() which releases all pylon resources is not used ????
     // Get the transport layer factory. (Singleton so Global scope, so get by reference)
-    CTlFactory& tlFactory = CTlFactory::GetInstance();
+    //CTlFactory& tlFactory = CTlFactory::GetInstance();
+    //tlFactory = CTlFactory::GetInstance();
+
+
+#endif
+
+#ifdef FS_TDALSA_GIGE_LINE_GRAY
+
+    std::vector<SapLocation> cameraLocs = findT_DalsaGigeCams(); //to hold the Gige cam locations (server/device pairs)
+
+#endif // FS_TDALSA_GIGE_LINE_GRAY
+
+
 
     // Create SharedImageBuffer object
     sharedImageBuffer = new SharedImageBuffer();
@@ -103,6 +117,110 @@ end of the layout
 
 }
 
+CameraContainer::CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLData>& vecXMLData): QWidget(parent)
+{
+
+
+
+#ifdef FS_BASLER_DART_PYLON_AREA
+
+    //PylonAutoInitTerm autoInitTerm;
+    PylonInitialize();
+    // Note PylonTerminate() which releases all pylon resources is not used ????
+    // Get the transport layer factory. (Singleton so Global scope, so get by reference)
+    //CTlFactory& tlFactory = CTlFactory::GetInstance();
+
+#endif
+
+#ifdef FS_TDALSA_GIGE_LINE_GRAY
+
+    std::vector<SapLocation> cameraLocs = findT_DalsaGigeCams(); //to hold the Gige cam locations (server/device pairs)
+
+#endif // FS_TDALSA_GIGE_LINE_GRAY
+
+
+
+    // Create SharedImageBuffer object
+    sharedImageBuffer = new SharedImageBuffer();
+
+    //load the logo and check that it has loaded
+    QPixmap p("../images/fsSVG.png");
+    if (p.isNull())
+       qDebug() << "No image loaded";
+
+    // Create a label and place it in the widget
+    logoLabel = new ScaledLabel(this);
+
+    /* Sets the intial size of the label width, that will be used in sizeHint() to set the height of the
+    label to suit the images aspect ratio.*/
+    logoLabel->setFixedSize(200,200);
+    logoLabel->setPix(p);
+
+    //Sets the label size to suit the images aspect ratio.
+    logoLabel->setFixedSize(logoLabel->sizeHint());
+    // put the pixMap into the resized label
+    logoLabel->setPixmap(logoLabel->scaledPixmap());
+
+
+
+    //setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
+
+    camLayout = new QVBoxLayout;
+    logoLayout = new QHBoxLayout;
+    layout = new QVBoxLayout;
+    simpleDefectMapLayout = new QHBoxLayout;
+    mapTopBannerLayout = new QHBoxLayout;
+    globalGrabButton = new QPushButton;
+
+    globalGrabButton->setText("Start Camera(s)");
+    globalGrabButton->setFocus();
+    globalGrabButton->setFixedSize(200,50);
+    globalGrabButton->setStyleSheet("QPushButton { background-color : lime; color : black; }");
+    isGrabbing = false; //set to true for grabbing as soon as the camera opens or false for start grabbing on button press
+
+    logoLayout->addWidget(globalGrabButton);
+    logoLayout->addStretch();
+    logoLayout->addWidget(logoLabel);
+    logoLayout->addStretch();
+
+
+    // add in all the camera widgets
+    addCameras(cams,camLayout,sharedImageBuffer,vecXMLData);
+
+    addSimpleMapLabels(list_simpledMapLabels, simpleDefectMapLayout, OFFSET_CAMERA_0_TO_END_IN_FRAMES);
+
+    mapTopBannerLayout->addStretch();
+    mapTopBannerLayout->addLayout(simpleDefectMapLayout);
+
+    layout->addLayout(logoLayout);
+    layout->addLayout(mapTopBannerLayout);
+    layout->addLayout(camLayout);
+
+    this->setLayout(layout);
+
+    setWindowTitle(tr("Fibrescan's First Window with Qwidgets"));
+
+
+/*********************************************************************************
+end of the layout
+***********************************************************************************/
+
+    // Connect button signal to appropriate slot
+    connect(globalGrabButton, SIGNAL (clicked()), this, SLOT (handleGrabButton()));
+
+
+
+   //QSize size = camLayout->sizeHint();
+   //qDebug() << "from widget::widget(), label size (Width * Height)   " << size;
+   // size = cams[0]->getSize();
+   // qDebug() << "from CameraWidget::getSize(), label size (Width * Height)   " << size;
+
+    //test
+   // cams[0]->setText("test");
+
+
+}
+
 CameraContainer::~CameraContainer()
 {
     // autoInitTerm's destructor calls PylonTerminate() now
@@ -115,16 +233,13 @@ CameraContainer::~CameraContainer()
 
 //add the Camera Widget and the buffers containing the mats which are all held in a hash table in the SharedImageBuffer class.
 
-//void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, int nCameras)
-void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, QVector<MachCamConfigFileXMLData> vec )
+void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, QVector<MachCamConfigFileXMLData> vec_MachCamXMLData )
 {
-    int nCameras = vec[0].NumberOfCameras.toInt();
+    int nCameras = vec_MachCamXMLData[0].NumberOfCameras.toInt();
 
     for(int i = 0; i != nCameras ; ++i)
     {
-        //p_CamWidgets.push_back(new CameraWidget(this, i, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, 0));
-        //p_CamWidgets.push_back(new CameraWidget(this, i, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, vec[i].ManufacturerType));
-        p_CamWidgets.push_back(new CameraWidget(this, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, vec[i]));
+        p_CamWidgets.push_back(new CameraWidget(this, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, vec_MachCamXMLData[i]));
 
         // p_CamWidgets[i]->setMinimumSize(1000,250);
         p_layOut->addWidget(p_CamWidgets[i]);
@@ -165,10 +280,7 @@ void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout
     // connect to all the cameras after setting up the layout
     for(int i = 0; i != nCameras ; ++i)
     {
-        //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, FS_LOCAL_CAM);
-        //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, FS_SISO_CIS_RGB);
-        //p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, vec[i].ManufacturerType);
-        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, vec[i]);
+        p_CamWidgets[i]->connectToCamera(false, 3, 4, true, -1, -1, vec_MachCamXMLData[i]);
     }
 
 

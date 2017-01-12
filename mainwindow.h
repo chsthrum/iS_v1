@@ -10,6 +10,8 @@
 
 //local includes
 #include "cameraContainer.h"
+#include "ImagingStuff/Structures.h"
+#include "xmlStuff/readxmldatafromfile.h"
 
 class MainWindow : public QMainWindow
 {

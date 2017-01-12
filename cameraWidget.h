@@ -23,6 +23,7 @@
 #include "pic2label.h"
 #include "ImagingStuff/Structures.h"
 #include "defectimagestorage.h"
+//#include "cameraContainer.h"
 
 class CameraWidget : public QWidget
 {
@@ -31,7 +32,7 @@ class CameraWidget : public QWidget
 public:
     //CameraWidget(QWidget *parent = 0, int deviceNumber = 0);
     //CameraWidget(QWidget *parent, int deviceNumber);
-    explicit CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer *sharedImageBuffer, int camType);
+    //explicit CameraWidget(QWidget *parent, int deviceNumber, int nDefectImages, SharedImageBuffer *sharedImageBuffer, int camType);
     explicit CameraWidget(QWidget *parent, int nDefectImages, SharedImageBuffer *sharedImageBuffer, MachCamConfigFileXMLData);
     ~CameraWidget();
 

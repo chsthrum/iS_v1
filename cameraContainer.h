@@ -9,6 +9,7 @@
 #include <QScrollArea>
 #include <QPushButton>
 #include <QVector>
+#include <QList>
 
 //local includes
 #include "cameraWidget.h"
@@ -23,9 +24,6 @@
 #include "ExternalHardwareSoftware/baslerpylondart_1.h"
 
 
-//class ProcessingThread; //check that these forward declarations are necessary
-//class CaptureThread;
-
 
 class CameraContainer : public QWidget
 {
@@ -33,6 +31,7 @@ class CameraContainer : public QWidget
 
 public:
     CameraContainer(QWidget *parent = 0);
+    CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLData>& vecXMLData);
     ~CameraContainer();
    //void addCameras(QList<CameraWidget *> &p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, int nCameras);
     void addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, QVector <MachCamConfigFileXMLData>);

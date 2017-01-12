@@ -66,7 +66,7 @@ ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int dev
 
 ProcessingThread::~ProcessingThread()
 {
-
+qDebug() << "[ " << deviceNumber << " ] ProcessingThread Destructor called.";
 }
 
 void ProcessingThread::run()

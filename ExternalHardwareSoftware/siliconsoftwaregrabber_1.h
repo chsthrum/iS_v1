@@ -24,15 +24,21 @@
 //stl includes
 #include <iostream>
 #include <string>
-
+//qt includes
 #include <QString>
+//local includes
+#include "../ImagingStuff/Structures.h"
+
+
+
 
 #ifdef _WIN32
 class SiliconSoftwareGrabber : public cv::VideoCapture
 {
 public:
 
-    explicit SiliconSoftwareGrabber(int grabberNumber, unsigned int portNumber, QString configFile);
+    //explicit SiliconSoftwareGrabber(int grabberNumber, unsigned int portNumber, QString configFile);
+    SiliconSoftwareGrabber(MachCamConfigFileXMLData);
     virtual ~SiliconSoftwareGrabber();
 
     virtual bool open(int) override;
@@ -48,6 +54,7 @@ public:
     int ErrorMessage(Fg_Struct *fg);
     int ErrorMessageWait(Fg_Struct *fg);
 
+    unsigned int getSerialNumber()const;
     unsigned int getWidth()const;
     unsigned int getHeight()const;
     unsigned int getChannels()const;
@@ -58,14 +65,15 @@ public:
 private:
     int grabNo;
     int portNo;
-    const char* config;
+
 
     Fg_Struct *fg;
     dma_mem *mem;
     int nBuffers = 32;
-    const char *applet;
+    //const char *applet;
     unsigned int width;
     unsigned int height;
+    unsigned int serialNumber = 0x0;  //serial number of type unsigned int in hex form
     int format; // for bytes per pixel
     unsigned int bytesPerPixel; // 1 for grayscale and 3 for RGB
     int boardType;

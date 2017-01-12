@@ -167,3 +167,29 @@ QVector<MachCamConfigFileXMLData> readXMLDataFromFile(QString filename)
 
     return retVec;
 }
+
+//check for a dupicate string
+bool checkForDuplicateSerialNumber(QVector<MachCamConfigFileXMLData>& vec)
+{
+    int nOccur = 0; //number of identical string occurancies
+    for (QVector<MachCamConfigFileXMLData>::size_type i = 0; i < vec.size(); i++)
+    {
+        for (QVector<MachCamConfigFileXMLData>::size_type j = 0; j < vec.size(); j++)
+        {
+            //check for a dupicate string
+            if (vec[i].SerialNumber == vec[j].SerialNumber)
+            {
+                if((++nOccur) > 1)
+                {
+                    // other words we have found a duplicated string
+                    //std::cout << "duplicate serial number found in the Machine Camera Configuration file or vector at element " << i << '\n';
+                    qDebug() << "duplicate serial number found in the Machine Camera Configuration file or vector at element " << i << '\n';
+                    return false;
+                }
+            }
+        }
+         nOccur = 0; // reset the number of occurancies in the outer loop.
+    }
+    return true;
+}
+
