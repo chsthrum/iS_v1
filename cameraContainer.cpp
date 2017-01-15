@@ -1,5 +1,7 @@
 //qt includes
 #include <QDebug>
+#include <QString>
+
 //local includes
 #include "cameraContainer.h"
 #include "ImagingStuff/Config.h"
@@ -33,7 +35,7 @@ CameraContainer::CameraContainer(QWidget *parent)
 
 #ifdef FS_TDALSA_GIGE_LINE_GRAY
 
-    std::vector<SapLocation> cameraLocs = findT_DalsaGigeCams(); //to hold the Gige cam locations (server/device pairs)
+    QVector<LocationStruct> cameraLocs = findT_DalsaGigeCams(); //to hold the Gige cam locations (server/device pairs)
 
 #endif // FS_TDALSA_GIGE_LINE_GRAY
 
@@ -84,7 +86,7 @@ CameraContainer::CameraContainer(QWidget *parent)
 
 
     // add in all the camera widgets
-    addCameras(cams,camLayout,sharedImageBuffer,vecXMLData);
+    addCameras(cams,camLayout,sharedImageBuffer,vecXMLData, cameraLocs);
 
     addSimpleMapLabels(list_simpledMapLabels, simpleDefectMapLayout, OFFSET_CAMERA_0_TO_END_IN_FRAMES);
     
@@ -122,6 +124,8 @@ end of the layout
 CameraContainer::CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLData>& vecXMLData): QWidget(parent)
 {
 
+    //read the MachineCameraConfiguration file
+    //vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig37.xml");
 
 
 #ifdef FS_BASLER_DART_PYLON_AREA
@@ -136,7 +140,7 @@ CameraContainer::CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLDa
 
 #ifdef FS_TDALSA_GIGE_LINE_GRAY
 
-    std::vector<SapLocation> cameraLocs = findT_DalsaGigeCams(); //to hold the Gige cam locations (server/device pairs)
+   QVector<LocationStruct> cameraLocs = findT_DalsaGigeCams(); //to hold the Gige cam locations (server/device pairs)
 
 #endif // FS_TDALSA_GIGE_LINE_GRAY
 
@@ -187,7 +191,7 @@ CameraContainer::CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLDa
 
 
     // add in all the camera widgets
-    addCameras(cams,camLayout,sharedImageBuffer,vecXMLData);
+    addCameras(cams,camLayout,sharedImageBuffer,vecXMLData, cameraLocs);
 
     addSimpleMapLabels(list_simpledMapLabels, simpleDefectMapLayout, OFFSET_CAMERA_0_TO_END_IN_FRAMES);
 
@@ -235,18 +239,21 @@ CameraContainer::~CameraContainer()
 
 //add the Camera Widget and the buffers containing the mats which are all held in a hash table in the SharedImageBuffer class.
 
-void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, QVector<MachCamConfigFileXMLData> vec_MachCamXMLData )
+void CameraContainer::addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer* sharedImBuf, QVector<MachCamConfigFileXMLData> vec_MachCamXMLData, QVector<LocationStruct> locs )
 {
     int nCameras = vec_MachCamXMLData[0].NumberOfCameras.toInt();
 
     for(int i = 0; i != nCameras ; ++i)
     {
+        if (vec_MachCamXMLData[i].ManufacturerType == FS_TDALSA_GIGE_LINE_GRAY)// Have we got a TDalsa camera?
+        {
+            vec_MachCamXMLData[i].locs = locs; // add in the vector of Tdalsa camera servers and devices
+        }
         p_CamWidgets.push_back(new CameraWidget(this, NUMBEROFDEFECTIMAGESTODISPLAY, sharedImBuf, vec_MachCamXMLData[i]));
 
         // p_CamWidgets[i]->setMinimumSize(1000,250);
         p_layOut->addWidget(p_CamWidgets[i]);
         p_layOut->addSpacing(1);
-
         // Create ImageBuffer with user-defined size
         Buffer<cv::Mat> *imageBuffer = new Buffer<cv::Mat>(DEFAULT_IMAGE_BUFFER_SIZE);
         bool syncEnabled = false; // setting up the cameras so they have the same frame
@@ -298,6 +305,7 @@ void CameraContainer::addSimpleMapLabels(QList<CsimpleDefectMapLabel *> pSimpleL
     // p_CamWidgets[i]->setMinimumSize(1000,250);
     p_simpleLayout->addWidget(pSimpleLabels[i]);
     p_simpleLayout->addSpacing(1);
+
     }
 
 }

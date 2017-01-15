@@ -6,19 +6,11 @@
 #pragma warning(disable: 4995)
 #endif
 
-//#define CAMERA_NUMBER  2
-
 // Teledyne Dalsa includes
 #include "sapclassbasic.h"
 
-//c includes
-#include "stdio.h"
-#include "conio.h"
-
-//stl includes
-#include <iostream>
-#include <string>
-#include <vector>
+//Qt includes
+#include <QVector>
 
 //opencv includes
 #include "opencv2/highgui/highgui.hpp"
@@ -33,7 +25,7 @@ class TeleDalsaSaperaLT : public cv::VideoCapture
 public:
 
     //explicit TeleDalsaSaperaLT(std::vector<SapLocation> cameras, int grabberNumber, const char *configFile);
-    explicit TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, MachCamConfigFileXMLData& ); // for i4060 application
+    explicit TeleDalsaSaperaLT(MachCamConfigFileXMLData& ); // for i4060 application
     virtual ~TeleDalsaSaperaLT();
     virtual bool open(int) override;
     virtual void release()override;
@@ -55,11 +47,11 @@ public:
 
 private:
 
-    unsigned int nBuffers = 1; //using n sub buffers
+    unsigned int nBuffers = 1; //using n sub buffers - careful here using n would mean that only every nth image is used.
     int grabNo;
     int portNo;
     std::string serialNo;
-    std::vector<SapLocation>& camLocs;
+    SapLocation camLoc;
     MachCamConfigFileXMLData& macCamXML;
     BOOL status = false;
 
@@ -96,7 +88,7 @@ private:
 };
 
 // for finding the TeleDyne Dalsa Gige Cameras
-std::vector<SapLocation> findT_DalsaGigeCams(); // not a member of Class::TeleDalsaSaperaLT
+QVector<LocationStruct> findT_DalsaGigeCams(); // not a member of Class::TeleDalsaSaperaLT
 
 
 #endif // _WIN32

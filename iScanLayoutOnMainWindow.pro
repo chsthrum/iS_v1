@@ -226,9 +226,11 @@ HEADERS += \
 }
 # end win32
 
-HEADERS +=
+HEADERS += \
+    UtilityStuff/fs_utilitiesstring.h
 
-SOURCES +=
+SOURCES += \
+    UtilityStuff/fs_utilitiesstring.cpp
 
 
 

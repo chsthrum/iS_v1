@@ -37,10 +37,12 @@
 #include <QString>
 #include <QPixmap>
 #include <QRect>
+#include <QVector>
 
 //opencv
 #include "opencv2/core/core.hpp"
-
+//local includes
+#include "Config.h"
 
 struct ImageProcessingSettings{
     int smoothType;
@@ -91,6 +93,13 @@ struct DefectStructToSave
     QString SfileName;
 };
 
+struct LocationStruct
+{
+    //char serverName[FS_SERVER_NAME_LENGTH];
+    QString serverName;
+    int deviceIndex;
+};
+
 struct MachCamConfigFileXMLData
 {
     QString NumberOfCameras = "";
@@ -105,6 +114,12 @@ struct MachCamConfigFileXMLData
     QString CameraReferenceDistance_mm = "";
     QString FrameGrabberNumber = ""; // for Silicon Software Frame grabber
     QString FrameGrabberPortNumber = "";  // for Silicon Software Frame grabber
+    //QString ServerName;  //for TD gige camera
+    //int DeviceIndex; //for TD gige camera
+    QVector<LocationStruct> locs;
+
 };
+
+
 
 #endif // STRUCTURES_H

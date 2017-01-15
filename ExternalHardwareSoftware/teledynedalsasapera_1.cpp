@@ -1,66 +1,65 @@
-//#include "../ImagingStuff/Structures.h"
+//c includes
+#include <cstring> // for strstr()
+#include <stdio.h>
+
+//stl includes
+#include <iostream>
+#include <string>
+
+//local includes
 #include "teledynedalsasapera_1.h"
 
 #ifdef _WIN32
 
-
-
-//TeleDalsaSaperaLT::TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, int grabberNumber, const char *configFile)
-//:camLocs(cameras), grabNo(grabberNumber) // directly initialize our member variables
-//{
-
-//    // Create a SapAcqDevice object
-//    acqDevice = new SapAcqDevice(camLocs[grabNo], configFile);
-//    if (!acqDevice->Create())
-//    {
-//        std::cout << "could not open Gige device.\n";
-//    }
-//}
-
-TeleDalsaSaperaLT::TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, MachCamConfigFileXMLData& machCamData): camLocs(cameras), macCamXML(machCamData)
+TeleDalsaSaperaLT::TeleDalsaSaperaLT(MachCamConfigFileXMLData& machCamData): macCamXML(machCamData)
 {
-    grabNo = machCamData.CameraNumber.toInt();
+    grabNo = this->macCamXML.CameraNumber.toInt();
 
     //get the camera configuration file by converting QString via std::string to c_string;
     QString text = macCamXML.filePathName;
     std::string str = text.toLatin1().constData();
     const char* configFile = str.c_str();
 
-    // get serial number of cameras
-    //    static BOOL GetResourceName(int serverIndex, SapManager::ResType resourceType, int resourceIndex,
-    //    char* resourceName);
-    //    static BOOL GetResourceName(const char *serverName, SapManager::ResType resourceType,
-    //    int resourceIndex, char* resourceName);
-    //    static BOOL GetResourceName(SapLocation loc, SapManager::ResType resourceType, char* resourceName);
-
     // choose the camera
     char deviceName[CORPRM_GETSIZE(CORACQ_PRM_LABEL)];
-    //deviceIndex=0;
     bool noMatchingString = true;
-    for (std::vector<SapLocation>::size_type i = 0; i < this->camLocs.size(); i++ )
+    for ( QVector<LocationStruct>::size_type i = 0; i < this->macCamXML.locs.size(); i++ )
     {
-        SapManager::GetResourceName(this->camLocs[i], SapManager::ResourceAcqDevice, deviceName, sizeof(deviceName));
-        printf("    %s%s\n", "User defined Name : ", deviceName);
-        printf("........................................\n");
+        //get serverName by converting QString via std::string to c_string;
+        QString qs = macCamXML.locs[i].serverName;
+        std::string str = qs.toLatin1().constData();
+        const char* serverName = str.c_str();
+
+        //of form : static BOOL GetResourceName(const char *serverName, SapManager::ResType resourceType,
+        //int resourceIndex, char* resourceName);
+
+        SapManager::GetResourceName(serverName, SapManager::ResourceAcqDevice, macCamXML.locs[i].deviceIndex, deviceName);
+
         if (deviceName == this->macCamXML.SerialNumber.toStdString())
         {
+            SapLocation loc(serverName, macCamXML.locs[i].deviceIndex);
+            camLoc = loc;
+
             // Create a SapAcqDevice object
-            acqDevice = new SapAcqDevice(this->camLocs[i], configFile);
+            acqDevice = new SapAcqDevice(loc, configFile);
             if (!acqDevice->Create())
             {
                 std::cout << "could not open Gige device.\n";
             }
-            std::cout << "Detected Basler Camera has serial number " << deviceName << std::endl;
+            std::cout << "Detected TDalsa Camera has serial number " << deviceName << std::endl;
+
             this->serialNo = deviceName;
             noMatchingString = false;
-
-            if (noMatchingString)
-            {
-                std::cout << "MachCamXML File : Basler Transport Layer - no matching serial number. Exit(0). " << std::endl;
-                exit(0);
-            }
         }
 
+        if(!noMatchingString)
+            break;
+
+    }
+    if (noMatchingString)
+    {
+        std::cout << "MachCamXML File : TeleDyne Dalsa - no matching serial number. Exit(0). " << std::endl;
+        exit(0);
     }
 
 }
@@ -77,7 +76,7 @@ bool TeleDalsaSaperaLT::open(int grabberNumber)
     status = acqDevice->GetFeatureCount(&featureCount);
 
     // Create an empty feature object (to receive information)
-    SapFeature feature(camLocs[grabNo]);
+    SapFeature feature(camLoc);
     if (!(feature.Create()))
     {
         std::cout << "could not open Gige feature object.\n";
@@ -282,16 +281,14 @@ void TeleDalsaSaperaLT::callBackFrameCounter(SapAcqDeviceCallbackInfo *pInfo)
 
 }
 
-std::vector<SapLocation>findT_DalsaGigeCams() // not a member of Class::TeleDalsaSaperaLT
+QVector<LocationStruct> findT_DalsaGigeCams() // not a member of Class::TeleDalsaSaperaLT
 {
     std::cout << "Finding Gige Cameras...." << std::endl;
 
-    char    serverName [CORSERVER_MAX_STRLEN];
-    //int deviceCount = 0;
+    char    serverName [FS_SERVER_NAME_LENGTH];
     int GenieIndex = 0;
     int deviceIndex = 0;
-
-    std::vector<SapLocation> camLocs; //to hold the Gige cam locations (server/device pairs)
+    QVector<LocationStruct> camLocs; //to hold the Gige cam locations (server/device pairs)
     bool showGigEOnly = true;
     bool serverFound = false;
 
@@ -318,7 +315,10 @@ std::vector<SapLocation>findT_DalsaGigeCams() // not a member of Class::TeleDals
              SapManager::GetResourceName(serverName, SapManager::ResourceAcqDevice, deviceIndex, deviceName, sizeof(deviceName));
              printf("    %s%s\n", "User defined Name : ", deviceName);
              printf("........................................\n");
-             SapLocation loc(serverName, deviceIndex);
+
+             LocationStruct loc;
+             loc.serverName = serverName;
+             loc.deviceIndex = deviceIndex;
              camLocs.push_back(loc);
          }
     }

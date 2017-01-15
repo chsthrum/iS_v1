@@ -48,6 +48,11 @@
 #define FS_BASLER_DART_PYLON_AREA      3           //Basler Area Camera
 #define FS_TDALSA_GIGE_LINE_GRAY       4           //Teledyne Dalsa Grayscale linescan
 
+
+//Server Name length for Teledyne Dalsa Grayscale linescan
+
+#define FS_SERVER_NAME_LENGTH           128
+
 // Machine Reversing after defect stop in distance in Frames
 #define REVERSE_LENGTH_N_FRAMES             13
 

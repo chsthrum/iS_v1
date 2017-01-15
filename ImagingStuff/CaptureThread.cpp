@@ -38,25 +38,6 @@
 
 using namespace cv;
 
-//CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height): QThread(), sharedImageBuffer(sharedImageBuffer)
-//{
-//    cap = new VideoCapture;
-//    // Save passed parameters
-//    this->dropFrameIfBufferFull=dropFrameIfBufferFull;
-//    this->deviceNumber=deviceNumber;
-//    this->width = width;
-//    this->height = height;
-//    // Initialize variables(s)
-//    doStop=false;
-//    doGrab=false;
-//    sampleNumber=0;
-//    fpsSum=0;
-//    fps.clear();
-//    statsData.averageFPS=0;
-//    statsData.nFramesProcessed=0;
-
-//}
-
 CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height, MachCamConfigFileXMLData machCamData) : QThread(), sharedImageBuffer(sharedImageBuffer)
 {
     switch(machCamData.ManufacturerType)
@@ -67,7 +48,6 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
     case FS_SISO_CIS_GRAY:
         break;
     case FS_SISO_CIS_RGB:
-        // this should be a refer to a centrally located setup file
         //cap = new SiliconSoftwareGrabber(0, 0, "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf");
         cap = new SiliconSoftwareGrabber(machCamData);
         break;
@@ -76,11 +56,12 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
         //cap = new BaslerPylonDart(CTlFactory::GetInstance(), machCamData);
         cap = new BaslerPylonDart(machCamData);
         break;
-//    case FS_TDALSA_GIGE_LINE_GRAY:
-//        //TeleDalsaSaperaLT::TeleDalsaSaperaLT(std::vector<SapLocation>& cameras, MachCamConfigFileXMLData & machCamData)
-//        cap = new TeleDalsaSaperaLT()
+    case FS_TDALSA_GIGE_LINE_GRAY:
+        //TeleDalsaSaperaLT::TeleDalsaSaperaLT(MachCamConfigFileXMLData & machCamData)
+        cap = new TeleDalsaSaperaLT(machCamData);
+        break;
     default:
-        std::cout << " passed thru to default option CaptureThread Constructor switch statement)" << std::endl;
+        std::cout << "passed thru to default option CaptureThread Constructor switch statement" << std::endl;
         break;
     }
 
