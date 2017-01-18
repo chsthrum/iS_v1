@@ -19,7 +19,7 @@ CameraContainer::CameraContainer(QWidget *parent)
     : QWidget(parent)
 {
     //read the MachineCameraConfiguration file
-    QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig2.xml");
+    QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig34BAS.xml");
 
 #ifdef FS_BASLER_DART_PYLON_AREA
 

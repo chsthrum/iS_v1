@@ -35,6 +35,7 @@
 #include "../ExternalHardwareSoftware/siliconsoftwaregrabber_1.h"
 #include "../ExternalHardwareSoftware/baslerpylondart_1.h"
 #include "../ExternalHardwareSoftware/teledynedalsasapera_1.h"
+#include "UtilityStuff/fs_utilities_various.h"
 
 using namespace cv;
 
@@ -106,7 +107,7 @@ void CaptureThread::run()
         /////////////////////////////////
         /////////////////////////////////
 
-        while(1)    //this inner while loop does all the work, - we also need to include doStop detection.
+        while(1)    //this inner while loop does all the work, - we also need the doStop detection which is now included.
         {
             ////////////////////////////////
             // Stop thread if doStop=TRUE //
@@ -130,6 +131,7 @@ void CaptureThread::run()
             if(!doGrab)
             {
                 doGrabMutex.unlock();
+                delay(30); // prevents rapid loop cycling
                 break; // break from the inner loop
             }
             doGrabMutex.unlock();

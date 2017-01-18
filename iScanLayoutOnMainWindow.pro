@@ -227,10 +227,10 @@ HEADERS += \
 # end win32
 
 HEADERS += \
-    UtilityStuff/fs_utilitiesstring.h
+    UtilityStuff/fs_utilities_various.h
 
 SOURCES += \
-    UtilityStuff/fs_utilitiesstring.cpp
+    UtilityStuff/fs_utilities_various.cpp
 
 
 

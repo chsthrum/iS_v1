@@ -34,9 +34,11 @@
 #include <QDebug>
 //local
 #include "ProcessingThread.h"
+#include "UtilityStuff/fs_utilities_various.h"
 #include "../weighteddie.h" // for the test program
 //stl
 #include <ctime>
+
 
 using namespace cv;
 
@@ -110,6 +112,7 @@ void ProcessingThread::run()
             if(!doGrab)
             {
                 doGrabMutex.unlock();
+                delay(30); // prevents rapid loop cycling
                 break; // break from the inner loop
             }
             doGrabMutex.unlock();
