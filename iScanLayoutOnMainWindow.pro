@@ -232,5 +232,8 @@ HEADERS += \
 SOURCES += \
     UtilityStuff/fs_utilities_various.cpp
 
+DISTFILES += \
+    changesTravellingJan2017
+
 
 

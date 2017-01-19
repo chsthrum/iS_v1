@@ -41,29 +41,57 @@ using namespace cv;
 
 CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber, bool dropFrameIfBufferFull, int width, int height, MachCamConfigFileXMLData machCamData) : QThread(), sharedImageBuffer(sharedImageBuffer)
 {
-    switch(machCamData.ManufacturerType)
+//    switch(machCamData.ManufacturerType)
+//    {
+//    case FS_LOCAL_CAM:
+//        cap = new VideoCapture;
+//        break;
+//    case FS_SISO_CIS_GRAY:
+//        break;
+//    case FS_SISO_CIS_RGB:
+//        //cap = new SiliconSoftwareGrabber(0, 0, "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf");
+//        cap = new SiliconSoftwareGrabber(machCamData);
+//        break;
+//    case FS_BASLER_DART_PYLON_AREA:
+//        //cap = new BaslerPylonDart(CTlFactory::GetInstance(), 2, "C:/Users/Fibrescan/Documents/BaslerFeatureFiles/daA1280-54uc_21917870.pfs");
+//        //cap = new BaslerPylonDart(CTlFactory::GetInstance(), machCamData);
+//        cap = new BaslerPylonDart(machCamData);
+//        break;
+//    case FS_TDALSA_GIGE_LINE_GRAY:
+//        //TeleDalsaSaperaLT::TeleDalsaSaperaLT(MachCamConfigFileXMLData & machCamData)
+//        cap = new TeleDalsaSaperaLT(machCamData);
+//        break;
+//    default:
+//        std::cout << "passed thru to default option CaptureThread Constructor switch statement" << std::endl;
+//        break;
+//    }
+
+    if(machCamData.ManufacturerType == FS_LOCAL_CAM)
     {
-    case FS_LOCAL_CAM:
         cap = new VideoCapture;
-        break;
-    case FS_SISO_CIS_GRAY:
-        break;
-    case FS_SISO_CIS_RGB:
-        //cap = new SiliconSoftwareGrabber(0, 0, "C:/Program Files/SiliconSoftware/Runtime5.2.1/bin/MySisoMcf/YKK_BLUE_UNCUT_600DPI.mcf");
+    }
+
+    else if(machCamData.ManufacturerType == FS_SISO_CIS_GRAY)
+    {
+        printf("no FSFS_SISO_CIS_GRAY option available when loading camera - exit(0)\n ");
+    }
+    else if(machCamData.ManufacturerType == FS_SISO_CIS_RGB)
+    {
         cap = new SiliconSoftwareGrabber(machCamData);
-        break;
-    case FS_BASLER_DART_PYLON_AREA:
-        //cap = new BaslerPylonDart(CTlFactory::GetInstance(), 2, "C:/Users/Fibrescan/Documents/BaslerFeatureFiles/daA1280-54uc_21917870.pfs");
-        //cap = new BaslerPylonDart(CTlFactory::GetInstance(), machCamData);
+    }
+    else if(machCamData.ManufacturerType == FS_BASLER_DART_PYLON_AREA)
+    {
         cap = new BaslerPylonDart(machCamData);
-        break;
-    case FS_TDALSA_GIGE_LINE_GRAY:
-        //TeleDalsaSaperaLT::TeleDalsaSaperaLT(MachCamConfigFileXMLData & machCamData)
+    }
+    else if(machCamData.ManufacturerType == FS_TDALSA_GIGE_LINE_GRAY)
+    {
         cap = new TeleDalsaSaperaLT(machCamData);
-        break;
-    default:
-        std::cout << "passed thru to default option CaptureThread Constructor switch statement" << std::endl;
-        break;
+    }
+
+    else
+    {
+        printf("no valid camera options when loading camera - exit(0)\n ");
+        exit(0);
     }
 
     // Save passed parameters
