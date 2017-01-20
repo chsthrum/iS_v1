@@ -85,7 +85,7 @@ class CaptureThread : public QThread
         int deviceNumber;
         int width;
         int height;
-        int cameraType;
+        QString cameraType;
 
     protected:
         void run();

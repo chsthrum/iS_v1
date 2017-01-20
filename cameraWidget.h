@@ -99,7 +99,7 @@ private:
     int heightForWidth(const QImage&, int labelWidth );
     //int heightForWidth(int)const;
 
-    int cameraType; // the type of camera being called ie. silicon software, Dalsa, etc
+    QString cameraType; // the type of camera being called ie. silicon software, Dalsa, etc
 
 
 

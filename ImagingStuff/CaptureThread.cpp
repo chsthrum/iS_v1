@@ -66,24 +66,24 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
 //        break;
 //    }
 
-    if(machCamData.ManufacturerType == FS_LOCAL_CAM)
+    if(machCamData.ManufacturerType == "FS_LOCAL_CAM")
     {
         cap = new VideoCapture;
     }
 
-    else if(machCamData.ManufacturerType == FS_SISO_CIS_GRAY)
+    else if(machCamData.ManufacturerType == "FS_SISO_CIS_GRAY")
     {
         printf("no FSFS_SISO_CIS_GRAY option available when loading camera - exit(0)\n ");
     }
-    else if(machCamData.ManufacturerType == FS_SISO_CIS_RGB)
+    else if(machCamData.ManufacturerType == "FS_SISO_CIS_RGB")
     {
         cap = new SiliconSoftwareGrabber(machCamData);
     }
-    else if(machCamData.ManufacturerType == FS_BASLER_DART_PYLON_AREA)
+    else if(machCamData.ManufacturerType == "FS_BASLER_DART_PYLON_AREA")
     {
         cap = new BaslerPylonDart(machCamData);
     }
-    else if(machCamData.ManufacturerType == FS_TDALSA_GIGE_LINE_GRAY)
+    else if(machCamData.ManufacturerType == "FS_TDALSA_GIGE_LINE_GRAY")
     {
         cap = new TeleDalsaSaperaLT(machCamData);
     }

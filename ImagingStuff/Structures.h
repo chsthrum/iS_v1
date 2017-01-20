@@ -108,7 +108,7 @@ struct MachCamConfigFileXMLData
     QString Mach_ModelNumber = "";
     QString CameraNumber = "";
     QString filePathName = "";
-    int ManufacturerType = 0;
+    QString ManufacturerType = ""; // was int 200117
     QString SerialNumber = "";
     QString Model = "";
     QString CameraReferenceDistance_mm = "";

@@ -41,12 +41,12 @@
 //Defect free length  - 2 or more defects most not occurr within this distance (in frames)
 #define DEFECT_FREE_LENGTH                  20
 
-// Camara Types
-#define FS_LOCAL_CAM                   0           // the local cameras called by videocapture
-#define FS_SISO_CIS_GRAY               1           //CIS camera with grayscale applet
-#define FS_SISO_CIS_RGB                2           //CIS camera with RGB applet
-#define FS_BASLER_DART_PYLON_AREA      3           //Basler Area Camera
-#define FS_TDALSA_GIGE_LINE_GRAY       4           //Teledyne Dalsa Grayscale linescan
+// Camara Types  NOW OBSOLETE CHS 20JAN2017
+//#define FS_LOCAL_CAM                   0           // the local cameras called by videocapture
+//#define FS_SISO_CIS_GRAY               1           //CIS camera with grayscale applet
+//#define FS_SISO_CIS_RGB                2           //CIS camera with RGB applet
+//#define FS_BASLER_DART_PYLON_AREA      3           //Basler Area Camera
+//#define FS_TDALSA_GIGE_LINE_GRAY       4           //Teledyne Dalsa Grayscale linescan
 
 
 //Server Name length for Teledyne Dalsa Grayscale linescan

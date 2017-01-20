@@ -112,15 +112,15 @@ QVector<MachCamConfigFileXMLData> readXMLDataFromFile(QString filename)
         for(int i = 0; i < sL.size(); i++)
         {
            if (sL[i]== "FS_LOCAL_CAM")
-           retVec[i].ManufacturerType = FS_LOCAL_CAM;
+           retVec[i].ManufacturerType = "FS_LOCAL_CAM";
            if (sL[i]== "FS_SISO_CIS_GRAY")
-           retVec[i].ManufacturerType = FS_SISO_CIS_GRAY;
+           retVec[i].ManufacturerType = "FS_SISO_CIS_GRAY";
            if (sL[i]== "FS_SISO_CIS_RGB")
-           retVec[i].ManufacturerType = FS_SISO_CIS_RGB;
+           retVec[i].ManufacturerType = "FS_SISO_CIS_RGB";
            if (sL[i]== "FS_BASLER_DART_PYLON_AREA")
-           retVec[i].ManufacturerType = FS_BASLER_DART_PYLON_AREA;
+           retVec[i].ManufacturerType = "FS_BASLER_DART_PYLON_AREA";
            if (sL[i]== "FS_TDALSA_GIGE_LINE_GRAY")
-           retVec[i].ManufacturerType =FS_TDALSA_GIGE_LINE_GRAY;
+           retVec[i].ManufacturerType = "FS_TDALSA_GIGE_LINE_GRAY";
            //and more when available
 
         }
