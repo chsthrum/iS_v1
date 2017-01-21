@@ -1,3 +1,6 @@
 1.In Capture Thread changed the switch statement to a series of If's.
 So I avoid the if defined trap on the cameras.
 ********************************************************************************
+2.Now the only the cameras in the xml file are detected.
+The camera defines in the Config.h are now obsolete.
+********************************************************************************

@@ -24,7 +24,7 @@ bool writeMachCamConfigFileXML()
     machine.setAttribute("Mach_ModelNumber", "i4060_modular");
     machine.setAttribute("Mach_SerialNumber", "010117001");
     machine.setAttribute("Mach_YearOfManufacture", "2017");
-    machine.setAttribute("NumberOfCameras", "4");
+    machine.setAttribute("NumberOfCameras", "6");
     root.appendChild(machine);
 
    QDomElement camera = document.createElement("Camera");
@@ -83,33 +83,33 @@ bool writeMachCamConfigFileXML()
 //    camera.setAttribute("FrameGrabberPortNumber", "0");  // for Silicon Software Frame grabber
 //    machine.appendChild(camera);
 
-//    camera = document.createElement("Camera");
-//    camera.setAttribute("CameraNumber", "4");
-//    camera.setAttribute("filePathName", "C:/Program Files/Teledyne DALSA/Sapera/CamFiles/User/T_Linea_M4096-7um_696W_512H_948XOFF.ccf");
-//    camera.setAttribute("Model", "Gige_1x4096");
-//    camera.setAttribute("SerialNumber", "13059349");//"13059349"
-//    camera.setAttribute("ManufacturerType", "FS_TDALSA_GIGE_LINE_GRAY");
-//    camera.setAttribute("CameraReferenceDistance_mm", "390");
-//    camera.setAttribute("FrameGrabberNumber", "NA");  // for Silicon Software Frame grabber
-//    camera.setAttribute("FrameGrabberPortNumber", "NA");  // for Silicon Software Frame grabber
-//    machine.appendChild(camera);
+    camera = document.createElement("Camera");
+    camera.setAttribute("CameraNumber", "4");
+    camera.setAttribute("filePathName", "C:/Program Files/Teledyne DALSA/Sapera/CamFiles/User/T_Linea_M4096-7um_696W_512H_948XOFF.ccf");
+    camera.setAttribute("Model", "Gige_1x4096");
+    camera.setAttribute("SerialNumber", "13059349");//"13059349"
+    camera.setAttribute("ManufacturerType", "FS_TDALSA_GIGE_LINE_GRAY");
+    camera.setAttribute("CameraReferenceDistance_mm", "390");
+    camera.setAttribute("FrameGrabberNumber", "NA");  // for Silicon Software Frame grabber
+    camera.setAttribute("FrameGrabberPortNumber", "NA");  // for Silicon Software Frame grabber
+    machine.appendChild(camera);
 
-//    camera = document.createElement("Camera");
-//    camera.setAttribute("CameraNumber", "5");
-//    camera.setAttribute("filePathName", "C:/Program Files/Teledyne DALSA/Sapera/CamFiles/User/T_Linea_M2048-7um_1176W_512H_800XOFF.ccf");
-//    camera.setAttribute("Model", "Gige_1x2048");
-//    camera.setAttribute("SerialNumber", "13058680");//"13058680"
-//    camera.setAttribute("ManufacturerType", "FS_TDALSA_GIGE_LINE_GRAY");
-//    camera.setAttribute("CameraReferenceDistance_mm", "690");
-//    camera.setAttribute("FrameGrabberNumber", "NA");  // for Silicon Software Frame grabber
-//    camera.setAttribute("FrameGrabberPortNumber", "NA");  // for Silicon Software Frame grabber
-//    machine.appendChild(camera);
+    camera = document.createElement("Camera");
+    camera.setAttribute("CameraNumber", "5");
+    camera.setAttribute("filePathName", "C:/Program Files/Teledyne DALSA/Sapera/CamFiles/User/T_Linea_M2048-7um_1176W_512H_800XOFF.ccf");
+    camera.setAttribute("Model", "Gige_1x2048");
+    camera.setAttribute("SerialNumber", "13058680");//"13058680"
+    camera.setAttribute("ManufacturerType", "FS_TDALSA_GIGE_LINE_GRAY");
+    camera.setAttribute("CameraReferenceDistance_mm", "690");
+    camera.setAttribute("FrameGrabberNumber", "NA");  // for Silicon Software Frame grabber
+    camera.setAttribute("FrameGrabberPortNumber", "NA");  // for Silicon Software Frame grabber
+    machine.appendChild(camera);
 
 
 
 
     //Write to file
-    QFile file ("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig34BAS.xml");
+    QFile file ("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig36NO_SISO.xml");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         qDebug() << "Failed to open file for writing";

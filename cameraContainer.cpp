@@ -15,7 +15,7 @@ CameraContainer::CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLDa
 {
 
     //read the MachineCameraConfiguration file
-    vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig34BAS.xml");
+    //vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig34BAS.xml");
     typedef QVector<MachCamConfigFileXMLData>::size_type vec_sz;
 
 
@@ -24,16 +24,22 @@ CameraContainer::CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLDa
     {
         if(vecXMLData[i].ManufacturerType == "FS_BASLER_DART_PYLON_AREA")
             PylonInitialize();
+            break;  // we just need to call PylonInitialize() once.
     }
 
 
 // are we using TDalsa Cameras?
+    bool foundCam = false;
     for (vec_sz i = 0; i < vecXMLData.size(); i++)
     {
         if(vecXMLData[i].ManufacturerType == "FS_TDALSA_GIGE_LINE_GRAY")
         {
-            QVector<LocationStruct> cameraLocs = findT_DalsaGigeCams(); //to hold the Gige cam locations (server/device pairs)
-            vecXMLData[i].locs = cameraLocs; // add in the vector of Tdalsa camera servers and devices
+            while (!foundCam) // we only want to find all the TDalsa cameras once
+            {
+            cameraLocations = findT_DalsaGigeCams(); //to hold the Gige cam locations (server/device pairs)
+            foundCam = true;
+            }
+            vecXMLData[i].locs = cameraLocations; // add in the vector of Tdalsa camera servers and devices
         }
     }
 

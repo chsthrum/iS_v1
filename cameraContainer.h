@@ -53,6 +53,8 @@ private:
     QPushButton* globalGrabButton;
     bool isGrabbing;
 
+    QVector<LocationStruct> cameraLocations; //these TDalsa Specific Locations
+
     //CTlFactory& tlFactory;
 
 private slots:
