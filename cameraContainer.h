@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QVector>
 #include <QList>
+#include <QDebug>
 
 //local includes
 #include "cameraWidget.h"
@@ -19,6 +20,7 @@
 #include "ImagingStuff/CaptureThread.h"
 #include "ImagingStuff/ProcessingThread.h"
 #include "csimpledefectmapLabel.h"
+
 
 
 #include "ExternalHardwareSoftware/baslerpylondart_1.h"
@@ -52,6 +54,7 @@ private:
     SharedImageBuffer *sharedImageBuffer;
     QPushButton* globalGrabButton;
     bool isGrabbing;
+    bool allCameraWidgetsActive;
 
     QVector<LocationStruct> cameraLocations; //these TDalsa Specific Locations
 

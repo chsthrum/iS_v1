@@ -1,6 +1,21 @@
+
+Commits
+
 1.In Capture Thread changed the switch statement to a series of If's.
 So I avoid the if defined trap on the cameras.
 ********************************************************************************
 2.Now the only the cameras in the xml file are detected.
 The camera defines in the Config.h are now obsolete.
+********************************************************************************
+3.Tidied up the camera detection loops in CameraContainer.cpp and tested - working well.
+Detecting all 4 Basler Cameras and 2 TDalsa cams.
+********************************************************************************
+NOTE/OBSERVATION
+When running the program with the line scan cameras but no drum motion. When grabbing is called (with no drum motion no image)
+the cameras cannot be closed when mainwindow exit is called.
+SUGGESTION: So we need a time out on no line detection. TODO!!!!!!!
+********************************************************************************
+4.Now we have changed the order of the destructors.
+So that we destroy the cameraWidgets, then the cameraContainer then the mainwindow. This is the correct order of things.
+NOT tested with SISO and TD cameras
 ********************************************************************************

@@ -13,6 +13,7 @@
 
 CameraContainer::CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLData>& vecXMLData): QWidget(parent)
 {
+    allCameraWidgetsActive = false; //NO cameras connected yet
 
     //read the MachineCameraConfiguration file
     //vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig34BAS.xml");
@@ -110,10 +111,13 @@ CameraContainer::CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLDa
 end of the layout
 ***********************************************************************************/
 
+
+    allCameraWidgetsActive = true; // All cameras now connected
+
+    qDebug() << "All Camera Widgets connected.\n";
+
     // Connect button signal to appropriate slot
     connect(globalGrabButton, SIGNAL (clicked()), this, SLOT (handleGrabButton()));
-
-
 
    //QSize size = camLayout->sizeHint();
    //qDebug() << "from widget::widget(), label size (Width * Height)   " << size;
@@ -124,15 +128,24 @@ end of the layout
    // cams[0]->setText("test");
 
 
+
 }
 
 CameraContainer::~CameraContainer()
 {
-    // autoInitTerm's destructor calls PylonTerminate() now
-    // Releases all pylon resources.
-    //Pylon::PylonTerminate();
-    //delete sharedImageBuffer;  // crashes if used
-    //sharedImageBuffer = NULL;  // crashes if used
+    if (allCameraWidgetsActive)
+    {
+        typedef QList <CameraWidget*>::size_type list_size;
+        for (list_size i = 0; i < cams.size(); i++)
+        {
+            // probably need a call to stop grabbing first - in order to prevent camera based execeptions warnings
+            delete cams[i]; //calls the cameraWidget destructor.
+            cams[i] = NULL;
+        }
+        // Releases all pylon resources.
+        Pylon::PylonTerminate(); // for the Basler cameras this line needs an if() qualification
+    }
+
     qDebug() << "CameraContainer Destructor called.";
 }
 
