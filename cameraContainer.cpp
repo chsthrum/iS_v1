@@ -143,7 +143,8 @@ CameraContainer::~CameraContainer()
             cams[i] = NULL;
         }
         // Releases all pylon resources.
-        Pylon::PylonTerminate(); // for the Basler cameras this line needs an if() qualification
+        Pylon::PylonTerminate(); // for the Basler cameras this line needs an if() qualification TODO
+        //Continuity notes will probably have to include a copy or reference machCamXML struct; CHS 21JAN2017
     }
 
     qDebug() << "CameraContainer Destructor called.";

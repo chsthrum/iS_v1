@@ -19,3 +19,6 @@ SUGGESTION: So we need a time out on no line detection. TODO!!!!!!!
 So that we destroy the cameraWidgets, then the cameraContainer then the mainwindow. This is the correct order of things.
 NOT tested with SISO and TD cameras
 ********************************************************************************
+5.Put the Pylon::InstantCamera stopGrabbing() in the CaptureThread Release() to elegently stop the camera grabbing images when we
+close the program down.
+********************************************************************************

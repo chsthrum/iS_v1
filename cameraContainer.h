@@ -35,7 +35,7 @@ public:
     //CameraContainer(QWidget *parent = 0);
     CameraContainer(QWidget *parent, QVector<MachCamConfigFileXMLData>& vecXMLData);
     ~CameraContainer();
-    void addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, QVector <MachCamConfigFileXMLData>);//, QVector< LocationStruct>);
+    void addCameras(QList<CameraWidget*>& p_CamWidgets, QVBoxLayout* p_layOut, SharedImageBuffer*, QVector <MachCamConfigFileXMLData>);
     void addSimpleMapLabels(QList<CsimpleDefectMapLabel*>, QHBoxLayout* p_simple, int nLabels);
     SharedImageBuffer* getSharedImageBuffer() const;
 

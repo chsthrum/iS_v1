@@ -111,7 +111,8 @@ bool BaslerPylonDart::open(int device)
 
 void BaslerPylonDart::release()
 {
-    //cam->DestroyDevice();
+    cam->StopGrabbing();
+    cam->DestroyDevice();  //this might have to be postponed if we want to use the camera again ie . reinvoke StartGrabbing().
 }
 
 bool BaslerPylonDart::grab()
