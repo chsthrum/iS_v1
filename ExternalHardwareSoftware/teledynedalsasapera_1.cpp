@@ -9,6 +9,9 @@
 //local includes
 #include "teledynedalsasapera_1.h"
 
+//qt includes
+#include <QDebug>
+
 #ifdef _WIN32
 
 TeleDalsaSaperaLT::TeleDalsaSaperaLT(MachCamConfigFileXMLData& machCamData): macCamXML(machCamData)
@@ -66,7 +69,21 @@ TeleDalsaSaperaLT::TeleDalsaSaperaLT(MachCamConfigFileXMLData& machCamData): mac
 
 TeleDalsaSaperaLT::~TeleDalsaSaperaLT()
 {
- std::cout << "The TeleDalsaSaperaLT destructor has been invoked." << std::endl;
+//Release resources for all objects - destroy the camera mechanism
+//always use this order of destruction
+    if(!xfer->Destroy())
+        std::cout << "error in TDalsa (transfer::Destroy()) - could not destory transfer object\n";
+    if(!buffers->Destroy())
+        std::cout << "error in TDalsa (buffer::Destroy)) - could close the buffers\n";
+    if(!acqDevice->Destroy())
+        std::cout << "error in TDalsa (AcqDevice::Destroy()) - could not destroy server/device object (camera instance)\n";
+
+    //Free all objects - delete the pointers
+   delete xfer;
+   delete buffers;
+   //delete acqDevice;  // program hangs if this delete is used
+
+    qDebug() << "The TeleDalsaSaperaLT destructor called.";
 }
 
 bool TeleDalsaSaperaLT::open(int grabberNumber)
@@ -152,6 +169,16 @@ bool TeleDalsaSaperaLT::open(int grabberNumber)
 
 void TeleDalsaSaperaLT::release()
 {
+
+    // Stop the transfer and wait (timeout = 5 seconds)
+    if(!xfer->Freeze())
+        std::cout << "error in TDalsa (transfer::Freeze()) - could not stop grabbing\n";
+    if (!xfer->Wait(5000))
+        std::cout << "error in TDalsa (transfer::wait(5000)) - could not stop grabbing\n";
+
+    //call the destructor
+    //delete this;
+
 
 }
 

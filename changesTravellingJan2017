@@ -22,3 +22,8 @@ NOT tested with SISO and TD cameras
 5.Put the Pylon::InstantCamera stopGrabbing() in the CaptureThread Release() to elegently stop the camera grabbing images when we
 close the program down.
 ********************************************************************************
+6. In the TeledynedalsaSapera::release()function we have put the freeze() and wait(5000) functions to stop grabbing before exit.
+Also in the destructor we have put the Sapera resource destruction.
+Note: for some reason including the delete AcqDevice line cause the program to hang when closing down. So commented out for the
+time being.
+********************************************************************************

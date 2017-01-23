@@ -161,9 +161,8 @@ CameraWidget::~CameraWidget()
             captureThread = NULL;
             delete processingThread;
             processingThread = NULL;
-            // Releases all pylon resources.
+
             qDebug() << "[" << deviceNumber << "] CameraWidget destructor called.";
-            //Pylon::PylonTerminate();
 
         }
 

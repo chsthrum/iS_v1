@@ -138,7 +138,6 @@ CameraContainer::~CameraContainer()
         typedef QList <CameraWidget*>::size_type list_size;
         for (list_size i = 0; i < cams.size(); i++)
         {
-            // probably need a call to stop grabbing first - in order to prevent camera based execeptions warnings
             delete cams[i]; //calls the cameraWidget destructor.
             cams[i] = NULL;
         }

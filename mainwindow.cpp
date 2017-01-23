@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     //read the MachineCameraConfiguration file
     //QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig37.xml");
     QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig34BAS.xml");//34BAS
-    //QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig32.xml");
+    //QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig32.xml"); //Tdalsa only
     //QVector<MachCamConfigFileXMLData> vecXMLData = readXMLDataFromFile("C:/Users/Fibrescan/Documents/iScanDev1/iS_v1/ConfigFilesXML/machineCameraConfig36NO_SISO.xml");
 
 

@@ -89,7 +89,8 @@ CaptureThread::CaptureThread(SharedImageBuffer *sharedImageBuffer, int deviceNum
 
 CaptureThread::~CaptureThread()
 {
-qDebug() << "[ " << deviceNumber << " ] CaptureThread Destructor called.";
+    delete cap; // delete the camera
+    qDebug() << "[ " << deviceNumber << " ] CaptureThread Destructor called.";
 }
 
 
